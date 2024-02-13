@@ -25,7 +25,7 @@ app.set('view engine', 'handlebars');
 app.use(express.static(__dirname + '/public'));
 
 //Declare routers:
-app.use("/", viewsRouter);
+app.use("/api/product", viewsRouter);
 //app.use("/users", usersViewRouter);
 
 // const SERVER_PORT = 9090;

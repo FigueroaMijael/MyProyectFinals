@@ -11,7 +11,7 @@ router.post('/', postDatosControllers);
 
 
 // Delete
-router.delete('/', deleteDatosControllers);
+router.delete('/:id', deleteDatosControllers);
 
 // TEST
 router.get('/test', (req, res) => {

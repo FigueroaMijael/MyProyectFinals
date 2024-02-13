@@ -1,10 +1,11 @@
-import { productModel } from '../models/product.model.js';
+import { productModel } from '../models/products.model.js';
 
 export const recuperarDatos = async () => {
     try {
         // Recupera todos los documentos de la colección de productos
         return await productModel.find();
     } catch (error) {
+        console.error("Error al recuperar los datos de productos: ", error.message);
         throw new Error("Error al recuperar los datos de productos: " + error.message);
     }
 }

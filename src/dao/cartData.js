@@ -1,46 +1,96 @@
 import { cartModel } from '../models/cart.model.js';
 
-export const recuperarDatosCart = async () => {
+export const recuperarDatosCart = async (_id) => {
     try {
-        // Recuperar todos los documentos de la colección de carritos
-        return await cartModel.find();
-    } catch (error) {
+        const cart = await cartModel.findOne({ _id: _id }).populate('products.product');
+    
+        if (!cart) {
+            const newCart = await cartModel.create({ products: [] });
+            return [newCart];
+        }
+    
+        return [cart];
+    }
+     catch (error) {
         throw new Error("Error al recuperar los datos del carrito: " + error.message);
     }
 }
 
-export const guardarDatosCart = async (dato) => {
+export const guardarDatosCart = async (cartExists, prodExists, quantity ) => {
     try {
-        // Crear un nuevo documento de carrito en la base de datos
-        const newCart = new cartModel(dato);
-        await newCart.save();
-        return newCart;
-    } catch (error) {
-        throw new Error("Error al guardar los datos del carrito: " + error.message);
+        const cart = await cartModel.findOne({ _id: cartExists }).populate('products.product', 'title price thumbnail');
+    
+    if (!cart) {
+        throw new Error('Cart not found');
     }
-}
 
-export const actualizarDatosCart = async (id, dato) => {
-    try {
-        // Actualizar el documento de carrito con el ID dado
-        const updatedCart = await cartModel.findByIdAndUpdate(id, dato, { new: true });
-        if (!updatedCart) {
-            throw new Error("Carrito no encontrado");
+    const existingProductIndex = cart.products.findIndex(p => p.product && p.product.equals(prodExists));
+
+    if (existingProductIndex !== -1) {
+
+        cart.products[existingProductIndex].quantity += quantity;
+
+    } else {
+
+        const product = await productModel.findById(prodExists);
+
+        if (!product) {
+            throw new Error('Product not found');
         }
-        return updatedCart;
+
+        cart.products.push({
+            _id: new mongoose.Types.ObjectId(),
+            product: product._id,
+            title: product.title,
+            price: product.price,
+            thumbnail: product.thumbnail,
+            quantity: quantity
+        });
+    }
+
+    console.log('Saving cart:');
+    console.log('cart:', cart);
+
+    await cartModel.findByIdAndUpdate(cartExists, { products: cart.products });
+
+    return cart.products;
     } catch (error) {
-        throw new Error("Error al actualizar los datos del carrito: " + error.message);
+        throw new Error("Error al agregar el producto al carrito: " + error.message);
     }
 }
 
-export const deleteCartById = async (id) => {
+
+export const actualizarDatosCart = async (cartExists, prodExists, quantity) => {
+   try {
+    const updateCart = await cartModel.findById(cartExists);
+
+    if (!updateCart) {
+        throw new Error('Cart not found');
+    }
+
+    const existingProduct = cart.products.find(product => product.prodExists === prodExists);
+
+    if (existingProduct) {
+        existingProduct.quantity = quantity;
+
+        return await updateCart.save();
+    }
+   } catch (error) {
+    throw new Error('Product not found in cart');
+   }
+}
+
+export const deleteCartById = async (_id) => {
     try {
         // Eliminar el documento de carrito con el ID dado
-        const deletedCart = await cartModel.findByIdAndDelete(id);
+        const deletedCart = await cartModel.findByIdAndDelete(_id);
         if (!deletedCart) {
             throw new Error("Carrito no encontrado");
         }
-        return true;
+        
+        deletedCart.products = [];
+
+        return await deletedCart.save();
     } catch (error) {
         throw new Error("Error al eliminar el carrito: " + error.message);
     }

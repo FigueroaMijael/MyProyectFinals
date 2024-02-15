@@ -1,17 +1,22 @@
 import { Router } from 'express';
-import { getDatosControllers, postDatosControllers, deleteDatosControllers } from '../controlers/products.Controller.js'
+import { getDatosControllers, postDatosControllers, updateDatosControllers,  deleteDatosControllers } from '../controlers/products.Controller.js'
 
 const router = Router();
 
 //GET
 router.get('/', getDatosControllers);
 
-// POST
-router.post('/', postDatosControllers);
+//GETById
+router.get('/:_id', getDatosControllers);
 
+// POST
+router.post('/create', postDatosControllers);
+
+//PUT
+router.put('/update/:_id', updateDatosControllers)
 
 // Delete
-router.delete('/:id', deleteDatosControllers);
+router.delete('/delete/:_id', deleteDatosControllers);
 
 // TEST
 router.get('/test', (req, res) => {

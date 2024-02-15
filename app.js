@@ -8,7 +8,8 @@ import cors from 'cors';
 //Passport imports
 
 //Routers
-import viewsRouter from './src/routes/product.router.js';
+import productRouter from './src/routes/product.router.js';
+import cartRouter from './src/routes/cart.router.js'
 //import usersViewRouter from './routes/users.views.router.js';
 //Custom - Extended
 
@@ -25,7 +26,8 @@ app.set('view engine', 'handlebars');
 app.use(express.static(__dirname + '/public'));
 
 //Declare routers:
-app.use("/api/product", viewsRouter);
+app.use("/api/product", productRouter);
+app.use("/api/cart", cartRouter);
 //app.use("/users", usersViewRouter);
 
 // const SERVER_PORT = 9090;

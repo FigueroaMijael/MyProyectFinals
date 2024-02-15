@@ -4,15 +4,15 @@ import { getCartControllers, postCartControllers, putCartControllers, deleteCart
 const router = Router();
 
 // GET
-router.get('/', getCartControllers);
+router.get('/:_id', getCartControllers);
 
 // POST
-router.post('/', postCartControllers);
+router.post('/:CId/product/:PId/quantity', postCartControllers);
 
 // PUT
-router.put('/:id', putCartControllers);
+router.put('/update/:CId/:PId', putCartControllers);
 
 // DELETE
-router.delete('/:id', deleteCartControllers);
+router.delete('/:_id', deleteCartControllers);
 
 export default router; 

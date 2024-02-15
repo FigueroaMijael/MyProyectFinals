@@ -1,23 +1,61 @@
 import { recuperarDatosCart, guardarDatosCart, actualizarDatosCart, deleteCartById } from '../dao/cartData.js'
+import { cartModel } from '../models/cart.model.js';
+import { productModel } from '../models/products.model.js';
 
-export const obtenerDatos = async () => {
+export const obtenerDatos = async ( _id ) => {
     // Lógica de negocio, validación de stock, etc.
-    return await recuperarDatosCart();
+
+    // Verificar si el carrito existe antes de actualizar
+    const cartExists = await cartModel.findById( _id );
+    if (!cartExists) {
+        return res.status(404).json({ error: "El carrito no existe" });
+    }
+
+    return await recuperarDatosCart( cartExists );
 }
 
-export const crearDato = async (dato) => {
+export const agregarDato = async (CId, PId, quantity ) => {
     // Lógica de negocio, validación de datos, etc.
-    dato.id = Math.random();
-    await guardarDatosCart(dato);
-    return dato;
+
+        // Verificar si el carrito existe antes de actualizar
+        const cartExists = await cartModel.findById( CId );
+        if (!cartExists) {
+            return res.status(404).json({ error: "El carrito no existe" });
+        }
+
+        // Verificar si el carrito existe antes de actualizar
+        const prodExists = await productModel.findById( PId);
+        if (!prodExists) {
+             return res.status(404).json({ error: "El producto no existe" });
+        }
+
+    return await guardarDatosCart(cartExists, prodExists, quantity );
 }
 
-export const actualizarCart = async (id, dato) => {
+export const actualizarCart = async (CId, PId) => {
     // Lógica de negocio para la actualización
-    return await actualizarDatosCart(id, dato);
+            // Verificar si el carrito existe antes de actualizar
+            const cartExists = await cartModel.findById( CId );
+            if (!cartExists) {
+                return res.status(404).json({ error: "El carrito no existe" });
+            }
+    
+            // Verificar si el carrito existe antes de actualizar
+            const prodExists = await productModel.findById( PId);
+            if (!prodExists) {
+                 return res.status(404).json({ error: "El producto no existe" });
+            }
+    
+        return await actualizarDatosCart(cartExists, prodExists);
 }
 
-export const deleteServices = async (id) => {
+export const deleteServices = async (_id) => {
     // Lógica para eliminar
-    return await deleteCartById(id);
+    // Verificar si el carrito existe antes de actualizar
+    const cartExists = await cartModel.findById( _id );
+    if (!cartExists) {
+        return res.status(404).json({ error: "El carrito no existe" });
+    }
+
+    return await deleteCartById(_id);
 }

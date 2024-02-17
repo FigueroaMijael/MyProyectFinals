@@ -1,7 +1,11 @@
 import { cartModel } from '../models/cart.model.js';
+import { productModel } from '../models/products.model.js';
+import mongoose from 'mongoose';
 
 export const recuperarDatosCart = async (_id) => {
     try {
+       if (!_id) {
+
         const cart = await cartModel.findOne({ _id: _id }).populate('products.product');
     
         if (!cart) {
@@ -10,6 +14,10 @@ export const recuperarDatosCart = async (_id) => {
         }
     
         return [cart];
+
+       } else {
+        return await cartModel.findById( _id )
+       }
     }
      catch (error) {
         throw new Error("Error al recuperar los datos del carrito: " + error.message);
@@ -44,7 +52,7 @@ export const guardarDatosCart = async (cartExists, prodExists, quantity ) => {
             title: product.title,
             price: product.price,
             thumbnail: product.thumbnail,
-            quantity: quantity
+            quantity: parseInt(quantity)
         });
     }
 

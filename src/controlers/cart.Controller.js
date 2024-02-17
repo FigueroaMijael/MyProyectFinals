@@ -12,9 +12,8 @@ export const getCartControllers = async (req, res) => {
 
 export const postCartControllers = async (req, res) => {
     try {
-        let { CId } = req.params;
-        let { PId } = req.params;
-        let { quantity} = req.params;
+        let { CId, PId, quantity } = req.params;
+
 
         const newCart = await agregarDato( CId, PId, quantity );
         res.json(newCart);

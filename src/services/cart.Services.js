@@ -5,13 +5,7 @@ import { productModel } from '../models/products.model.js';
 export const obtenerDatos = async ( _id ) => {
     // Lógica de negocio, validación de stock, etc.
 
-    // Verificar si el carrito existe antes de actualizar
-    const cartExists = await cartModel.findById( _id );
-    if (!cartExists) {
-        return res.status(404).json({ error: "El carrito no existe" });
-    }
-
-    return await recuperarDatosCart( cartExists );
+    return await recuperarDatosCart( _id );
 }
 
 export const agregarDato = async (CId, PId, quantity ) => {

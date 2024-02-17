@@ -3,11 +3,13 @@ import { getCartControllers, postCartControllers, putCartControllers, deleteCart
 
 const router = Router();
 
-// GET
+router.get('/', getCartControllers);
+
+// GETById
 router.get('/:_id', getCartControllers);
 
 // POST
-router.post('/:CId/product/:PId/quantity', postCartControllers);
+router.post('/:CId/product/:PId/:quantity', postCartControllers);
 
 // PUT
 router.put('/update/:CId/:PId', putCartControllers);

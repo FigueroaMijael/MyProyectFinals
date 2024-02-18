@@ -11,36 +11,58 @@ export const obtenerDatos = async ( _id ) => {
 export const agregarDato = async (CId, PId, quantity ) => {
     // Lógica de negocio, validación de datos, etc.
 
-        // Verificar si el carrito existe antes de actualizar
-        const cartExists = await cartModel.findById( CId );
-        if (!cartExists) {
-            return res.status(404).json({ error: "El carrito no existe" });
-        }
+    //parsea la cantidad
+    const parsedQuantity = parseInt(quantity);
 
-        // Verificar si el carrito existe antes de actualizar
-        const prodExists = await productModel.findById( PId);
-        if (!prodExists) {
-             return res.status(404).json({ error: "El producto no existe" });
-        }
+    if (isNaN(parsedQuantity) || parsedQuantity <= 0) {
+        throw new Error('Invalid quantity');
+    }
 
-    return await guardarDatosCart(cartExists, prodExists, quantity );
+    const cartExists = await cartModel.findById(CId);
+    if (!cartExists) {
+        throw new Error('Cart not found');
+    }
+
+    const prodExists = await productModel.findById(PId);
+    if (!prodExists) {
+        throw new Error('Product not found');
+    }
+
+    // Verificar si hay suficiente stock disponible
+    if (parsedQuantity > prodExists.stock) {
+        throw new Error('Insufficient stock');
+    }
+
+    return await guardarDatosCart(cartExists, prodExists, parsedQuantity );
 }
 
-export const actualizarCart = async (CId, PId) => {
+export const actualizarCart = async (CId, PId, quantity) => {
     // Lógica de negocio para la actualización
-            // Verificar si el carrito existe antes de actualizar
-            const cartExists = await cartModel.findById( CId );
-            if (!cartExists) {
-                return res.status(404).json({ error: "El carrito no existe" });
-            }
-    
-            // Verificar si el carrito existe antes de actualizar
-            const prodExists = await productModel.findById( PId);
-            if (!prodExists) {
-                 return res.status(404).json({ error: "El producto no existe" });
-            }
-    
-        return await actualizarDatosCart(cartExists, prodExists);
+
+    try {
+        // Parsea la cantidad
+        const parsedQuantity = parseInt(quantity);
+
+        if (isNaN(parsedQuantity) || parsedQuantity <= 0) {
+            throw new Error('Invalid quantity');
+        }
+
+        // Verificar si el carrito existe antes de actualizar
+        const cartExists = await cartModel.findById(CId);
+        if (!cartExists) {
+            throw new Error("El carrito no existe");
+        }
+
+        // Verificar si el producto existe antes de actualizar
+        const prodExists = await productModel.findById(PId);
+        if (!prodExists) {
+            throw new Error("El producto no existe");
+        }
+
+        return await actualizarDatosCart(cartExists, prodExists, parsedQuantity);
+    } catch (error) {
+        throw new Error(error.message);
+    }
 }
 
 export const deleteServices = async (_id) => {

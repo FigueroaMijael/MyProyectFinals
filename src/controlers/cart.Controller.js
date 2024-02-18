@@ -12,10 +12,9 @@ export const getCartControllers = async (req, res) => {
 
 export const postCartControllers = async (req, res) => {
     try {
-        let { CId, PId, quantity } = req.params;
+        const { CId, PId, quantity } = req.params;
 
-
-        const newCart = await agregarDato( CId, PId, quantity );
+        const newCart = await agregarDato(CId, PId, quantity);
         res.json(newCart);
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -24,10 +23,10 @@ export const postCartControllers = async (req, res) => {
 
 export const putCartControllers = async (req, res) => {
     try {
-        let { CId } = req.params;
-        let { PId } = req.params;
+    
+        const { CId, PId, quantity } = req.params;
           
-        await actualizarCart( CId, PId);
+        await actualizarCart( CId, PId, quantity);
         res.json({ message: "Datos del carrito actualizados correctamente" });
     } catch (error) {
         res.status(400).json({ error: error.message });

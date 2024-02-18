@@ -12,7 +12,7 @@ router.get('/:_id', getCartControllers);
 router.post('/:CId/product/:PId/:quantity', postCartControllers);
 
 // PUT
-router.put('/update/:CId/:PId', putCartControllers);
+router.put('/update/:CId/product/:PId/:quantity', putCartControllers);
 
 // DELETE
 router.delete('/:_id', deleteCartControllers);

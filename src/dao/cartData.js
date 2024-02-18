@@ -1,6 +1,4 @@
 import { cartModel } from '../models/cart.model.js';
-import { productModel } from '../models/products.model.js';
-import mongoose from 'mongoose';
 
 export const recuperarDatosCart = async (_id) => {
     try {
@@ -24,40 +22,32 @@ export const recuperarDatosCart = async (_id) => {
     }
 }
 
-export const guardarDatosCart = async (cartExists, prodExists, quantity ) => {
+export const guardarDatosCart = async (cartExists, prodExists, parsedQuantity ) => {
+    
     try {
-        const cart = await cartModel.findOne({ _id: cartExists }).populate('products.product', 'title price thumbnail');
+        
+        const cart = await cartModel.findById(cartExists).populate('products.product');
     
     if (!cart) {
         throw new Error('Cart not found');
     }
 
-    const existingProductIndex = cart.products.findIndex(p => p.product && p.product.equals(prodExists));
+    const existingProductIndex = cart.products.findIndex(p => p.product && p.product.equals(prodExists._id));
 
     if (existingProductIndex !== -1) {
 
-        cart.products[existingProductIndex].quantity += quantity;
+        cart.products[existingProductIndex].quantity += parsedQuantity;
 
     } else {
 
-        const product = await productModel.findById(prodExists);
-
-        if (!product) {
-            throw new Error('Product not found');
-        }
-
         cart.products.push({
-            _id: new mongoose.Types.ObjectId(),
-            product: product._id,
-            title: product.title,
-            price: product.price,
-            thumbnail: product.thumbnail,
-            quantity: parseInt(quantity)
+            product: prodExists._id,
+            title: prodExists.title,
+            price: prodExists.price,
+            thumbnail: prodExists.thumbnail,
+            quantity: parsedQuantity
         });
     }
-
-    console.log('Saving cart:');
-    console.log('cart:', cart);
 
     await cartModel.findByIdAndUpdate(cartExists, { products: cart.products });
 
@@ -70,18 +60,28 @@ export const guardarDatosCart = async (cartExists, prodExists, quantity ) => {
 
 export const actualizarDatosCart = async (cartExists, prodExists, quantity) => {
    try {
-    const updateCart = await cartModel.findById(cartExists);
+    const updateCart = await cartModel.findById(cartExists)
 
     if (!updateCart) {
         throw new Error('Cart not found');
     }
 
-    const existingProduct = cart.products.find(product => product.prodExists === prodExists);
+    const existingProduct = updateCart.products.find(product => product.product.toString() === prodExists._id.toString());
 
+    console.log(existingProduct);
+
+    
     if (existingProduct) {
-        existingProduct.quantity = quantity;
+        // Verificar si hay suficiente stock disponible
+        if (quantity > prodExists.stock) {
+            throw new Error('Insufficient stock');
+        }
 
-        return await updateCart.save();
+        existingProduct.quantity = quantity;
+        await updateCart.save();
+        return updateCart.products;
+    } else {
+        throw new Error('Product not found in cart');
     }
    } catch (error) {
     throw new Error('Product not found in cart');

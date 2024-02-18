@@ -14,7 +14,10 @@ router.post('/:CId/product/:PId/:quantity', postCartControllers);
 // PUT
 router.put('/update/:CId/product/:PId/:quantity', putCartControllers);
 
-// DELETE
-router.delete('/:_id', deleteCartControllers);
+// DELETE ONE PRODUCT
+router.delete('/:CId/product/:PId', deleteCartControllers);
+
+// DELETE CART
+router.delete('/:CId', deleteCartControllers);
 
 export default router; 

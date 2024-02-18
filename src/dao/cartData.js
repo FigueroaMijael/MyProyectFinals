@@ -88,18 +88,19 @@ export const actualizarDatosCart = async (cartExists, prodExists, quantity) => {
    }
 }
 
-export const deleteCartById = async (_id) => {
+export const deleteCartById = async (cartExists, prodExists) => {
     try {
-        // Eliminar el documento de carrito con el ID dado
-        const deletedCart = await cartModel.findByIdAndDelete(_id);
-        if (!deletedCart) {
-            throw new Error("Carrito no encontrado");
-        }
-        
-        deletedCart.products = [];
+        const cart = await cartModel.findById(cartExists._id);
 
-        return await deletedCart.save();
+        if (!cart) {
+            throw new Error('Cart not found');
+        }
+
+        cart.products.pull({ _id: prodExists });
+        await cart.save();
+
+        return cart;
     } catch (error) {
-        throw new Error("Error al eliminar el carrito: " + error.message);
+        throw new Error("Error al eliminar el producto del carrito: " + error.message);
     }
 }

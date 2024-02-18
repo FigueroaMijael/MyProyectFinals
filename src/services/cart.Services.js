@@ -65,13 +65,26 @@ export const actualizarCart = async (CId, PId, quantity) => {
     }
 }
 
-export const deleteServices = async (_id) => {
-    // Lógica para eliminar
-    // Verificar si el carrito existe antes de actualizar
-    const cartExists = await cartModel.findById( _id );
-    if (!cartExists) {
-        return res.status(404).json({ error: "El carrito no existe" });
-    }
+export const deleteServices = async (CId, PId) => {
+    try {
+        const cartExists = await cartModel.findById(CId);
+        if (!cartExists) {
+            throw new Error("El carrito no existe");
+        }
 
-    return await deleteCartById(_id);
+        if (!PId) {
+            cartExists.products = [];
+            await cartExists.save();
+            return;
+        }
+
+        const prodExists = await productModel.findById(PId);
+        if (!prodExists) {
+            throw new Error("El producto no existe");
+        }
+
+        await deleteCartById(cartExists, PId);
+    } catch (error) {
+        throw new Error(error.message);
+    }
 }

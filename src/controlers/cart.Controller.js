@@ -35,8 +35,8 @@ export const putCartControllers = async (req, res) => {
 
 export const deleteCartControllers = async (req, res) => {
     try {
-        const { _id } = req.params;
-        await deleteServices( _id );
+        const { CId, PId } = req.params;
+        await deleteServices( CId, PId );
         res.json({ message: "Product deleted" });
     } catch (error) {
         res.status(400).json({ error: error.message });

@@ -59,7 +59,6 @@ export default class CartService {
     const prod = cart.products.find(product => product.product.toString() === PId._id.toString());
     
     if (prod) {
-        // Verificar si hay suficiente stock disponible
         if (quantity > PId.stock) {
             throw new Error('Insufficient stock');
         }

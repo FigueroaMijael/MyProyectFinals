@@ -1,11 +1,11 @@
  class CartItem {
   constructor(product) {
-      this._id = product._id; // Suponiendo que el producto tiene un ID único
+      this._id = product._id;
       this.product = product.product;
       this.title = product.title;
       this.price = product.price;
       this.thumbnail = product.thumbnail;
-      this.quantity = product.quantity || 1; // Establecer cantidad predeterminada como 1 si no se proporciona
+      this.quantity = product.quantity || 1;
   }
 };
 

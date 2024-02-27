@@ -23,8 +23,8 @@ const usersSchema = new Schema({
     password: stringTypeSchemaNonUniqueRequired,
     loggedBy: {
         type: String,
-        default: 'form', // Valor por defecto
-        enum: ['form', 'github'], // Valores permitidos
+        default: 'form', 
+        enum: ['form', 'github'], 
     },
     
     role: {

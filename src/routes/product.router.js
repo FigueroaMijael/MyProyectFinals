@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { getDatosControllers, postDatosControllers, updateDatosControllers,  deleteDatosControllers } from '../controlers/products.Controller.js'
+import {authorization} from '../../utils.js'
 
 const router = Router();
 
@@ -10,24 +11,19 @@ router.get('/', getDatosControllers);
 router.get('/:_id', getDatosControllers);
 
 //GETByCode
-router.get('/:code', getDatosControllers);
+/* router.get('/:code', getDatosControllers); */
 
 // POST
-router.post('/create', postDatosControllers);
+router.post('/create',authorization(['admin']), postDatosControllers);
 
 //PUT
-router.put('/update/:_id', updateDatosControllers)
+router.put('/update/:_id',authorization(['admin']), updateDatosControllers)
 
 // Delete
-router.delete('/delete/:_id', deleteDatosControllers);
+router.delete('/delete/:_id',authorization(['admin']), deleteDatosControllers);
 
 // Delete
-router.delete('/delete/:code', deleteDatosControllers);
-
-// TEST
-router.get('/test', (req, res) => {
-    res.send({ message: "success", payload: "Success!!" });
-});
+/* router.delete('/delete/:code', deleteDatosControllers); */
 
 
 export default router; 

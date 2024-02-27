@@ -43,7 +43,7 @@ export const updateDatosControllers = async (req, res) => {
 
 export const deleteDatosControllers = async (req, res) => {
     try {
-        let { id } = req.params; // Cambiado de _id a id
+        let { id } = req.params;
         const deleteProd = await productService.delete(id);
         res.json({ message: `Producto con id: ${id} eliminado con éxito`, deletedProduct: deleteProd });
     } catch (error) {

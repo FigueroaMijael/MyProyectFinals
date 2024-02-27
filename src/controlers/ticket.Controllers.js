@@ -1,10 +1,10 @@
-import Ticket from '../services/dao/mongodb/models/ticket.model.js';
+import { ticketService } from '../services/service.js';
 
-export const createTicket = async (req, res) => {
+export const finalizePurchase = async (req, res) => {
   try {
-    const { code, amount, purchaser } = req.body;
-    const ticket = new Ticket({ code, amount, purchaser });
-    await ticket.save();
+    const { amount } = req.body;
+    const purchaser = req.user.email;
+    const ticket = await ticketService.createTicket({ amount, purchaser });
     res.status(201).json(ticket);
   } catch (error) {
     res.status(400).json({ message: error.message });

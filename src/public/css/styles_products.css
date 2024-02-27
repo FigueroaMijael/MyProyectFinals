@@ -15,10 +15,10 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    position: fixed; /* Se mantiene fija en la parte superior */
-    width: 100%; /* Ocupa el 100% del ancho de la pantalla */
-    top: 0; /* Se sitúa en la parte superior */
-    z-index: 1000; /* Para estar sobre otros elementos */
+    position: fixed;
+    width: 100%; 
+    top: 0; 
+    z-index: 1000; 
 }
 
 .nav-item {

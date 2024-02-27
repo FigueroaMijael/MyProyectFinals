@@ -82,10 +82,8 @@ export const getDatosUserRenderViewControllers = async (req, res) => {
         const user = req.user;
         console.log("Usuario logueado: ", user);
 
-        // Crear DTO del usuario con información no sensible
         const userDto = new UsersDto(user);
 
-        // Renderizar la vista con el DTO del usuario
         res.render("profile", { user: userDto });
     } catch (error) {
         console.error("Error al obtener los datos del usuario:", error);

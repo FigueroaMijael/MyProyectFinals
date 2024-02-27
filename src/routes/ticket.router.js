@@ -1,8 +1,11 @@
+// router/ticketRouter.js
 import { Router } from 'express';
-import { createTicket } from '../controlers/ticket.Controllers.js';
+import { finalizePurchase } from '../controlers/ticket.Controllers.js';
+import {authorization} from '../../utils.js'
 
-const router = Router();
 
-router.post('/tickets', createTicket);
+const ticketRouter = Router();
 
-export default router;
+ticketRouter.post('/finalizePurchase', authorization(['user']), finalizePurchase);
+
+export default ticketRouter;

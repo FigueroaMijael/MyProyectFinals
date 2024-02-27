@@ -23,11 +23,10 @@ class ProductManager {
             const data = await fs.readFile(this.filePath, 'utf-8');
             this.products = JSON.parse(data);
         } catch (error) {
-            // Si el archivo no existe, inicializa una lista de productos vacía
             if (error.code === 'ENOENT') {
-                await this.save(); // Crea el archivo con una lista de productos vacía
+                await this.save(); 
             } else {
-                throw error; // Error desconocido, relanza la excepción
+                throw error; 
             }
         }
     }
@@ -59,7 +58,7 @@ class ProductManager {
         try {
             const product = await this.getProductById(_id);
             if (product) {
-                Object.assign(product, newData); // Actualiza todas las propiedades del producto con los nuevos datos
+                Object.assign(product, newData); 
                 await this.save();
                 return product;
             } else {

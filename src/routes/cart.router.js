@@ -1,15 +1,16 @@
 import { Router } from "express";
 import { getCartControllers, postCartControllers, putCartControllers, deleteCartControllers } from '../controlers/cart.Controller.js';
+import {authorization} from '../../utils.js'
 
 const router = Router();
 
-router.get('/', getCartControllers);
+router.get('/', authorization(['user']), getCartControllers);
 
 // GETById
 router.get('/:_id', getCartControllers);
 
 // POST
-router.post('/:CId/product/:PId/:quantity', postCartControllers);
+router.post('/:CId/product/:PId/:quantity',authorization(['user']), postCartControllers);
 
 // PUT
 router.put('/update/:CId/product/:PId/:quantity', putCartControllers);

@@ -35,10 +35,8 @@ export const passportCall = (strategy) => {
 export const authorization = (roles) => {
     return async (req, res, next) => {
         if (req.user && roles.includes(req.user.role)){
-            // Usuario autorizado, pasar al siguiente middleware o controlador
             next();
         } else {
-             // Usuario no autorizado, devolver un error de acceso prohibido
             res.status(403).json({ error: 'Acceso prohibido, El usuario no tiene permisos con este rol.' });
         }
     }

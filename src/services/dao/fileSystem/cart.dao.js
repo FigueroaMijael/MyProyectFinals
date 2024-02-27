@@ -1,6 +1,6 @@
 import __dirname from '../../../../utils.js';
 import fileSystem from 'fs';
-import Cart from './models/cart.model.fs.js'; // Importa el modelo de carrito
+import Cart from './models/cart.model.fs.js';
 
 export default class CartService {
     #cart;
@@ -9,12 +9,12 @@ export default class CartService {
     #fileSystem;
 
     constructor() {
-        this.#cart = new Cart(__dirname + '/files/cart.json'); // Inicializa el carrito con el archivo JSON
+        this.#cart = new Cart(__dirname + '/files/cart.json');
         this.#dirPath = __dirname + '/files';
         this.#filePath = this.#dirPath + "/cart.json";
         this.#fileSystem = fileSystem;
 
-        this.#prepararDirectorioBase(); // Llamada a la función prepararDirectorioBase en el constructor
+        this.#prepararDirectorioBase();
     }
 
     async #prepararDirectorioBase() {
@@ -26,28 +26,28 @@ export default class CartService {
 
 
     async getAll() {
-        return await this.#cart.getAllProducts(); // Llama al método getAllProducts del modelo de carrito
+        return await this.#cart.getAllProducts(); 
     }
 
     
     async save() {
-        await this.#cart.save(); // Llama al método save del modelo de carrito
+        await this.#cart.save();
     }
 
     async saveProduct(product) {
-        await this.#cart.addProduct(product); // Llama al método addProduct del modelo de carrito
-        await this.save(); // Llama al método save del servicio para guardar los cambios
+        await this.#cart.addProduct(product); 
+        await this.save();
     }
 
     async update(productId, updatedProduct) {
-        await this.#cart.updateProductQuantity(productId, updatedProduct.quantity); // Llama al método updateProductQuantity del modelo de carrito
-        await this.save(); // Llama al método save del servicio para guardar los cambios
+        await this.#cart.updateProductQuantity(productId, updatedProduct.quantity); 
+        await this.save(); 
     }
 
     async delete(productId) {
         if (productId) {
-            await this.#cart.removeProduct(productId); // Llama al método removeProduct del modelo de carrito
-            await this.save(); // Llama al método save del servicio para guardar los cambios
+            await this.#cart.removeProduct(productId); 
+            await this.save(); 
         } else {
             await this.clearCart()
             await this.save()

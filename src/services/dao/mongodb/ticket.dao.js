@@ -1,10 +1,10 @@
-import Ticket from '../models/ticket.model.js';
+import ticketModel from './models/ticket.model.js';
 
-export default class TicketService {
+export default class TicketDao {
 
-  static async createTicket(ticketData) {
+   createTicket = async (ticketData) => {
     try {
-      const ticket = new Ticket(ticketData);
+      const ticket = ticketModel.create(ticketData);
       await ticket.save();
       return ticket;
     } catch (error) {
@@ -12,3 +12,4 @@ export default class TicketService {
     }
   }
 }
+

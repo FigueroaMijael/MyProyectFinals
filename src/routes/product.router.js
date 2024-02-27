@@ -9,6 +9,9 @@ router.get('/', getDatosControllers);
 //GETById
 router.get('/:_id', getDatosControllers);
 
+//GETByCode
+router.get('/:code', getDatosControllers);
+
 // POST
 router.post('/create', postDatosControllers);
 
@@ -17,6 +20,9 @@ router.put('/update/:_id', updateDatosControllers)
 
 // Delete
 router.delete('/delete/:_id', deleteDatosControllers);
+
+// Delete
+router.delete('/delete/:code', deleteDatosControllers);
 
 // TEST
 router.get('/test', (req, res) => {

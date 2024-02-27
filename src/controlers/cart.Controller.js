@@ -1,10 +1,25 @@
-import { obtenerDatos, agregarDato, actualizarCart, deleteServices } from '../services/cart.Services.js';
+/* IMPLEMENTACION CON FACTORY
+import {cartService} from '../services/factory.js' 
+*/
+
+//IMPLEMENTACION CON REPOSITORY
+import {cartService} from '../services/service.js'
+import { cartModel } from '../services/dao/mongodb/models/cart.model.js';
+import { productModel } from '../services/dao/mongodb/models/products.model.js';
+import CartDto from '../services/dto/cart.dto.js'
+
 
 export const getCartControllers = async (req, res) => {
     try {
-        let { _id } = req.params;
-        const dataCart = await obtenerDatos( _id );
-        res.json(dataCart);
+        const { _id } = req.params;
+
+        const dataCart = await cartService.getAll( _id );
+
+        const cartDto = new CartDto(dataCart);
+
+        console.log(cartDto);
+
+        res.json(cartDto);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -12,9 +27,34 @@ export const getCartControllers = async (req, res) => {
 
 export const postCartControllers = async (req, res) => {
     try {
-        const { CId, PId, quantity } = req.params;
+        const { CId, PId, quantity = 1 } = req.params;
 
-        const newCart = await agregarDato(CId, PId, quantity);
+        const parsedQuantity = parseInt(quantity);
+
+        if (isNaN(parsedQuantity) || parsedQuantity <= 0) {
+            throw new Error('Invalid quantity');
+        }
+
+        const cartExists = await cartModel.findById(CId);
+        if (!cartExists) {
+            throw new Error('Cart not found');
+        }
+
+        const prodExists = await productModel.findById(PId);
+        if (!prodExists) {
+            throw new Error('Product not found');
+        }
+
+        if (parsedQuantity > prodExists.stock) {
+            throw new Error('Insufficient stock');
+        }
+
+        // Restar la cantidad del producto al stock en la base de datos
+        prodExists.stock -= parsedQuantity;
+        await prodExists.save();
+
+        const newCart = await cartService.save(cartExists, prodExists, parsedQuantity);
+
         res.json(newCart);
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -24,10 +64,36 @@ export const postCartControllers = async (req, res) => {
 export const putCartControllers = async (req, res) => {
     try {
     
-        const { CId, PId, quantity } = req.params;
+        const { CId, PId, quantity = 1 } = req.params;
+
+
+        console.log(quantity);
+
+        const parsedQuantity = parseInt(quantity);
+
+        if (isNaN(parsedQuantity) || parsedQuantity <= 0) {
+            throw new Error('Invalid quantity');
+        }
+
+        // Verificar si el carrito existe antes de actualizar
+        const cartExists = await cartModel.findById(CId);
+        if (!cartExists) {
+            throw new Error("El carrito no existe");
+        }
+
+        // Verificar si el producto existe antes de actualizar
+        const prodExists = await productModel.findById(PId);
+        if (!prodExists) {
+            throw new Error("El producto no existe");
+        }
           
-        await actualizarCart( CId, PId, quantity);
-        res.json({ message: "Datos del carrito actualizados correctamente" });
+         // Restar la cantidad del producto al stock en la base de datos
+         prodExists.stock += parsedQuantity;
+         await prodExists.save();
+ 
+        const newCartUpdate = await cartService.update(cartExists, prodExists, parsedQuantity);
+
+        res.json({ message: "Datos del carrito actualizados correctamente" + newCartUpdate});
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -36,8 +102,28 @@ export const putCartControllers = async (req, res) => {
 export const deleteCartControllers = async (req, res) => {
     try {
         const { CId, PId } = req.params;
-        await deleteServices( CId, PId );
-        res.json({ message: "Product deleted" });
+
+        const cartExists = await cartModel.findById(CId);
+
+        if (!cartExists) {
+            throw new Error("El carrito no existe");
+        }
+
+        if (!PId) {
+            let clearCart = cartExists.products = [];
+            await cartExists.save();
+            res.send('carrito vaciado con exito.')
+            return clearCart;
+        }
+
+        const prodExists = await productModel.findById(PId);
+        if (!prodExists) {
+            throw new Error("El producto no existe");
+        }
+
+        const deleteCart = await cartService.delete( cartExists, prodExists );
+
+        res.json({ message: "Product deleted" + deleteCart});
     } catch (error) {
         res.status(400).json({ error: error.message });
     }

@@ -15,9 +15,9 @@ router.post('/:CId/product/:PId/:quantity', postCartControllers);
 router.put('/update/:CId/product/:PId/:quantity', putCartControllers);
 
 // DELETE ONE PRODUCT
-router.delete('/:CId/product/:PId', deleteCartControllers);
+router.delete('/delete/:CId/product/:PId', deleteCartControllers);
 
 // DELETE CART
-router.delete('/:CId', deleteCartControllers);
+router.delete('/delete/:CId', deleteCartControllers);
 
 export default router; 

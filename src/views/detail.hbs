@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del Producto</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Detalles del Producto</h1>
+        <div class="productDetailsContainer">
+            <h2>{{ProdId.title}}</h2>
+           {{!--  <img src="{{ProdId.thumbnail}}" alt="imagen del producto"> --}}
+            <p>{{ProdId.description}}</p>
+            <div class="details">
+                <p class="detailTitle"><b>Precio:</b></p>
+                <p class="detailContent">{{ProdId.price}}</p>
+            </div>
+            <div class="details">
+                <p class="detailTitle"><b>Categoría:</b></p>
+                <p class="detailContent">{{ProdId.category}}</p>
+            </div>
+            <div class="details">
+                <p class="detailTitle"><b>Stock:</b></p>
+                <p class="detailContent">{{ProdId.stock}}</p>
+            </div>
+             <div class="quantity-controls">
+                <button id="decrementQuantity">-</button>
+                <span id="quantity">1</span>
+                <button id="incrementQuantity">+</button>
+            </div>
+            <input type="submit" value="Agregar al carrito" id="addProductToCart">
+            <button id="viewCartBtn">Ver Carrito</button>
+        </div>
+    </div>
+
+        <script src="/js/detail.js"></script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+/* Estilos generales del cuerpo (body) */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilos de la barra de navegación (navbar) */
+.navbar {
+    background-color: #3498db;
+    overflow: hidden;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    position: fixed; /* Se mantiene fija en la parte superior */
+    width: 100%; /* Ocupa el 100% del ancho de la pantalla */
+    top: 0; /* Se sitúa en la parte superior */
+    z-index: 1000; /* Para estar sobre otros elementos */
+}
+
+.nav-item {
+    color: #fff;
+    text-decoration: none;
+    padding: 14px 16px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.nav-item:hover {
+    background-color: #2980b9;
+    color: #fff;
+}
+
+/* Estilo para el dropdown */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    background-color: #3498db;
+    color: #fff;
+    padding: 14px 16px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.dropbtn:hover {
+    background-color: #2980b9;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+/* Estilos para la sección de usuario */
+.user-section {
+    display: flex;
+    align-items: center;
+}
+
+.user-section .nav-item {
+    margin-right: 10px;
+}
+
+.icon {
+    color: #fff;
+    font-size: 20px;
+    margin-left: 10px;
+}
+
+/* Estilos para la barra de búsqueda */
+.search-bar {
+    display: flex;
+    align-items: center;
+}
+
+#searchInput {
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    margin-right: 10px;
+}
+
+#searchBtn {
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#searchBtn:hover {
+    background-color: #2980b9;
+}
+
+/* Estilos para el ícono del carrito */
+#cartIcon {
+    position: relative;
+}
+
+#cartIcon .badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #e74c3c;
+    color: #fff;
+    padding: 5px 8px;
+    border-radius: 50%;
+}
+
+/* Estilo para el contenedor principal */
+.container {
+    margin-top: 80px;
+    padding: 20px;
+}
+
+/* Estilos para la sección de productos */
+.ProductsContainer {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+/* Estilos para las cartas de productos */
+.styleList {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px;
+    width: calc(33.33% - 20px);
+    box-sizing: border-box;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.styleList:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.styleList img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+.detailTitle {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Estilos para los botones en las cartas */
+.styleList a,
+.styleList button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.cta-details {
+    background-color: #3498db;
+    transition: background-color 0.3s;
+}

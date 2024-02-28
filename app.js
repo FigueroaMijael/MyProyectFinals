@@ -5,6 +5,10 @@ import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
+// chat
+import { Server } from "socket.io"
+import {chatService} from './src/services/service.js'
+
 // configuracion
 import config from './src/config/config.js';
 import __dirname from './utils.js';
@@ -19,7 +23,7 @@ import renderRouter from './src/routes/renderView.router.js'
 import productRouter from './src/routes/product.router.js';
 import cartRouter from './src/routes/cart.router.js'
 import jwtRouter from './src/routes/jwt.router.js'
-import ticketRouter from './src/routes/ticket.router.js'
+
 
 //Custom - Extended
 
@@ -49,24 +53,25 @@ app.engine(
   app.set("view engine", "hbs");
   app.set("views", `${__dirname}/src/views`);
   app.use(express.static(__dirname + '/src/public'))
+  app.use("/socket.io", express.static(__dirname + '/socket.io/client-dist'));
+
 
 Handlebars.registerHelper('eq', function (a, b) {
     return a === b;
   });
-
 
 //Declare routers:
 app.use("/", renderRouter);
 app.use("/api/product", productRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/jwt", jwtRouter);
-app.use("/api/ticket", ticketRouter);
+
 
 
 
 const SERVER_PORT = config.port;
 
-app.listen(SERVER_PORT, async () => {
+const httpServer = app.listen(SERVER_PORT, async () => {
     console.log("Servidor escuchando por el puerto: " + SERVER_PORT);
     try {
         await MongoSingleton.getInstance();
@@ -76,6 +81,28 @@ app.listen(SERVER_PORT, async () => {
         process.exit();
     }
 });
+
+const io = new Server(httpServer);
+
+app.set('socketio', io);
+
+io.on('connection', (socket) => {
+  console.log('Nuevo usuario conectado');
+
+  socket.on('message', async (data) => {
+      try {
+          const newMessage = await chatService.save(data.user, data.message);
+          io.emit('messages', await chatService.getAll(newMessage));
+      } catch (error) {
+          console.error(`Error al procesar el mensaje en tiempo real: ${error.message}`);
+      }
+  });
+
+  socket.on('disconnect', () => {
+      console.log('Usuario desconectado');
+  });
+});
+
 
 
 

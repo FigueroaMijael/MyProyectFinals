@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat App</title>
+</head>
+<body>
+  <section class="main_container">
+    <div id="chat-container">
+    <div>
+      <input type="text" id="chatbox" placeholder="Escribe tu mensaje" />
+    </div>
+
+    <div>
+      <!-- Agregar un campo oculto para almacenar el nombre de usuario -->
+      <input type="hidden" id="userName" value="{{userName}}">
+      <p id="messages"></p>
+    </div>
+  </div>
+  </section>
+  
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/chat.js"></script>
+</body>
+</html>

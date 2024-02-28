@@ -3,7 +3,7 @@ import {cartService} from '../services/factory.js'
 */
 
 //IMPLEMENTACION CON REPOSITORY
-import {cartService} from '../services/service.js'
+import {cartService, ticketService} from '../services/service.js'
 import { cartModel } from '../services/dao/mongodb/models/cart.model.js';
 import { productModel } from '../services/dao/mongodb/models/products.model.js';
 import CartDto from '../services/dto/cart.dto.js'
@@ -128,3 +128,23 @@ export const deleteCartControllers = async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 }
+
+export const finalizePurchase = async (req, res) => {
+    try {
+        const { amount } = req.body;
+        const purchaser = req.user.email;
+
+        console.log("Creando ticket...");
+
+        // Crear el ticket con los datos proporcionados
+        const ticket = await ticketService.createTicket({ amount, purchaser });
+
+        console.log("Ticket creado:", ticket);
+
+        // Redirigir a la vista de finalizePurchase con el ID del ticket
+        res.redirect(`/finalizePurchase/${ticket._id}`);
+    } catch (error) {
+        console.error("Error al finalizar la compra:", error);
+        res.status(400).json({ message: error.message });
+    }
+};

@@ -1,0 +1,100 @@
+<body>
+    <div class="navbar">
+        <a href="/products" class="nav-item">Inicio</a>
+        <a href="/realtimeproducts" class="nav-item">Agregar Producto</a>
+
+        <div class="dropdown">
+            <button class="dropbtn">Productos
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <a href="#category1" class="dropdown-item">Categoría 1</a>
+                <a href="#category2" class="dropdown-item">Categoría 2</a>
+                <a href="#category3" class="dropdown-item">Categoría 3</a>
+            </div>
+        </div>
+
+        <div class="user-section">
+            <a href="/users/login" class="nav-item" id="loginBtn">Iniciar Sesión</a>
+            <a href="/users/register" class="nav-item" id="registerBtn">Registrarse</a>
+            <div class="icon" id="userIcon">
+                <i class="fa fa-user"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div>
+            <form method="post" id="realTimeForm">
+                <label for="realTimeTitle">Title:</label>
+                <input type="text" id="realTimeTitle" name="title" required><br>
+
+                <label for="realTimeDescription">Description:</label>
+                <textarea id="realTimeDescription" name="description" required></textarea><br>
+
+                <label for="realTimePrice">Price:</label>
+                <input type="number" id="realTimePrice" name="price" step="0.01" required><br>
+
+                <label for="realTimeCategory">Category:</label>
+                <input type="text" id="realTimeCategory" name="category" required><br>
+
+                <label for="realTimeThumbnail">Thumbnail URL:</label>
+                <input type="text" id="realTimeThumbnail" name="thumbnail" required><br>
+
+                <label for="realTimeStock">Stock:</label>
+                <input type="number" id="realTimeStock" name="stock" required><br>
+
+                <label for="realTimeCode">Code:</label>
+                <input type="text" id="realTimeCode" name="code" required><br>
+
+                <input type="submit" value="Send" id="realTimeButtonn">
+            </form>
+
+            <div id="updateFormContainer">
+                <form method="put" id="updateForm"> 
+                    <!-- Campos del formulario para actualizar un producto -->
+                    <!-- Asegúrate de que los campos tengan los mismos nombres que esperas en el servidor -->
+                    <input type="text" id="updateTitle" name="title" required><br>
+                    <textarea id="updateDescription" name="description" required></textarea><br>
+                    <input type="number" id="updatePrice" name="price" step="0.01" required><br>
+                    <input type="text" id="updateCategory" name="category" required><br>
+                    <input type="text" id="updateThumbnail" name="thumbnail" required><br>
+                    <input type="number" id="updateStock" name="stock" required><br>
+                    <!-- Botón para enviar el formulario y actualizar el producto -->
+                    <input type="submit" value="Actualizar Producto">
+                </form>
+            </div>
+            
+            <div class="realTimeProductsContainer">
+                <h1>Lista de Productos en Tiempo Real</h1>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Precio</th>
+                            <th>Código</th>
+                            <th>ID</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="realTimeProductTableBody">
+                        {{#each products}}
+                        <tr>
+                            <td>{{this.title}}</td>
+                            <td>{{this.price}}</td>
+                            <td>{{this.code}}</td>
+                            <td>{{this._id}}</td>
+                            <td>
+                    <button class="deleteProduct" data-productId="{{this._id}}" id="deleteProduct">Eliminar</button>
+                    <button class="updateProduct" onclick="updateProduct('{{this._id}}')">Actualizar</button>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/realTimeProduct.js"></script>
+</body>

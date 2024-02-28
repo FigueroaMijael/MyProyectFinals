@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { getCartControllers, postCartControllers, putCartControllers, deleteCartControllers } from '../controlers/cart.Controller.js';
-import {authorization} from '../../utils.js'
+import { getCartControllers, postCartControllers, putCartControllers, deleteCartControllers,finalizePurchase } from '../controlers/cart.Controller.js';
+import {authorization, passportCall} from '../../utils.js'
 
 const router = Router();
 
@@ -10,7 +10,7 @@ router.get('/', authorization(['user']), getCartControllers);
 router.get('/:_id', getCartControllers);
 
 // POST
-router.post('/:CId/product/:PId/:quantity',authorization(['user']), postCartControllers);
+router.post('/:CId/product/:PId/:quantity',passportCall('jwt'), authorization(['user']), postCartControllers);
 
 // PUT
 router.put('/update/:CId/product/:PId/:quantity', putCartControllers);
@@ -20,5 +20,11 @@ router.delete('/delete/:CId/product/:PId', deleteCartControllers);
 
 // DELETE CART
 router.delete('/delete/:CId', deleteCartControllers);
+
+
+router.post('/:CId//finalizePurchase',passportCall('jwt'), authorization(['user']), finalizePurchase);
+
+
+
 
 export default router; 

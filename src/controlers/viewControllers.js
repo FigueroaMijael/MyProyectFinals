@@ -1,7 +1,8 @@
-import { productService, cartService, userService } from "../services/service.js";
+import { productService, cartService} from "../services/service.js";
 import UsersDto from "../services/dto/users.dto.js";
 import Handlebars from "handlebars";
 import CartDto from '../services/dto/cart.dto.js'
+;
 
 Handlebars.registerHelper('eq', function (a, b) {
     return a === b;
@@ -38,6 +39,20 @@ export const getDatosRenderViewControllers = async (req, res) => {
         console.error(error);
         res.status(500).send("Error interno del servidor");
     }
+}
+
+export const realTimeViewControllers = async (req,res) => {
+     try {
+    const result = await productService.getAll();
+
+    res.render("realTimeProduct", {
+      title: "Lista de Productos en Tiempo Real",
+      products: result.products,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error interno del servidor");
+  }
 }
 
 export const getDatosCartRenderViewControllers = async (req, res) => {

@@ -1,4 +1,5 @@
-<div class="cart-container">
+<body>
+    <div class="cart-container">
     <h1>Tu Carrito de Compras</h1>
     <ul class="cart-products-container">
         {{#each cartDto.products}}
@@ -18,5 +19,7 @@
     </ul>
     <p class="total">Total: {{cartDto.totalAmount}} USD</p>
     
-    <button class="btn-finish-purchase" id=".btn-finish-purchase">Finalizar Compra</button>
+    <button class="btn-finish-purchase" id="btn-finish-purchase">Finalizar Compra</button>
 </div>
+<script src="/js/finalizePurchase.js"></script>
+</body>

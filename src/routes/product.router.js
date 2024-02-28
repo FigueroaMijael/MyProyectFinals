@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import { getDatosControllers, postDatosControllers, updateDatosControllers,  deleteDatosControllers } from '../controlers/products.Controller.js'
-import {authorization} from '../../utils.js'
 
 const router = Router();
 
@@ -14,13 +13,13 @@ router.get('/:_id', getDatosControllers);
 /* router.get('/:code', getDatosControllers); */
 
 // POST
-router.post('/create',authorization(['admin']), postDatosControllers);
+router.post('/create', postDatosControllers);
 
 //PUT
-router.put('/update/:_id',authorization(['admin']), updateDatosControllers)
+router.put('/update/:_id', updateDatosControllers)
 
 // Delete
-router.delete('/delete/:_id',authorization(['admin']), deleteDatosControllers);
+router.delete('/delete/:_id', deleteDatosControllers);
 
 // Delete
 /* router.delete('/delete/:code', deleteDatosControllers); */

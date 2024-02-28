@@ -1,12 +1,6 @@
-// En el archivo finalizePurchase.js
 const finalizePurchase = async () => {
     try {
-        const token = document.cookie.split('; ').find(row => row.startsWith('jwtCookieToken='));
-        if (!token) {
-            throw new Error('No se encontró el token de autenticación en la cookie');
-        }
-        const jwtToken = token.split('=')[1];
-        
+        const token = document.cookie.split(' ').find(row => row.startsWith('jwtCookieToken=')).split('=')[1];
         const totalAmount = parseFloat(document.querySelector('.total').textContent.split(': ')[1]);
 
         const ticketData = {
@@ -17,14 +11,14 @@ const finalizePurchase = async () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${jwtToken}` // Usar el token JWT obtenido de la cookie
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(ticketData)
         });
 
         if (response.ok) {
             const { purchaseId } = await response.json();
-            window.location.href = `/finalizePurchase?id=${purchaseId}`; // Redirigir con el ID del ticket
+            window.location.href = `/finalizePurchase/${purchaseId}`;
         } else {
             throw new Error('Error al finalizar la compra');
         }
@@ -34,5 +28,6 @@ const finalizePurchase = async () => {
     }
 };
 
-const finalizePurchaseButton = document.getElementById('btn-finish-purchase');
+const finalizePurchaseButton = document.getElementById('btn');
 finalizePurchaseButton.addEventListener('click', finalizePurchase);
+

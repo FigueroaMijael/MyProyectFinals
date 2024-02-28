@@ -22,7 +22,7 @@ router.delete('/delete/:CId/product/:PId', deleteCartControllers);
 router.delete('/delete/:CId', deleteCartControllers);
 
 
-router.post('/:CId//finalizePurchase',passportCall('jwt'), authorization(['user']), finalizePurchase);
+router.post('/finalizePurchase',passportCall('jwt'), authorization(['user']), finalizePurchase);
 
 
 

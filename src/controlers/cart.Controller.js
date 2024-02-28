@@ -142,9 +142,10 @@ export const finalizePurchase = async (req, res) => {
         console.log("Ticket creado:", ticket);
 
         // Redirigir a la vista de finalizePurchase con el ID del ticket
-        res.redirect(`/finalizePurchase/${ticket._id}`);
+        res.status(201).json({ purchaseId: ticket._id });
     } catch (error) {
         console.error("Error al finalizar la compra:", error);
         res.status(400).json({ message: error.message });
     }
 };
+

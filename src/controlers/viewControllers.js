@@ -1,4 +1,4 @@
-import { productService, cartService} from "../services/service.js";
+import { productService, cartService, ticketService} from "../services/service.js";
 import UsersDto from "../services/dto/users.dto.js";
 import Handlebars from "handlebars";
 import CartDto from '../services/dto/cart.dto.js'
@@ -130,4 +130,19 @@ export const renderRegisterControllers = async (req, res) => {
 
 export const renderGtiHubControllers = async (req, res) => {
     res.render("github-login");
+}
+
+export const finalizePurchase = async (req, res) => {
+  try {
+    const { _id } = req.params;
+
+    const ticket = await ticketService.getAll(_id);
+
+    console.log(ticket);
+
+    res.render('finalizepurchase',{ ticket })
+  } catch (error) {
+    console.error("Error al obtener los datos del ticket:", error);
+        res.status(500).send("Error interno del servidor");
+  }
 }

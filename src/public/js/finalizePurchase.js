@@ -1,6 +1,5 @@
 const finalizePurchase = async () => {
     try {
-        const token = document.cookie.split(' ').find(row => row.startsWith('jwtCookieToken=')).split('=')[1];
         const totalAmount = parseFloat(document.querySelector('.total').textContent.split(': ')[1]);
 
         const ticketData = {
@@ -11,7 +10,6 @@ const finalizePurchase = async () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(ticketData)
         });

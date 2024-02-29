@@ -132,12 +132,25 @@ export const deleteCartControllers = async (req, res) => {
 export const finalizePurchase = async (req, res) => {
     try {
         const { amount } = req.body;
-        const purchaser = req.user.email;
+        
+        const purchaser = req.user ? req.user.email : null; // Obtener el nombre de usuario si está autenticado
+
+        const generateRandomCode = () => {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            const length = 10; 
+            let code = '';
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * characters.length);
+                code += characters.charAt(randomIndex);
+            }
+            return code;
+        };
+        
+        const code = generateRandomCode();
 
         console.log("Creando ticket...");
 
-        // Crear el ticket con los datos proporcionados
-        const ticket = await ticketService.createTicket({ amount, purchaser });
+        const ticket = await ticketService.save({ amount, purchaser, code });
 
         console.log("Ticket creado:", ticket);
 

@@ -58,7 +58,7 @@ const addToCart = async () => {
     }
 };
 
-// Función para manejar el evento de clic en el botón "Ver Carrito"
+
 const viewCart = () => {
     const cartId = localStorage.getItem('cartId');
 

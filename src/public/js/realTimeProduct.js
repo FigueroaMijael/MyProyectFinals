@@ -1,4 +1,4 @@
-/* const realTimeForm = document.getElementById('realTimeForm');
+const realTimeForm = document.getElementById('realTimeForm');
 
 const sendProductData = async (event) => {
     event.preventDefault();
@@ -30,15 +30,12 @@ const sendProductData = async (event) => {
     }
 };
 
-// Agregar event listener al formulario para enviar los datos del producto
 realTimeForm.addEventListener('submit', sendProductData);
-*/
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Obtener todos los botones de eliminar por su clase
+
     const deleteButtons = document.querySelectorAll('.deleteProduct');
 
-    // Función para eliminar un producto
     const deleteProduct = async (_id) => {
         console.log(_id);
         try {
@@ -59,11 +56,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Agregar event listeners a todos los botones de eliminar
     deleteButtons.forEach(button => {
         button.addEventListener('click', () => {
-            // Obtener el id del producto del atributo data-productid
-            const productId = button.dataset.productid; // Asegurémonos de usar camelCase para dataset
+
+            const productId = button.dataset.productid;
             console.log(productId);
             deleteProduct(productId);
         });

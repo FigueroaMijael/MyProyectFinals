@@ -35,9 +35,9 @@ router.get("/updatePassword",authorization(['user']), renderUpdatePasswordContro
 //GitHub login
 router.get("/github/login", renderGtiHubControllers)
 
-// Renderizar la página del chat con el nombre de usuario como dato dinámico
+//chat
 router.get('/chat', passportCall('jwt'), authorization(['user']), (req, res) => {
-    const userName = req.user ? req.user.name : null; // Obtener el nombre de usuario si está autenticado
+    const userName = req.user ? req.user.name : null; 
     res.render('chat', { userName, fileCss: 'styles.chat.css' });
 });
 

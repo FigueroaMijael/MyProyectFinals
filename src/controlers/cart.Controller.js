@@ -133,7 +133,7 @@ export const finalizePurchase = async (req, res) => {
     try {
         const { amount } = req.body;
         
-        const purchaser = req.user ? req.user.email : null; // Obtener el nombre de usuario si está autenticado
+        const purchaser = req.user ? req.user.email : null; 
 
         const generateRandomCode = () => {
             const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -154,7 +154,6 @@ export const finalizePurchase = async (req, res) => {
 
         console.log("Ticket creado:", ticket);
 
-        // Redirigir a la vista de finalizePurchase con el ID del ticket
         res.status(201).json({ purchaseId: ticket._id });
     } catch (error) {
         console.error("Error al finalizar la compra:", error);

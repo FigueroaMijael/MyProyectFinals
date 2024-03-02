@@ -23,6 +23,7 @@ import renderRouter from './src/routes/renderView.router.js'
 import productRouter from './src/routes/product.router.js';
 import cartRouter from './src/routes/cart.router.js'
 import jwtRouter from './src/routes/jwt.router.js'
+import emailRouter from './src/routes/email.router.js'
 
 
 //Custom - Extended
@@ -65,6 +66,7 @@ app.use("/", renderRouter);
 app.use("/api/product", productRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/jwt", jwtRouter);
+app.use("/api/email", emailRouter);
 
 
 

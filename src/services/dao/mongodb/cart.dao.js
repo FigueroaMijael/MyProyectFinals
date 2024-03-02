@@ -7,12 +7,12 @@ export default class CartService {
 
             const cart = await cartModel.findOne({ _id: _id }).populate('products.product');
         
-            if (!cart) {
-                const newCart = await cartModel.create({ products: [] });
-                return [newCart];
-            }
-        
-            return [cart];
+
+                if (!cart) {
+                    const newCart = await cartModel.create({ products: [] });
+                    return { _id: newCart._id, cartData: [newCart] }; // Devuelve el _id y los datos del carrito
+                }
+                return { _id: cart._id, cartData: [cart] }; // Devuelve el _id y los datos del carrito
     
            } else {
             return await cartModel.findById( _id )

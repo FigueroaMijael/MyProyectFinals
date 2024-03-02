@@ -7,7 +7,7 @@ const router = Router();
 
 // VIEWS PRODUCTS
 //products (home)
-router.get("/", getDatosRenderViewControllers)
+router.get("/home", getDatosRenderViewControllers)
 
 //detalle
 router.get("/detail/:PId", getDatosProductRenderViewControllers )

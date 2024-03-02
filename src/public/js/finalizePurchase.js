@@ -11,7 +11,7 @@ const finalizePurchase = async () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(ticketData)
+            body: JSON.stringify(ticketData) // Asegúrate de enviar un objeto con la propiedad 'amount'
         });
 
         if (response.ok) {

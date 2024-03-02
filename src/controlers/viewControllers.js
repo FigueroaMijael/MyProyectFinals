@@ -25,7 +25,7 @@ export const getDatosRenderViewControllers = async (req, res) => {
             availability,
         });
         
-        res.render("home", {
+        res.render("home.hbs", {
         fileCss: "styles_products.css",
           products: result.products,
           total: result.total,

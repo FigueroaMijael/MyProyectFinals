@@ -19,8 +19,9 @@ decrementBtn.addEventListener("click", () => {
     }
 });
 
+
 const addToCart = async () => {
-    try {
+  
         const productId = window.location.pathname.split('/').pop();
 
         let cartId = localStorage.getItem('cartId');
@@ -31,14 +32,16 @@ const addToCart = async () => {
                 throw new Error('No se pudo obtener el ID del carrito');
             }
             const cartData = await cartResponse.json();
-            cartId = cartData[0]._id;
-
+            
+            cartId = cartData._id;
+        
             localStorage.setItem('cartId', cartId);
         }
+        
 
         const quantityDisplay = document.getElementById("quantity");
         const quantity = parseInt(quantityDisplay.textContent);
-
+        console.log(quantity);
         const response = await fetch(`/api/cart/${cartId}/product/${productId}/${quantity}`, {
             method: 'POST',
             headers: {
@@ -47,15 +50,15 @@ const addToCart = async () => {
         });
 
         if (response.ok) {
+            console.log(response);
             alert('Producto agregado al carrito');
         } else {
             const data = await response.json();
+            console.log(data);
             throw new Error(data.error || 'Error al agregar el producto al carrito');
         }
-    } catch (error) {
-        console.error(error);
-        alert('Ocurrió un error al agregar el producto al carrito');
-    }
+
+        
 };
 
 

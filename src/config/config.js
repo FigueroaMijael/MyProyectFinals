@@ -30,6 +30,8 @@ export default {
     gitClientSecret: process.env.CLIENT_SECRET,
     gitUrlCallback: process.env.GITHUB_URLCALLBACK,
     jwtPrivateKey: process.env.JWT_PRIVATE_KEY,
+    gmailAccount: process.env.GMAIL_ACCOUNT,
+    gmailAppPassword: process.env.GMAIL_APP_PASSWD,
     persistence
     
 };

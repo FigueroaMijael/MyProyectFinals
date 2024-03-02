@@ -4,7 +4,7 @@ import {authorization, passportCall} from '../../utils.js'
 
 const router = Router();
 
-router.get('/', authorization(['user']), getCartControllers);
+router.get('/', getCartControllers);
 
 // GETById
 router.get('/:_id', getCartControllers);

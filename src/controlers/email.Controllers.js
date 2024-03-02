@@ -23,35 +23,35 @@ transporter.verify(function (error, success) {
 
 export const sendEmail = (req, res) => {
     try {
-
         const userEmail = req.user ? req.user.email : null;
 
-const mailOptions = {
-    from: "ecommers gigabyte Test - " + config.gmailAccount,
-    to: userEmail,
-    subject: 'Correo de prueba de la finalización de la compra',
-    html: `
-        <h1>¡Gracias por tu compra!</h1>
-        <p>Detalles de la compra:</p>
-        <ul>
-            <li>ID de la compra: ${req.body._id}</li>
-            <li>Producto: ${req.body.title}</li>
-            <li>Precio: ${req.body.price}</li>
-            <li>Precio total de la compra: ${req.body.totalAmount}</li>
-        </ul>
-    `,
-};
+        const { purchaseId, amount } = req.body;
 
-        let result = transporter.sendMail(mailOptions, (error, info) => {
+        const mailOptions = {
+            from: "ecommers gigabyte Test - " + config.gmailAccount,
+            to: userEmail,
+            subject: 'Correo de prueba de la finalización de la compra',
+            html: `
+                <h1>¡Gracias por tu compra!</h1>
+                <p>Detalles de la compra:</p>
+                <ul>
+                    <li>ID de la compra: ${purchaseId}</li>
+                    <li>Precio total de la compra: ${amount}</li>
+                </ul>
+            `,
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
                 console.log(error);
                 res.status(400).send({ message: "Error", payload: error });
+            } else {
+                console.log('Message sent: %s', info.messageId);
+                res.send({ message: "Success", payload: info });
             }
-            console.log('Message sent: %s', info.messageId);
-            res.send({ message: "Success", payload: info })
-        })
+        });
     } catch (error) {
         console.error(error);
-        res.status(500).send({ error: error, message: "No se pudo enviar el email desde:" + config.gmailAccount });
+        res.status(500).send({ error: error, message: "No se pudo enviar el correo electrónico desde:" + config.gmailAccount });
     }
-}
+};

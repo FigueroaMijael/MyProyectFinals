@@ -47,6 +47,7 @@ export const realTimeViewControllers = async (req,res) => {
 
     res.render("realTimeProduct", {
       title: "Lista de Productos en Tiempo Real",
+      fileCss: "styles_realtime.css",
       products: result.products,
     });
   } catch (error) {
@@ -67,7 +68,7 @@ export const getDatosCartRenderViewControllers = async (req, res) => {
         
         res.render("cart", {
           title: "Vista del Carrito",
-          fileCss: "cartStyle.css",
+          fileCss: "style.cart.css",
           cartDto,
         });
       } catch (error) {
@@ -84,6 +85,7 @@ export const getDatosProductRenderViewControllers = async (req, res) => {
     
         res.render("detail", {
           title: "Detalle del producto",
+          fileCss:"style.detailProduct.css",
           ProdId,
         });
       } catch (error) {
@@ -99,7 +101,9 @@ export const getDatosUserRenderViewControllers = async (req, res) => {
 
         const userDto = new UsersDto(user);
 
-        res.render("profile", { user: userDto });
+        res.render("profile", {
+          user: userDto,
+          fileCss:"styles.profile.css" });
     } catch (error) {
         console.error("Error al obtener los datos del usuario:", error);
         res.status(500).send("Error interno del servidor");
@@ -110,21 +114,21 @@ export const getDatosUserRenderViewControllers = async (req, res) => {
 export const renderUpdatePasswordControllers = async (req, res) => {
     res.render("updatePassword", {
         title: "update Password",
-        fileCss: "updatePassword.css",
+        fileCss: "styles.updatePassword.css",
     }) 
 }
 
 export const renderLoginControllers = async (req, res) => {
     res.render("login", {
         title: "vista del login",
-        /* fileCss: "loginStyle.css" */
+        fileCss:"styles.login.css"
     })
 }
 
 export const renderRegisterControllers = async (req, res) => {
     res.render("register.hbs", {
         title: "vista del resgister",
-        /* fileCss: "registerStyle.css" */
+        fileCss: "styles.register.css"
     }) 
 }
 

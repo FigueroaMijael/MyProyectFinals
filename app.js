@@ -84,26 +84,37 @@ const httpServer = app.listen(SERVER_PORT, async () => {
     }
 });
 
+
 const io = new Server(httpServer);
 
 app.set('socketio', io);
 
-io.on('connection', (socket) => {
-  console.log('Nuevo usuario conectado');
+io.on('connection', async (socket) => {
+    console.log('Nuevo usuario conectado');
 
-  socket.on('message', async (data) => {
-      try {
-          const newMessage = await chatService.save(data.user, data.message);
-          io.emit('messages', await chatService.getAll(newMessage));
-      } catch (error) {
-          console.error(`Error al procesar el mensaje en tiempo real: ${error.message}`);
-      }
-  });
+    try {
+        const allMessages = await chatService.getAll();
 
-  socket.on('disconnect', () => {
-      console.log('Usuario desconectado');
-  });
+        socket.emit('messages', allMessages);
+    } catch (error) {
+        console.error(`Error al obtener todos los mensajes: ${error.message}`);
+    }
+
+    socket.on('message', async (data) => {
+        try {
+            const newMessage = await chatService.save(data.user, data.message);
+
+            io.emit('messages', await chatService.getAll(newMessage));
+        } catch (error) {
+            console.error(`Error al procesar el mensaje en tiempo real: ${error.message}`);
+        }
+    });
+
+    socket.on('disconnect', () => {
+        console.log('Usuario desconectado');
+    });
 });
+
 
 
 

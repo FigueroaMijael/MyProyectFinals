@@ -26,7 +26,7 @@ const finalizePurchase = async () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({purchaseId}, ticketData) // Envía el purchaseId
+                body: JSON.stringify({purchaseId, totalAmount}) // Envía el purchaseId
             });
 
             if (sendEmail.ok) {

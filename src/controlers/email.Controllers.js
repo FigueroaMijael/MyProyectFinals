@@ -25,7 +25,7 @@ export const sendEmail = (req, res) => {
     try {
         const userEmail = req.user ? req.user.email : null;
 
-        const { purchaseId, amount } = req.body;
+        const { purchaseId, totalAmount } = req.body;
 
         const mailOptions = {
             from: "ecommers gigabyte Test - " + config.gmailAccount,
@@ -36,7 +36,7 @@ export const sendEmail = (req, res) => {
                 <p>Detalles de la compra:</p>
                 <ul>
                     <li>ID de la compra: ${purchaseId}</li>
-                    <li>Precio total de la compra: ${amount}</li>
+                    <li>Precio total de la compra: ${totalAmount}</li>
                 </ul>
             `,
         };

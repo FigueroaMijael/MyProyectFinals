@@ -1,15 +1,16 @@
 import { productService, cartService, ticketService} from "../services/service.js";
 import UsersDto from "../services/dto/users.dto.js";
 import Handlebars from "handlebars";
-import CartDto from '../services/dto/cart.dto.js'
-;
+import CartDto from '../services/dto/cart.dto.js';
+import CustomError from '../config/Errors/customError/customError.js';
+import { EErrors } from '../config/Errors/customError/errors-enum.js'
 
 Handlebars.registerHelper('eq', function (a, b) {
     return a === b;
   });
 
 
-export const getDatosRenderViewControllers = async (req, res) => {
+  export const getDatosRenderViewControllers = async (req, res) => {
     try {
         const { limit = 10, page = 1, sort, query, category, availability } = req.query;
     
@@ -26,34 +27,32 @@ export const getDatosRenderViewControllers = async (req, res) => {
         });
         
         res.render("home.hbs", {
-        fileCss: "styles_products.css",
-          products: result.products,
-          total: result.total,
-          hasPrevPage: result.hasPrevPage,
-          hasNextPage: result.hasNextPage,
-          page: parseInt(pageInt),
-          add: Handlebars.helpers.add
-      });
+            fileCss: "styles_products.css",
+            products: result.products,
+            total: result.total,
+            hasPrevPage: result.hasPrevPage,
+            hasNextPage: result.hasNextPage,
+            page: parseInt(pageInt),
+            add: Handlebars.helpers.add
+        });
       
     } catch (error) {
-        console.error(error);
-        res.status(500).send("Error interno del servidor");
+        CustomError.createError({ name: "ViewControllerError", cause: error, message: "Error interno del servidor", code: EErrors.VIEW_INTERNAL_SERVER_ERROR });
     }
 }
 
 export const realTimeViewControllers = async (req,res) => {
-     try {
-    const result = await productService.getAll();
+    try {
+        const result = await productService.getAll();
 
-    res.render("realTimeProduct", {
-      title: "Lista de Productos en Tiempo Real",
-      fileCss: "styles_realtime.css",
-      products: result.products,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Error interno del servidor");
-  }
+        res.render("realTimeProduct", {
+            title: "Lista de Productos en Tiempo Real",
+            fileCss: "styles_realtime.css",
+            products: result.products,
+        });
+    } catch (error) {
+        CustomError.createError({ name: "ViewControllerError", cause: error, message: "Error interno del servidor", code: EErrors.VIEW_INTERNAL_SERVER_ERROR });
+    }
 }
 
 export const getDatosCartRenderViewControllers = async (req, res) => {
@@ -62,19 +61,15 @@ export const getDatosCartRenderViewControllers = async (req, res) => {
     
         const CartId = await cartService.getAll(CId);
         const cartDto = new CartDto(CartId);
-    
-        
-        console.log(cartDto);
-        
+            
         res.render("cart", {
-          title: "Vista del Carrito",
-          fileCss: "style.cart.css",
-          cartDto,
+            title: "Vista del Carrito",
+            fileCss: "style.cart.css",
+            cartDto,
         });
-      } catch (error) {
-        console.error(error);
-        res.status(500).send("Error interno del servidor");
-      }
+    } catch (error) {
+        CustomError.createError({ name: "ViewControllerError", cause: error, message: "Error interno del servidor", code: EErrors.VIEW_INTERNAL_SERVER_ERROR });
+    }
 }
 
 export const getDatosProductRenderViewControllers = async (req, res) => {
@@ -84,69 +79,79 @@ export const getDatosProductRenderViewControllers = async (req, res) => {
         const ProdId = await productService.getAll(PId);
     
         res.render("detail", {
-          title: "Detalle del producto",
-          fileCss:"style.detailProduct.css",
-          ProdId,
+            title: "Detalle del producto",
+            fileCss:"style.detailProduct.css",
+            ProdId,
         });
-      } catch (error) {
-        console.error(error);
-        res.status(500).send("Error interno del servidor");
-      }
+    } catch (error) {
+        CustomError.createError({ name: "ViewControllerError", cause: error, message: "Error interno del servidor", code: EErrors.VIEW_INTERNAL_SERVER_ERROR });
+    }
 }
 
 export const getDatosUserRenderViewControllers = async (req, res) => {
     try {
         const user = req.user;
-        console.log("Usuario logueado: ", user);
 
         const userDto = new UsersDto(user);
 
         res.render("profile", {
-          user: userDto,
-          fileCss:"styles.profile.css" });
+            user: userDto,
+            fileCss:"styles.profile.css"
+        });
     } catch (error) {
-        console.error("Error al obtener los datos del usuario:", error);
-        res.status(500).send("Error interno del servidor");
+        CustomError.createError({ name: "ViewControllerError", cause: error, message: "Error interno del servidor", code: EErrors.VIEW_INTERNAL_SERVER_ERROR });
     }
 };
 
-
 export const renderUpdatePasswordControllers = async (req, res) => {
-    res.render("updatePassword", {
-        title: "update Password",
-        fileCss: "styles.updatePassword.css",
-    }) 
+    try {
+        res.render("updatePassword", {
+            title: "update Password",
+            fileCss: "styles.updatePassword.css",
+        });
+    } catch (error) {
+        CustomError.createError({ name: "ViewControllerError", cause: error, message: "Error interno del servidor", code: EErrors.VIEW_INTERNAL_SERVER_ERROR });
+    }
 }
 
 export const renderLoginControllers = async (req, res) => {
-    res.render("login", {
-        title: "vista del login",
-        fileCss:"styles.login.css"
-    })
+    try {
+        res.render("login", {
+            title: "vista del login",
+            fileCss:"styles.login.css"
+        });
+    } catch (error) {
+        CustomError.createError({ name: "ViewControllerError", cause: error, message: "Error interno del servidor", code: EErrors.VIEW_INTERNAL_SERVER_ERROR });
+    }
 }
 
 export const renderRegisterControllers = async (req, res) => {
-    res.render("register.hbs", {
-        title: "vista del resgister",
-        fileCss: "styles.register.css"
-    }) 
+    try {
+        res.render("register.hbs", {
+            title: "vista del resgister",
+            fileCss: "styles.register.css"
+        });
+    } catch (error) {
+        CustomError.createError({ name: "ViewControllerError", cause: error, message: "Error interno del servidor", code: EErrors.VIEW_INTERNAL_SERVER_ERROR });
+    }
 }
 
 export const renderGtiHubControllers = async (req, res) => {
-    res.render("github-login");
+    try {
+        res.render("github-login");
+    } catch (error) {
+        CustomError.createError({ name: "ViewControllerError", cause: error, message: "Error interno del servidor", code: EErrors.VIEW_INTERNAL_SERVER_ERROR });
+    }
 }
 
-export const finalizePurchase = async (req, res) => {
-  try {
-    const { _id } = req.params;
+export const finalizePurchaseControllers = async (req, res) => {
+    try {
+        const { _id } = req.params;
 
-    const ticket = await ticketService.getAll(_id);
+        const ticket = await ticketService.getAll(_id);
 
-    console.log(ticket);
-
-    res.render('finalizepurchase',{ ticket })
-  } catch (error) {
-    console.error("Error al obtener los datos del ticket:", error);
-        res.status(500).send("Error interno del servidor");
-  }
+        res.render('finalizepurchase', { ticket })
+    } catch (error) {
+        CustomError.createError({ name: "ViewControllerError", cause: error, message: "Error interno del servidor", code: EErrors.VIEW_INTERNAL_SERVER_ERROR });
+    }
 }

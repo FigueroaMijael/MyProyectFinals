@@ -24,11 +24,12 @@ import productRouter from './src/routes/product.router.js';
 import cartRouter from './src/routes/cart.router.js'
 import jwtRouter from './src/routes/jwt.router.js'
 import emailRouter from './src/routes/email.router.js'
+import testUserFaker from './src/routes/test-faker.router.js'
 
+// LOGGER
+import { addLogger } from './src/config/logger/logger.js';
 
 //Custom - Extended
-
-
 const app = express();
 initializePassport()
 
@@ -61,12 +62,15 @@ Handlebars.registerHelper('eq', function (a, b) {
     return a === b;
   });
 
+  //use logger
+  app.use(addLogger)
 //Declare routers:
 app.use("/", renderRouter);
 app.use("/api/product", productRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/jwt", jwtRouter);
 app.use("/api/email", emailRouter);
+app.use("/api/testFaker", testUserFaker)
 
 
 
@@ -90,7 +94,6 @@ const io = new Server(httpServer);
 app.set('socketio', io);
 
 io.on('connection', async (socket) => {
-    console.log('Nuevo usuario conectado');
 
     try {
         const allMessages = await chatService.getAll();

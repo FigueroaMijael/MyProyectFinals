@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 import config from "../config.js";
+import CustomError from '../Errors/customError/customError.js';
+import { EErrors } from '../Errors/customError/errors-enum.js'
+
+const prodLogger = console;
+const devLogger = console;
 
 export default class MongoSingleton {
     static #instance;
@@ -8,7 +13,6 @@ export default class MongoSingleton {
         this.#connectMongoDB();
     }
 
-    // Implementación Singleton
     static getInstance() {
         if (!this.#instance) {
             this.#instance = new MongoSingleton();
@@ -22,10 +26,19 @@ export default class MongoSingleton {
                 useNewUrlParser: true,
                 useUnifiedTopology: true
             });
-            console.log("Conectado con éxito a MongoDB usando Mongoose.");
+            // Log de información de conexión exitosa a MongoDB
+            prodLogger.info("Conectado con éxito a MongoDB usando Mongoose.");
+            devLogger.info("Conectado con éxito a MongoDB usando Mongoose.");
         } catch (error) {
-            console.error("No se pudo conectar a la BD usando Mongoose:", error);
-            process.exit()
+            // Manejo de error al no poder conectar a MongoDB
+            CustomError.createError({
+                name: "MongoDBConnectionError",
+                cause: error,
+                message: "No se pudo conectar a la base de datos MongoDB usando Mongoose.",
+                code: EErrors.DATABASE_ERROR,
+                logger: prodLogger.error // Usar el logger de producción para este tipo de error
+            });
+            process.exit(); // Salir del proceso en caso de error
         }
-    }
-};
+    };
+}

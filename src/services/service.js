@@ -10,7 +10,6 @@ import UsersRepository from './repository/users.repository.js'
 import TicketRepository from './repository/ticket.repository.js';
 import ChatRepository from './repository/chat.repository.js';
 
-// Generamos las instancias de las clases
 const productDao = new ProductDao()
 const cartDao = new CartDao();
 const usersDao = new UserDao();

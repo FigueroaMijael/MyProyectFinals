@@ -1,6 +1,9 @@
+// controllers/emailController.js
 import nodemailer from "nodemailer";
 import config from "../config/config.js";
-import __dirname from "../../utils.js";
+import CustomError from '../config/Errors/customError/customError.js';
+import { EErrors } from '../config/Errors/customError/errors-enum.js';
+import  __dirname  from "../../utils.js";
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -13,18 +16,15 @@ const transporter = nodemailer.createTransport({
 
 transporter.verify(function (error, success) {
     if (error) {
-        console.log(error);
+        CustomError.createError({ name: "EmailControllerError", cause: error, message: "Error al verificar el servidor de correo", code: EErrors.SERVER_ERROR, logger: console });
     } else {
-        console.log('Server is ready to take our messages');
+        console.info('Server is ready to take our messages');
     }
-})
-
-
+});
 
 export const sendEmail = (req, res) => {
     try {
         const userEmail = req.user ? req.user.email : null;
-
         const { purchaseId, totalAmount } = req.body;
 
         const mailOptions = {
@@ -43,15 +43,13 @@ export const sendEmail = (req, res) => {
 
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
-                console.log(error);
-                res.status(400).send({ message: "Error", payload: error });
+                CustomError.createError({ name: "EmailControllerError", cause: error, message: "Error al enviar correo electrónico", code: EErrors.EMAIL_ERROR, logger: console });
             } else {
-                console.log('Message sent: %s', info.messageId);
-                res.send({ message: "Success", payload: info });
+                console.info('Message sent: %s', info.messageId);
+                res.send({ message: "Correo electrónico enviado correctamente", payload: info });
             }
         });
     } catch (error) {
-        console.error(error);
-        res.status(500).send({ error: error, message: "No se pudo enviar el correo electrónico desde:" + config.gmailAccount });
+        CustomError.createError({ name: "EmailControllerError", cause: error, message: "Error al enviar correo electrónico", code: EErrors.EMAIL_ERROR, logger: console });
     }
 };

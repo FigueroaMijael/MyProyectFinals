@@ -6,7 +6,8 @@ import {userService} from '../services/factory.js'
 import {userService} from '../services/service.js'
 import { isValidPassword, generateJWToken, createHash } from '../../utils.js';
 import UsersDto from '../services/dto/users.dto.js'
-
+import CustomError from '../config/Errors/customError/customError.js';
+import { EErrors } from '../config/Errors/customError/errors-enum.js';
 
 export const loginUser = async (req, res) => {
     try {
@@ -15,11 +16,21 @@ export const loginUser = async (req, res) => {
         const user = await userService.findByUsername(email);
 
         if (!user) {
-            return res.status(400).send({ error: "Not found", message: "Usuario no encontrado con username: " + email });
+            throw new CustomError({
+                name: "JWTControllerError",
+                message: "Usuario no encontrado con username: " + email,
+                code: EErrors.NOT_FOUND
+            });
         }
+
         if (!isValidPassword(user, password)) {
-            return res.status(401).send({ status: "error", error: "El usuario y la contraseña no coinciden!" });
+            throw new CustomError({
+                name: "JWTControllerError",
+                message: "El usuario y la contraseña no coinciden!",
+                code: EErrors.UNAUTHORIZED
+            });
         }
+
         const tokenUser = {
             name: `${user.name} ${user.lastName}`,
             email: user.email,
@@ -32,21 +43,23 @@ export const loginUser = async (req, res) => {
 
         res.send({ message: "Login successful!" });
     } catch (error) {
-        console.error(error);
-        return res.status(500).send({ status: "error", error: "Error interno de la aplicación." });
+        CustomError.createError({ name: "JWTControllerError", cause: error, message: "Error interno de la aplicación.", code: EErrors.INTERNAL_SERVER_ERROR, logger: req.logger });
     }
 };
 
 export const registerUser = async (req, res) => {
     const { name, lastName, email, age, password } = req.body;
 
-
-
     const exists = await userService.findByUsername(email);
 
     if (exists) {
-        return res.status(401).send({ status: "error", message: "Usuario ya existe." });
+        throw new CustomError({
+            name: "JWTControllerError",
+            message: "Usuario ya existe.",
+            code: EErrors.UNAUTHORIZED
+        });
     }
+
     const user = {
         name,
         lastName,
@@ -55,17 +68,12 @@ export const registerUser = async (req, res) => {
         password: createHash(password)
     };
 
-
-
     const userDto = new UsersDto(user);
-
-  
     
     try {
         await userService.save(userDto);
-        return res.status(201).send({ status: "success", message: "Usuario creado con éxito." });
+        res.status(201).send({ status: "success", message: "Usuario creado con éxito." });
     } catch (error) {
-        console.error(error);
-        return res.status(500).send({ status: "error", error: "Error interno de la aplicación." });
+        CustomError.createError({ name: "JWTControllerError", cause: error, message: "Error interno de la aplicación.", code: EErrors.INTERNAL_SERVER_ERROR, logger: req.logger });
     }
 };

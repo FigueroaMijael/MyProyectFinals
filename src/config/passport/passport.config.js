@@ -3,17 +3,14 @@ import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import GithubStrategy from 'passport-github2';
 import config from '../config.js';
 import { usersModel } from "../../services/dao/mongodb/models/users.model.js";
+import CustomError from '../Errors/customError/customError.js';
+import { EErrors } from '../Errors/customError/errors-enum.js'
 
-// Definir cookieExtractor antes de su uso en JwtStrategy
 const cookieExtractor = req => {
     let token = null;
-    console.log("Entrando a Cookie Extractor");
+    
     if (req && req.cookies) {
-        console.log("Cookies presentes: ");
-        console.log(req.cookies);
         token = req.cookies['jwtCookieToken']
-        console.log("Token obtenido desde Cookie:");
-        console.log(token);
     }
     return token;
 };
@@ -24,13 +21,15 @@ const initializePassport = () => {
             jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
             secretOrKey: config.jwtPrivateKey
         }, async (jwt_payload, done) => {
-            console.log("Entrando a passport Strategy con JWT.");
             try {
-                console.log("JWT obtenido del Payload");
-                console.log(jwt_payload);
                 return done(null, jwt_payload.user)
             } catch (error) {
-                return done(error)
+                CustomError.createError({
+                    name: "PassportJWTError",
+                    cause: error,
+                    message: "Error en la estrategia de autenticación JWT",
+                    code: EErrors.INVALID_TYPES_ERROR
+                });
             }
         }
     ));
@@ -41,14 +40,10 @@ const initializePassport = () => {
         callbackUrl: config.gitUrlCallback
         },
         async (accessToken, refreshToken, profile, done) => {
-            console.log("Profile obtenido del usuario de github: ");
-            console.log(profile);
             try {
                 const user = await usersModel.findOne({email: profile._json.email})
-                console.log("Usuario encontrado para login:");
-                console.log(user);
                 if(!user) {
-                    console.warn("User doesn't exists with username: " + profile._json.email);
+                    req.logger.warn("User doesn't exists with username: " + profile._json.email);
                     let NewUser = {
                         first_name: profile._json.name,
                         last_name: ' ', 
@@ -60,12 +55,15 @@ const initializePassport = () => {
                     const result = await usersModel.create(NewUser);
                     return done(null, result);
                 } else {
-                    console.log('user exists')
                     return done(null, user)
-                }
-                
+                }  
             } catch (error) {
-                return done(error)
+                CustomError.createError({
+                    name: "PassportGithubError",
+                    cause: error,
+                    message: "Error en la estrategia de autenticación GitHub",
+                    code: EErrors.INVALID_TYPES_ERROR
+                });
             }
         })
     );
@@ -79,7 +77,12 @@ const initializePassport = () => {
             let user = await usersModel.findById(_id);
             done(null, user);
         } catch (error) {
-            console.error("Error deserializando el usuario: " + error);
+            CustomError.createError({
+                name: "PassportDeserializeError",
+                cause: error,
+                message: "Error deserializando el usuario",
+                code: EErrors.DATABASE_ERROR
+            });
         }
     });
 }

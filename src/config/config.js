@@ -5,21 +5,17 @@ const program = new Command();
 
 program
     .option('-d', 'Varaible para debug', false) 
+    .option('--test', 'Variable para correr los test', false)
     .option('--persist <persist>', 'Modo de persistencia', "mongodb")
-    .option('--mode <mode>', 'Modo de trabajo', 'prod')
+    .option('--mode <mode>', 'Modo de trabajo', 'development')
 program.parse(); 
-
-console.log("Environment Mode Option: ", program.opts().mode);
-console.log("Persistence Mode Option: ", program.opts().persist);
-
-console.log("PERSISTENCE:::");
-console.log(program.opts().persist);
 
 const persistence = program.opts().persist
 const environment = program.opts().mode;
+const test = program.opts().test;
 
 dotenv.config({
-    path: environment === "prod" ? "./src/config/.env.production" : "./src/config/.env.development"
+    path: environment === "production" ? "./src/config/.env.production" : "./src/config/.env.development"
 });
 
 export default {
@@ -32,5 +28,7 @@ export default {
     jwtPrivateKey: process.env.JWT_PRIVATE_KEY,
     gmailAccount: process.env.GMAIL_ACCOUNT,
     gmailAppPassword: process.env.GMAIL_APP_PASSWD,
-    persistence
+    persistence: persistence, 
+    environment: environment,
+    test: test
 };

@@ -3,53 +3,54 @@ import {cartService} from '../services/factory.js'
 */
 
 //IMPLEMENTACION CON REPOSITORY
-import {cartService, ticketService} from '../services/service.js'
+// controllers/cartControllers.js
+import { cartService, ticketService } from '../services/service.js';
 import { cartModel } from '../services/dao/mongodb/models/cart.model.js';
 import { productModel } from '../services/dao/mongodb/models/products.model.js';
-import CartDto from '../services/dto/cart.dto.js'
-
+import CartDto from '../services/dto/cart.dto.js';
+import CustomError from '../config/Errors/customError/customError.js';
+import { EErrors } from '../config/Errors/customError/errors-enum.js';
 
 export const getCartControllers = async (req, res) => {
     try {
+        req.logger.info("Obteniendo datos del carrito");
         const { _id } = req.params;
 
-        const dataCart = await cartService.getAll( _id );
+        const dataCart = await cartService.getAll(_id);
 
         const cartDto = new CartDto(dataCart);
 
-        console.log(cartDto);
-
         res.json(cartDto);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        CustomError.createError({ name: "CartControllerError", cause: error, message: "Error al obtener datos del carrito", code: EErrors.DATABASE_ERROR, logger: req.logger });
     }
-}
+};
 
 export const postCartControllers = async (req, res) => {
     try {
+        req.logger.info("Creando nuevo producto en el carrito");
         const { CId, PId, quantity = 1 } = req.params;
 
         const parsedQuantity = parseInt(quantity);
 
         if (isNaN(parsedQuantity) || parsedQuantity <= 0) {
-            throw new Error('Invalid quantity');
+            CustomError.createError({ name: "CartControllerError", message: "Cantidad no válida", code: EErrors.VALIDATION_ERROR, logger: req.logger });
         }
 
         const cartExists = await cartModel.findById(CId);
         if (!cartExists) {
-            throw new Error('Cart not found');
+            CustomError.createError({ name: "CartControllerError", message: "Carrito no encontrado", code: EErrors.NOT_FOUND, logger: req.logger });
         }
 
         const prodExists = await productModel.findById(PId);
         if (!prodExists) {
-            throw new Error('Product not found');
+            CustomError.createError({ name: "CartControllerError", message: "Producto no encontrado", code: EErrors.NOT_FOUND, logger: req.logger });
         }
 
         if (parsedQuantity > prodExists.stock) {
-            throw new Error('Insufficient stock');
+            CustomError.createError({ name: "CartControllerError", message: "Stock insuficiente", code: EErrors.VALIDATION_ERROR, logger: req.logger });
         }
 
-        // Restar la cantidad del producto al stock en la base de datos
         prodExists.stock -= parsedQuantity;
         await prodExists.save();
 
@@ -57,80 +58,76 @@ export const postCartControllers = async (req, res) => {
 
         res.json(newCart);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        CustomError.createError({ name: "CartControllerError", cause: error, message: "Error al agregar producto al carrito", code: EErrors.DATABASE_ERROR, logger: req.logger });
     }
-}
+};
 
 export const putCartControllers = async (req, res) => {
     try {
-    
+        req.logger.info("Actualizando datos del carrito");
         const { CId, PId, quantity = 1 } = req.params;
-
-
-        console.log(quantity);
 
         const parsedQuantity = parseInt(quantity);
 
         if (isNaN(parsedQuantity) || parsedQuantity <= 0) {
-            throw new Error('Invalid quantity');
+            CustomError.createError({ name: "CartControllerError", message: "Cantidad no válida", code: EErrors.VALIDATION_ERROR, logger: req.logger });
         }
 
-        // Verificar si el carrito existe antes de actualizar
         const cartExists = await cartModel.findById(CId);
         if (!cartExists) {
-            throw new Error("El carrito no existe");
+            CustomError.createError({ name: "CartControllerError", message: "El carrito no existe", code: EErrors.NOT_FOUND, logger: req.logger });
         }
 
-        // Verificar si el producto existe antes de actualizar
         const prodExists = await productModel.findById(PId);
         if (!prodExists) {
-            throw new Error("El producto no existe");
+            CustomError.createError({ name: "CartControllerError", message: "El producto no existe", code: EErrors.NOT_FOUND, logger: req.logger });
         }
-          
-         // Restar la cantidad del producto al stock en la base de datos
-         prodExists.stock += parsedQuantity;
-         await prodExists.save();
- 
+
+        prodExists.stock += parsedQuantity;
+        await prodExists.save();
+
         const newCartUpdate = await cartService.update(cartExists, prodExists, parsedQuantity);
 
-        res.json({ message: "Datos del carrito actualizados correctamente" + newCartUpdate});
+        res.json({ message: "Datos del carrito actualizados correctamente", cart: newCartUpdate });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        CustomError.createError({ name: "CartControllerError", cause: error, message: "Error al actualizar datos del carrito", code: EErrors.DATABASE_ERROR, logger: req.logger });
     }
-}
+};
 
 export const deleteCartControllers = async (req, res) => {
     try {
+        req.logger.info("Eliminando producto del carrito");
         const { CId, PId } = req.params;
 
         const cartExists = await cartModel.findById(CId);
 
         if (!cartExists) {
-            throw new Error("El carrito no existe");
+            CustomError.createError({ name: "CartControllerError", message: "El carrito no existe", code: EErrors.NOT_FOUND, logger: req.logger });
         }
 
         if (!PId) {
-            let clearCart = cartExists.products = [];
+            cartExists.products = [];
             await cartExists.save();
-            res.send('carrito vaciado con exito.')
-            return clearCart;
+            res.send('Carrito vaciado con éxito.');
+            return;
         }
 
         const prodExists = await productModel.findById(PId);
         if (!prodExists) {
-            throw new Error("El producto no existe");
+            CustomError.createError({ name: "CartControllerError", message: "El producto no existe", code: EErrors.NOT_FOUND, logger: req.logger });
         }
 
-        const deleteCart = await cartService.delete( cartExists, prodExists );
+        const deleteCart = await cartService.delete(cartExists, prodExists);
 
-        res.json({ message: "Product deleted" + deleteCart});
+        res.json({ message: "Producto eliminado del carrito", deletedCart: deleteCart });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        CustomError.createError({ name: "CartControllerError", cause: error, message: "Error al eliminar producto del carrito", code: EErrors.DATABASE_ERROR, logger: req.logger });
     }
-}
+};
 
 export const finalizePurchase = async (req, res) => {
     try {
+        req.logger.info("Finalizando compra");
         const { amount } = req.body;
         
         const purchaser = req.user ? req.user.email : null; 
@@ -148,16 +145,10 @@ export const finalizePurchase = async (req, res) => {
         
         const code = generateRandomCode();
 
-        console.log("Creando ticket...");
-
         const ticket = await ticketService.save({ amount, purchaser, code });
-
-        console.log("Ticket creado:", ticket);
 
         res.status(201).json({ purchaseId: ticket._id });
     } catch (error) {
-        console.error("Error al finalizar la compra:", error);
-        res.status(400).json({ message: error.message });
+        CustomError.createError({ name: "CartControllerError", cause: error, message: "Error al finalizar la compra", code: EErrors.DATABASE_ERROR, logger: req.logger });
     }
 };
-

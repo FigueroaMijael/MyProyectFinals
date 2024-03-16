@@ -29,7 +29,6 @@ export default class ProductService {
           const hasNextPage = page * limit < count;
 
           if (!_id) {
-            // Recupera todos los documentos de la colección de productos
             const products = await productModel.find(queryFilter, null, options)
             return {
                 products,

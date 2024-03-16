@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { passportCall, authorization} from "../../utils.js";
-import {finalizePurchase ,getDatosRenderViewControllers, realTimeViewControllers, getDatosCartRenderViewControllers, getDatosProductRenderViewControllers, renderLoginControllers, renderRegisterControllers,  getDatosUserRenderViewControllers, renderUpdatePasswordControllers, renderGtiHubControllers} from '../controlers/viewControllers.js'
-
+import {finalizePurchaseControllers ,getDatosRenderViewControllers, realTimeViewControllers, getDatosCartRenderViewControllers, getDatosProductRenderViewControllers, renderLoginControllers, renderRegisterControllers,  getDatosUserRenderViewControllers, renderUpdatePasswordControllers, renderGtiHubControllers} from '../controlers/viewControllers.js'
 
 const router = Router();
 
@@ -41,6 +40,6 @@ router.get('/chat', passportCall('jwt'), authorization(['user']), (req, res) => 
     res.render('chat', { userName, fileCss: 'styles.chat.css' });
 });
 
-router.get('/finalizePurchase/:_id',  passportCall('jwt'), authorization(['user']), finalizePurchase) 
+router.get('/finalizePurchase/:_id',  passportCall('jwt'), authorization(['user']), finalizePurchaseControllers) 
 
 export default router

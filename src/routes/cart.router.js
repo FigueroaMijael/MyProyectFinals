@@ -24,7 +24,4 @@ router.delete('/delete/:CId', deleteCartControllers);
 
 router.post('/finalizePurchase',passportCall('jwt'), authorization(['user']), finalizePurchase);
 
-
-
-
 export default router; 

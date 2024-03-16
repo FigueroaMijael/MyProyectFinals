@@ -18,9 +18,6 @@ export default class userService {
     };
 
     update = async (filter, value) => {
-        console.log("Update student with filter and value:");
-        console.log(filter);
-        console.log(value);
         let result = await usersModel.updateOne(filter, value);
         return result;
     }

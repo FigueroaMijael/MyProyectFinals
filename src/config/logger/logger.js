@@ -14,6 +14,7 @@ const customLevelsOptions = {
     }
 };
 
+// Configuración del logger para producción
 const prodLogger = winston.createLogger({
     levels: customLevelsOptions.levels,
     transports: [
@@ -32,6 +33,7 @@ const prodLogger = winston.createLogger({
     ]
 });
 
+// Configuración del logger para desarrollo
 const devLogger = winston.createLogger({
     levels: customLevelsOptions.levels,
     transports: [
@@ -45,24 +47,29 @@ const devLogger = winston.createLogger({
     ]
 });
 
-export const addLogger = (req, res, next) => {
+const errorHandlerMiddleware = (error, req, res, next) => {
+    console.error("Información del error en errorHandlerMiddleware:", error);
+
     if (config.environment === 'production') {
         req.logger = prodLogger;
     } else {
         req.logger = devLogger;
     }
 
-    req.logger.info(`${req.method} en ${req.url} - at ${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`);
-
-    res.errorHandler = (error) => {
-        CustomError.createError({
-            name: "CustomErrorHandler",
-            cause: error,
-            message: "Internal server error",
-            code: EErrors.DATABASE_ERROR,
-            logger: req.logger // Pasar el logger adjunto en la solicitud
-        });
-    };
+    // Verificar si el error es una instancia de CustomError
+    if (error instanceof CustomError) {
+        req.logger.error(`${error.name}: ${error.message || 'Error desconocido'}`);
+        if (error.cause) {
+            req.logger.error(`Causa: ${error.cause.message || 'Causa desconocida'}`);
+        }
+        res.status(error.code || 500).json({ error: error.message || 'Error desconocido' });
+    } else {
+        // Manejar otros tipos de errores
+        req.logger.error(error.stack || 'Error desconocido'); // Aquí se cambió para evitar 'undefined: Error desconocido'
+        res.status(500).json({ error: 'Internal server error' });
+    }
 
     next();
 };
+
+export { errorHandlerMiddleware, devLogger, prodLogger };

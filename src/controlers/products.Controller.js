@@ -5,8 +5,9 @@ import {productService} from '../services/factory.js'
 //IMPLEMENTACION CON REPOSITORY
 // controllers/productControllers.js
 import { productService } from '../services/service.js';
-import CustomError from '../config/Errors/customError/customError.js';
 import { EErrors } from '../config/Errors/customError/errors-enum.js';
+import CustomError from '../config/Errors/customError/customError.js';
+import { errorHandlerMiddleware, devLogger, prodLogger } from '../config/logger/logger.js';
 
 export const getDatosControllers = async (req, res) => {
     try {
@@ -26,9 +27,10 @@ export const getDatosControllers = async (req, res) => {
     }
 };
 
-export const postDatosControllers = async (req, res) => {
+export const postDatosControllers = async (req, res, next) => {
     try {
-        req.logger.info("Creando nuevo producto");
+        devLogger.info("Creando nuevo producto");
+        prodLogger.info("Creando nuevo producto");
 
         const { title, description, price, category, thumbnail, code, stock } = req.body;
 
@@ -37,7 +39,8 @@ export const postDatosControllers = async (req, res) => {
             throw new CustomError({
                 name: "ProductControllerError",
                 message: "Todos los campos son obligatorios",
-                code: EErrors.VALIDATION_ERROR
+                code: EErrors.VALIDATION_ERROR,
+                logger: req.logger
             });
         }
 
@@ -45,7 +48,8 @@ export const postDatosControllers = async (req, res) => {
             throw new CustomError({
                 name: "ProductControllerError",
                 message: "El precio debe ser un número positivo",
-                code: EErrors.VALIDATION_ERROR
+                code: EErrors.VALIDATION_ERROR,
+                logger: req.logger
             });
         }
 
@@ -53,7 +57,8 @@ export const postDatosControllers = async (req, res) => {
             throw new CustomError({
                 name: "ProductControllerError",
                 message: "El stock debe ser un número no negativo",
-                code: EErrors.VALIDATION_ERROR
+                code: EErrors.VALIDATION_ERROR,
+                logger: req.logger
             });
         }
 
@@ -61,9 +66,13 @@ export const postDatosControllers = async (req, res) => {
         const nuevoDato = await productService.save(req.body);
         res.status(201).json({ dato: nuevoDato });
     } catch (error) {
-        CustomError.createError({ name: "ProductControllerError", cause: error, message: "Error al crear un nuevo producto", code: EErrors.DATABASE_ERROR, logger: req.logger });
+        console.error("Información del error:", error);
+    next(error);
     }
+    
 };
+
+
 
 export const updateDatosControllers = async (req, res) => {
     try {

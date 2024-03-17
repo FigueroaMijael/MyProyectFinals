@@ -1,17 +1,18 @@
 export default class CustomError {
     static createError({ name, cause, message, code, logger }) {
-        const error = new Error(message);
+        const errorMessage = message || 'Error desconocido';
+        const error = new Error(errorMessage);
         error.name = name;
         error.code = code;
+        error.message = errorMessage;
         error.cause = cause ? new Error(cause) : null;
 
+        // Asegurarse de usar el logger proporcionado
         if (logger) {
-            logger.error(`Error: ${message}`);
-            if (cause) {
-                logger.error(cause);
-            }
+            logger.error(`${error.stack || error.message}`);
         }
 
+        // Lanzar el error
         throw error;
     }
 }

@@ -27,7 +27,7 @@ import emailRouter from './src/routes/email.router.js'
 import testUserFaker from './src/routes/test-faker.router.js'
 
 // LOGGER
-import { addLogger } from './src/config/logger/logger.js';
+import { errorHandlerMiddleware } from './src/config/logger/logger.js';
 
 //Custom - Extended
 const app = express();
@@ -62,8 +62,7 @@ Handlebars.registerHelper('eq', function (a, b) {
     return a === b;
   });
 
-  //use logger
-  app.use(addLogger)
+
 //Declare routers:
 app.use("/", renderRouter);
 app.use("/api/product", productRouter);
@@ -72,8 +71,7 @@ app.use("/api/jwt", jwtRouter);
 app.use("/api/email", emailRouter);
 app.use("/api/testFaker", testUserFaker)
 
-
-
+app.use(errorHandlerMiddleware);
 
 const SERVER_PORT = config.port;
 

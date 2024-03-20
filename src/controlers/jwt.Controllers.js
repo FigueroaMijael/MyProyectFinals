@@ -16,11 +16,7 @@ export const loginUser = async (req, res) => {
         const user = await userService.findByUsername(email);
 
         if (!user) {
-            throw new CustomError({
-                name: "JWTControllerError",
-                message: "Usuario no encontrado con username: " + email,
-                code: EErrors.NOT_FOUND
-            });
+            throw new CustomError("User Not Found", "JWTControllerError", "Usuario no encontrado con username: " + email , EErrors.NOT_FOUND, devLogger);
         }
 
         if (!isValidPassword(user, password)) {

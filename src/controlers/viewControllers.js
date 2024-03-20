@@ -37,7 +37,7 @@ Handlebars.registerHelper('eq', function (a, b) {
         });
       
     } catch (error) {
-        CustomError.createError({ name: "ViewControllerError", cause: error, message: "Error interno del servidor", code: EErrors.VIEW_INTERNAL_SERVER_ERROR });
+        next(error)
     }
 }
 
@@ -51,7 +51,7 @@ export const realTimeViewControllers = async (req,res) => {
             products: result.products,
         });
     } catch (error) {
-        CustomError.createError({ name: "ViewControllerError", cause: error, message: "Error interno del servidor", code: EErrors.VIEW_INTERNAL_SERVER_ERROR });
+        next(error)
     }
 }
 
@@ -68,8 +68,7 @@ export const getDatosCartRenderViewControllers = async (req, res) => {
             cartDto,
         });
     } catch (error) {
-        CustomError.createError({ name: "ViewControllerError", cause: error, message: "Error interno del servidor", code: EErrors.VIEW_INTERNAL_SERVER_ERROR });
-    }
+        next(error)    }
 }
 
 export const getDatosProductRenderViewControllers = async (req, res) => {
@@ -84,7 +83,7 @@ export const getDatosProductRenderViewControllers = async (req, res) => {
             ProdId,
         });
     } catch (error) {
-        CustomError.createError({ name: "ViewControllerError", cause: error, message: "Error interno del servidor", code: EErrors.VIEW_INTERNAL_SERVER_ERROR });
+        next(error)    
     }
 }
 
@@ -99,8 +98,7 @@ export const getDatosUserRenderViewControllers = async (req, res) => {
             fileCss:"styles.profile.css"
         });
     } catch (error) {
-        CustomError.createError({ name: "ViewControllerError", cause: error, message: "Error interno del servidor", code: EErrors.VIEW_INTERNAL_SERVER_ERROR });
-    }
+        next(error)    }
 };
 
 export const renderUpdatePasswordControllers = async (req, res) => {
@@ -110,8 +108,7 @@ export const renderUpdatePasswordControllers = async (req, res) => {
             fileCss: "styles.updatePassword.css",
         });
     } catch (error) {
-        CustomError.createError({ name: "ViewControllerError", cause: error, message: "Error interno del servidor", code: EErrors.VIEW_INTERNAL_SERVER_ERROR });
-    }
+        next(error)    }
 }
 
 export const renderLoginControllers = async (req, res) => {
@@ -121,8 +118,7 @@ export const renderLoginControllers = async (req, res) => {
             fileCss:"styles.login.css"
         });
     } catch (error) {
-        CustomError.createError({ name: "ViewControllerError", cause: error, message: "Error interno del servidor", code: EErrors.VIEW_INTERNAL_SERVER_ERROR });
-    }
+        next(error)    }
 }
 
 export const renderRegisterControllers = async (req, res) => {
@@ -132,16 +128,14 @@ export const renderRegisterControllers = async (req, res) => {
             fileCss: "styles.register.css"
         });
     } catch (error) {
-        CustomError.createError({ name: "ViewControllerError", cause: error, message: "Error interno del servidor", code: EErrors.VIEW_INTERNAL_SERVER_ERROR });
-    }
+        next(error)    }
 }
 
 export const renderGtiHubControllers = async (req, res) => {
     try {
         res.render("github-login");
     } catch (error) {
-        CustomError.createError({ name: "ViewControllerError", cause: error, message: "Error interno del servidor", code: EErrors.VIEW_INTERNAL_SERVER_ERROR });
-    }
+        next(error)    }
 }
 
 export const finalizePurchaseControllers = async (req, res) => {
@@ -152,6 +146,5 @@ export const finalizePurchaseControllers = async (req, res) => {
 
         res.render('finalizepurchase', { ticket })
     } catch (error) {
-        CustomError.createError({ name: "ViewControllerError", cause: error, message: "Error interno del servidor", code: EErrors.VIEW_INTERNAL_SERVER_ERROR });
-    }
+        next(error)    }
 }

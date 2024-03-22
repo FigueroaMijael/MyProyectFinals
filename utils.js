@@ -20,6 +20,46 @@ export const generateJWToken = (user) => {
      return jwt.sign({user}, config.jwtPrivateKey, {expiresIn: '24h'});
 }
 
+export const generateResetToken = () => {
+    return jwt.sign({}, config.resetJwtPrivateKey, { expiresIn: '1h' });
+}
+
+export const verifyResetToken = (token) => {
+    try {
+        
+        const decoded = jwt.verify(token, config.resetJwtPrivateKey);
+        return decoded;
+
+    } catch (error) {
+
+        if (error.name === 'TokenExpiredError') {
+
+            throw new CustomError({
+                name: 'ResetTokenExpiredError',
+                message: 'El token de restablecimiento ha expirado',
+                code: EErrors.TOKEN_EXPIRED_ERROR,
+                logger: console
+            });
+        } else if (error.name === 'JsonWebTokenError') {
+
+            throw new CustomError({
+                name: 'ResetTokenInvalidError',
+                message: 'El token de restablecimiento es inválido',
+                code: EErrors.TOKEN_INVALID_ERROR,
+                logger: console
+            });
+        } else {
+
+            throw new CustomError({
+                name: 'ResetTokenVerificationError',
+                message: 'Error interno al verificar el token de restablecimiento',
+                code: EErrors.TOKEN_VERIFICATION_ERROR,
+                logger: console
+            });
+        }
+    }
+};
+
 export const passportCall = (strategy) => {
     return async (req, res, next) => {
         passport.authenticate(strategy, function (error, user, info) {

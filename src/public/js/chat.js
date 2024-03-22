@@ -3,7 +3,6 @@ const user = "{{user}}";
 
 const userName = document.querySelector("#userName").value;
 
-// Verificar si el usuario está autenticado
 if (!userName) {
   window.location.href = '/login';
 }

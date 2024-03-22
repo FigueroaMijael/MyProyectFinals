@@ -1,4 +1,3 @@
-// Capturamos los elementos HTML relevantes
 const addProductToCart = document.getElementById("addProductToCart");
 const incrementBtn = document.getElementById("incrementQuantity");
 const decrementBtn = document.getElementById("decrementQuantity");

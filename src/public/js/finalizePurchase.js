@@ -6,7 +6,6 @@ const finalizePurchase = async () => {
             amount: totalAmount
         };
 
-        // Primer fetch para finalizar la compra y obtener purchaseId
         const response = await fetch('/api/cart/finalizePurchase', {
             method: 'POST',
             headers: {
@@ -17,19 +16,17 @@ const finalizePurchase = async () => {
 
         if (response.ok) {
             const { purchaseId } = await response.json();
-            // Redirecciona a la página de finalización de la compra
             window.location.href = `/finalizePurchase/${purchaseId}`;
 
-            // Segundo fetch para enviar el correo electrónico, pasando purchaseId
-            const sendEmail = await fetch('/api/email', {
+            const sendEmailFinalyPurchase = await fetch('/api/email/finalyPurchase', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({purchaseId, totalAmount}) // Envía el purchaseId
+                body: JSON.stringify({purchaseId, totalAmount}) 
             });
 
-            if (sendEmail.ok) {
+            if (sendEmailFinalyPurchase.ok) {
                 console.log('Correo electrónico enviado');
             } else {
                 throw new Error('Error al enviar el correo electrónico');

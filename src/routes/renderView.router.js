@@ -6,7 +6,7 @@ const router = Router();
 
 // VIEWS PRODUCTS
 //products (home)
-router.get("/home", getDatosRenderViewControllers)
+router.get("/", getDatosRenderViewControllers)
 
 //detalle
 router.get("/detail/:PId", getDatosProductRenderViewControllers )
@@ -28,8 +28,13 @@ router.get("/register", renderRegisterControllers)
 //profile
 router.get("/profile", passportCall('jwt'),authorization(['user']), getDatosUserRenderViewControllers)
 
+//buscar usuario
+router.get("/searchUser", (req, res) => {
+    res.render("serchUser");
+});
+
 // Cambio de contraseña
-router.get("/updatePassword",authorization(['user']), renderUpdatePasswordControllers)
+router.get("/updatePassword/reset", renderUpdatePasswordControllers)
 
 //GitHub login
 router.get("/github/login", renderGtiHubControllers)

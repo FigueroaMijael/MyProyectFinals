@@ -1,16 +1,23 @@
-const form = document.getElementById('changePasswordForm');
+const resetPasswordForm = document.getElementById('resetPasswordForm');
 
-form.addEventListener('submit', async (e) => {
+resetPasswordForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const formData = new FormData(form);
+    const formData = new FormData(resetPasswordForm);
+    const token = formData.get('token');
     const email = formData.get('email');
     const newPassword = formData.get('newPassword');
+    const confirmPassword = formData.get('confirmPassword');
+
+    if (newPassword !== confirmPassword) {
+        console.error('Las contraseñas no coinciden');
+        return;
+    }
 
     try {
-        const response = await fetch('/api/sessions/Updatepassword', {
+        const response = await fetch('/api/jwt/resetPassword', {
             method: 'PUT',
-            body: JSON.stringify({ email, newPassword }),
+            body: JSON.stringify({ token, email, newPassword }),
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -18,8 +25,8 @@ form.addEventListener('submit', async (e) => {
 
         if (response.status === 200) {
             const result = await response.json();
-            console.log('cambio de contraseña exitoso', result);
-            window.location.replace('/users/login')
+            console.log('Cambio de contraseña exitoso', result);
+            window.location.replace('/login');
         } else {
             const error = await response.json();
             console.error(error);
@@ -28,3 +35,4 @@ form.addEventListener('submit', async (e) => {
         console.error('Error al realizar la solicitud:', error);
     }
 });
+

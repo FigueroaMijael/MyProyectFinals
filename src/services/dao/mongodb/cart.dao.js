@@ -10,9 +10,9 @@ export default class CartService {
 
                 if (!cart) {
                     const newCart = await cartModel.create({ products: [] });
-                    return { _id: newCart._id, cartData: [newCart] }; // Devuelve el _id y los datos del carrito
+                    return { _id: newCart._id, cartData: [newCart] }; 
                 }
-                return { _id: cart._id, cartData: [cart] }; // Devuelve el _id y los datos del carrito
+                return { _id: cart._id, cartData: [cart] }; 
     
            } else {
             return await cartModel.findById( _id )
@@ -59,7 +59,7 @@ export default class CartService {
     const prod = cart.products.find(product => product.product.toString() === PId._id.toString());
     
     if (prod) {
-        // Verificar si hay suficiente stock disponible
+
         if (quantity > PId.stock) {
             throw new Error('Insufficient stock');
         }

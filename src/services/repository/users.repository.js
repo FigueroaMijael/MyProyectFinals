@@ -8,8 +8,8 @@ export default class UsersRepository {
     save = (user) => {
         return this.dao.save(user);
     }
-    update = (filter, value) => {
-        return this.dao.update(filter, value);
+    update = (filter, updateValues) => {
+        return this.dao.update(filter, updateValues);
     }
     findByUsername = async (email) => {
         return this.dao.findByUsername(email);

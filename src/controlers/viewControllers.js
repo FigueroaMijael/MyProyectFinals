@@ -2,8 +2,6 @@ import { productService, cartService, ticketService} from "../services/service.j
 import UsersDto from "../services/dto/users.dto.js";
 import Handlebars from "handlebars";
 import CartDto from '../services/dto/cart.dto.js';
-import CustomError from '../config/Errors/customError/customError.js';
-import { EErrors } from '../config/Errors/customError/errors-enum.js'
 
 Handlebars.registerHelper('eq', function (a, b) {
     return a === b;
@@ -103,9 +101,12 @@ export const getDatosUserRenderViewControllers = async (req, res) => {
 
 export const renderUpdatePasswordControllers = async (req, res) => {
     try {
+        const token = req.query.token;
+
         res.render("updatePassword", {
             title: "update Password",
             fileCss: "styles.updatePassword.css",
+            token
         });
     } catch (error) {
         next(error)    }

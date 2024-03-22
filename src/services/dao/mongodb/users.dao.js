@@ -17,8 +17,19 @@ export default class userService {
         return result;
     };
 
-    update = async (filter, value) => {
-        let result = await usersModel.updateOne(filter, value);
-        return result;
+    update = async (filter, updateValues) => {
+    let result;
+    if (filter._id) {
+
+        result = await usersModel.updateOne({ _id: filter._id }, updateValues);
+    } else if (filter.email) {
+
+        result = await usersModel.updateOne({ email: filter.email }, updateValues);
+    } else {
+
+        throw new Error('Filtro no válido proporcionado para la actualización.');
     }
+    return result;
+}
+
 }

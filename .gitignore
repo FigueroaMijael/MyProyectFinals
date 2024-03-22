@@ -1,2 +1,4 @@
 **/node_modules
-**/src/config/*.env
+**/src/config/*.env.production
+**/src/config/*.env.development
+

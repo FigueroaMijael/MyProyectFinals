@@ -42,12 +42,12 @@ export default class ProductService {
         }
         }
 
-    save = async ( prod ) => {
-
-        const newProduct = await productModel.create(prod);
-
-        return newProduct;
-    }
+        save = async (prod, ) => {      
+          const newProduct = await productModel.create(prod);
+      
+          return newProduct;
+      }
+      
 
     update = async ( _id, updateData) => {
 

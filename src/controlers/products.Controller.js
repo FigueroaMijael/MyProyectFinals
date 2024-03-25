@@ -31,8 +31,13 @@ export const postDatosControllers = async (req, res, next) => {
     try {
         devLogger.info("Creando nuevo producto");
 
-        const { title, description, price, category, thumbnail, code, stock } = req.body;
+        const { title, description, category, thumbnail, code } = req.body;
+        let { price, stock } = req.body;
 
+        price = parseInt(price);
+        stock = parseInt(stock);
+
+        // Validaciones complejas
         if (!title || !description || !price || !category || !thumbnail || !code || !stock) {
             throw new CustomError("Todos los campos son obligatorios", "ValidationError", "Hay un campo sin completar al momento de crear el producto", EErrors.VALIDATION_ERROR, devLogger);
         }
@@ -45,7 +50,14 @@ export const postDatosControllers = async (req, res, next) => {
             throw new CustomError("El stock no es válido", "InvalidTypeError", "El stock debe ser un número no negativo", EErrors.INVALID_TYPES_ERROR, devLogger);
         }
 
-        const nuevoDato = await productService.save(req.body);
+         const { user } = req;
+         const { role, email } = user;
+ 
+         const owner = (role === 'premium') ? email : 'admin';
+        
+         const productoACrear = { title, description, price, category, thumbnail, code, stock, owner };
+
+        const nuevoDato = await productService.save(productoACrear);
         res.status(201).json({ dato: nuevoDato });
     } catch (error) {
         next(error); 
@@ -59,11 +71,13 @@ export const updateDatosControllers = async (req, res, next) => {
         const { _id } = req.params;
         const newData = req.body;
 
+        // Verificar si el producto existe
         const existingProduct = await productModel.findById(_id);
         if (!existingProduct) {
             throw new CustomError("Product Not Found", "NOT FOUND", "El producto no se encontro en la base de datos", EErrors.NOT_FOUND, devLogger);
         }
 
+        // Actualizar el producto
         const updateProd = await productService.update(_id, newData);
         res.status(201).json({ message: "Dato actualizado correctamente", dato: updateProd });
     } catch (error) {

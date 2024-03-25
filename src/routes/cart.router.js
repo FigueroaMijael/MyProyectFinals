@@ -10,7 +10,7 @@ router.get('/', getCartControllers);
 router.get('/:_id', getCartControllers);
 
 // POST
-router.post('/:CId/product/:PId/:quantity',passportCall('jwt'), authorization(['user']), postCartControllers);
+router.post('/:CId/product/:PId/:quantity', passportCall('jwt'), authorization(['user', 'premium']), postCartControllers);
 
 // PUT
 router.put('/update/:CId/product/:PId/:quantity', putCartControllers);
@@ -22,6 +22,6 @@ router.delete('/delete/:CId/product/:PId', deleteCartControllers);
 router.delete('/delete/:CId', deleteCartControllers);
 
 
-router.post('/finalizePurchase',passportCall('jwt'), authorization(['user']), finalizePurchase);
+router.post('/finalizePurchase',passportCall('jwt'), authorization(['user', 'premium']), finalizePurchase);
 
 export default router; 

@@ -4,14 +4,16 @@ import config from "../config/config.js";
 import CustomError from '../config/Errors/customError/customError.js';
 import { EErrors } from '../config/Errors/customError/errors-enum.js';
 import { userService } from "../services/service.js";
-import  __dirname, { generateResetToken }  from "../../utils.js";
+import  __dirname, { generateResetToken, verifyResetToken }  from "../../utils.js";
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     port: 587,
     auth: {
+        type: 'OAuth2',
         user: config.gmailAccount,
         pass: config.gmailAppPassword
+        
     }
 });
 
@@ -64,6 +66,12 @@ export const sendEmailUpdatePassword = async (req, res) => {
 
         if (user) {
             const resetToken = generateResetToken(); 
+/*             const tokenVerify = verifyResetToken(resetToken)
+    
+            if (tokenVerify) {
+                return res.status(500).send({ status: "error", error: "El token no es valido" });
+            } */
+            
             const resetLink = `${req.protocol}://${req.get('host')}/updatePassword/reset?token=${resetToken}`;
 
             const mailOptions = {
@@ -75,6 +83,7 @@ export const sendEmailUpdatePassword = async (req, res) => {
                     <p>Haga clic en el siguiente enlace para restablecer su contraseña:</p>
                     <a href="${resetLink}">Restablecer contraseña</a>
                 `,
+                
             };
 
             transporter.sendMail(mailOptions, (error, info) => {

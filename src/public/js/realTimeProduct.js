@@ -1,36 +1,39 @@
 const realTimeForm = document.getElementById('realTimeForm');
 
-const sendProductData = async (event) => {
-    event.preventDefault();
+realTimeForm.addEventListener('submit', (e) => {
+    e.preventDefault();
 
     const formData = new FormData(realTimeForm);
+    console.log(formData);
     const productData = {};
-    formData.forEach((value, key) => {
-        productData[key] = value;
-    });
+    console.log(productData);
+    formData.forEach((value, key) => productData[key] = value);
 
     try {
-        const response = await fetch('/api/product/create', {
+        fetch('/api/product/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(productData)
+        }).then(result => {
+            if (result.status === 201) {
+                alert('Producto agregado exitosamente');
+                window.location.reload();                
+            } else {
+                alert('Error al agregar el producto');
+            }
+        }).catch(error => {
+            console.error('Error al realizar la solicitud fetch:', error);
+            alert("Hubo un error al procesar la solicitud.");
         });
-
-        if (response.ok) {
-            alert('Producto agregado exitosamente');
-            window.location.reload();
-        } else {
-            throw new Error('Error al agregar el producto');
-        }
     } catch (error) {
         console.error(error);
         alert('Ocurrió un error al agregar el producto');
-    }
-};
+    }; 
+}
+)
 
-realTimeForm.addEventListener('submit', sendProductData);
 
 document.addEventListener('DOMContentLoaded', () => {
 

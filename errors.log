@@ -7,3 +7,12 @@ error: POST en /api/product/create- Causa del error Hay un campo sin completar a
 error: POST en /api/product/create- Causa del error Hay un campo sin completar al momento de crear el producto - at 20/3/2024 - 00:28:07
 error: GET en /searchUser- Causa del error undefined - at 21/3/2024 - 09:29:27
 error: GET en /resetPassword/reset?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTEwMzE4OTUsImV4cCI6MTcxMTAzNTQ5NX0.QLj-D72k89eiAC9ONtGoUajBYQD8LoO635jrZ0oZPQo- Causa del error undefined - at 21/3/2024 - 11:41:51
+error: POST en /api/product/create- Causa del error  - at 24/3/2024 - 22:49:16
+error: POST en /api/product/create- Causa del error  - at 24/3/2024 - 23:07:18
+error: POST en /api/product/create- Causa del error undefined - at 24/3/2024 - 23:30:12
+error: POST en /api/product/create- Causa del error undefined - at 24/3/2024 - 23:33:44
+error: POST en /api/product/create- Causa del error undefined - at 24/3/2024 - 23:34:19
+error: POST en /api/product/create- Causa del error undefined - at 24/3/2024 - 23:34:45
+error: POST en /api/product/create- Causa del error undefined - at 24/3/2024 - 23:40:13
+error: POST en /api/product/create- Causa del error undefined - at 24/3/2024 - 23:42:07
+error: POST en /api/product/create- Causa del error undefined - at 24/3/2024 - 23:57:57

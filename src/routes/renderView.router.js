@@ -12,7 +12,7 @@ router.get("/", getDatosRenderViewControllers)
 router.get("/detail/:PId", getDatosProductRenderViewControllers )
 
 //realTime
-router.get("/realtimeproducts", passportCall('jwt'), authorization(['user']) , realTimeViewControllers );
+router.get("/realtimeproducts", passportCall('jwt'), authorization(['user', 'admin', 'premium']) , realTimeViewControllers );
 
 //VIEWS CART
 //carrito
@@ -26,7 +26,7 @@ router.get("/login", renderLoginControllers)
 router.get("/register", renderRegisterControllers)
 
 //profile
-router.get("/profile", passportCall('jwt'),authorization(['user']), getDatosUserRenderViewControllers)
+router.get("/profile", passportCall('jwt'),authorization(['user', 'admin', 'premium']), getDatosUserRenderViewControllers)
 
 //buscar usuario
 router.get("/searchUser", (req, res) => {

@@ -10,7 +10,6 @@ import CustomError from '../config/Errors/customError/customError.js';
 import { EErrors } from '../config/Errors/customError/errors-enum.js';
 import { devLogger, prodLogger } from '../config/logger/logger.js'
 import config from '../config/config.js';
-import __dirname from '../../utils.js';
 
 const logger = config.environment === 'production' ? prodLogger : devLogger;
 
@@ -78,7 +77,15 @@ export const registerUser = async (req, res) => {
 
 export const resetPassword = async (req, res) => {
     try {
-        const { email, newPassword } = req.body;
+        const { token, email, newPassword } = req.body;
+
+        console.log(token);
+
+        const verifyToken = verifyResetToken(token)
+
+        if (verifyToken) {
+            return res.status(500).send({ status: "error", error: "El token no es valido" });
+        }
 
         const user = await userService.findByUsername(email);
 

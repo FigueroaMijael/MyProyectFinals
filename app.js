@@ -71,7 +71,6 @@ app.use("/api/jwt", jwtRouter);
 app.use("/api/email", emailRouter);
 app.use("/api/testFaker", testUserFaker)
 
-/* app.use(errorHandlerMiddleware); */
 app.use(customErrorMiddleware);
 
 const SERVER_PORT = config.port;

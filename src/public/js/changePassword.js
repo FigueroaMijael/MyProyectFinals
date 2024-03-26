@@ -22,11 +22,21 @@ resetPasswordForm.addEventListener('submit', async (e) => {
                 'Content-Type': 'application/json'
             }
         });
-
+    
         if (response.status === 200) {
             const result = await response.json();
             console.log('Cambio de contraseña exitoso', result);
             window.location.replace('/login');
+        } else if (response.status === 400) {
+            const error = await response.json();
+            console.error(error.error);
++            swal.fire({
+                icon: 'error',
+                title: 'Token inválido',
+                text: error.message
+            }).then(() => {
+                window.location.href = '/searchUser';
+            });
         } else {
             const error = await response.json();
             console.error(error);
@@ -34,5 +44,5 @@ resetPasswordForm.addEventListener('submit', async (e) => {
     } catch (error) {
         console.error('Error al realizar la solicitud:', error);
     }
+    
 });
-

@@ -11,6 +11,7 @@ import { EErrors } from '../config/Errors/customError/errors-enum.js';
 import { devLogger, prodLogger } from '../config/logger/logger.js'
 import config from '../config/config.js';
 
+
 const logger = config.environment === 'production' ? prodLogger : devLogger;
 
 export const loginUser = async (req, res) => {
@@ -79,13 +80,16 @@ export const resetPassword = async (req, res) => {
     try {
         const { token, email, newPassword } = req.body;
 
-        console.log(token);
-
         const verifyToken = verifyResetToken(token)
 
         if (verifyToken) {
-            return res.status(500).send({ status: "error", error: "El token no es valido" });
+            return res.status(400).json({
+                status: "error",
+                error: "Token inválido",
+                message: "El token de restablecimiento de contraseña no es válido o ha expirado. Por favor, ingresa tu correo electrónico nuevamente."
+            });
         }
+
 
         const user = await userService.findByUsername(email);
 

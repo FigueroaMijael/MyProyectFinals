@@ -1,8 +1,28 @@
-    <div>
-        <h1>BIENVENIDO A TU PERFIL!! {{user.fullName}}</h1>
-        <p>Name: {{user.fullName}}</p>
-        <p>Email: {{user.email}}</p>
-        <p>Age: {{user.age}}</p>
-
-        <a href="/">volver al inicio</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Usuario</title>
+    <link rel="stylesheet" href="/styles/profile.css">
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-header">
+            <h1>¡Bienvenido a tu perfil, {{user.name}}!</h1>
+        </div>
+        <div class="profile-avatar">
+            <img src="https://via.placeholder.com/150" alt="Avatar" class="avatar">
+        </div>
+        <div class="profile-info">
+            <p><strong>Nombre:</strong> {{user.name}}</p>
+            <p><strong>Correo Electrónico:</strong> {{user.email}}</p>
+            <p><strong>Edad:</strong> {{user.age}}</p>
+            <p><strong>Role:</strong> {{user.role}}</p>
+        </div>
+        <div class="back-to-home">
+            <a href="/">Volver al Inicio</a>
+        </div>
     </div>
+</body>
+</html>

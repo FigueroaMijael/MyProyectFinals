@@ -1,6 +1,5 @@
 import winston from "winston";
 import config from "../config.js";
-import CustomError from "../Errors/customError/customError.js";
 
 const customLevelsOptions = {
     levels: {
@@ -58,22 +57,21 @@ const customErrorMiddleware = (error, req, res, next) => {
 
     const errorData = {
         name: error.name || "Fatal",
-        cause: error,
+        cause: error.cause || "Error interno del servidor",
+        code: error.code || 500,
         message: error.message || "Internal server error",
     };
 
-    CustomError.createError(errorData);
+    logger.error(`${req.method} en ${req.url} - Causa del error: ${errorData.cause} - Code error: ${errorData.code} - at ${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`);
 
-    logger.error(`${req.method} en ${req.url}- Causa del error ${errorData.cause.cause} - at ${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`);
-
-    res.status(error.status || 500).json({
+    res.status(errorData.code).json({
         error: {
-
             cause: errorData.cause,
             message: errorData.message,
-
+            code: errorData.code,
         }
     });
 };
+
 
 export { customErrorMiddleware, devLogger, prodLogger };

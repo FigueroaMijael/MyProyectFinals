@@ -6,7 +6,6 @@ import {userService} from '../services/factory.js'
 import {userService} from '../services/service.js'
 import { isValidPassword, generateJWToken, createHash, verifyResetToken } from '../../utils.js';
 import UsersDto from '../services/dto/users.dto.js'
-import CustomError from '../config/Errors/customError/customError.js';
 import { EErrors } from '../config/Errors/customError/errors-enum.js';
 import { devLogger, prodLogger } from '../config/logger/logger.js'
 import config from '../config/config.js';
@@ -14,47 +13,67 @@ import config from '../config/config.js';
 
 const logger = config.environment === 'production' ? prodLogger : devLogger;
 
-export const loginUser = async (req, res) => {
+export const loginUser = async (req, res, next) => {
     try {
         const { email, password } = req.body;
 
         const user = await userService.findByUsername(email);
 
+        logger.info(`iniciando session con el user ${email}`)
+
         if (!user) {
-            throw new CustomError("User Not Found", "JWTControllerError", "Usuario no encontrado con username: " + email , EErrors.NOT_FOUND, logger);
+            const error = {
+                name: "JWTControllerError",
+                cause: "Usuario no encontrado con username: " + email,
+                code: EErrors.NOT_FOUND,
+                message: "User Not Found"
+            };
+            throw error;
         }
 
         if (!isValidPassword(user, password)) {
-            throw new CustomError({
+            const error = {
                 name: "JWTControllerError",
-                message: "El usuario y la contraseña no coinciden!",
-                code: EErrors.UNAUTHORIZED
-            });
+                cause: "El usuario o la contraseña son incorrectas",
+                code: EErrors.UNAUTHORIZED,
+                message: "Invalid username or password"
+            };
+            throw error;
         }
 
         const tokenUser = {
-            name: `${user.name} ${user.lastName}`,
+            name: user.name, 
+            lastName: user.lastName,
             email: user.email,
             age: user.age,
             role: user.role
         };
+
         const access_token = generateJWToken(tokenUser);
 
         res.cookie('jwtCookieToken', access_token, { httpOnly: true });
-
-        res.send({ message: "Login successful!" });
+        res.status(200).json({ status: "success", message: "Usuario logueado con éxito"});
     } catch (error) {
-        CustomError.createError({ name: "JWTControllerError", cause: error, message: "Error interno de la aplicación.", code: EErrors.INTERNAL_SERVER_ERROR, logger});
+        next(error);
     }
 };
 
-export const registerUser = async (req, res) => {
+export const registerUser = async (req, res, next) => {
+    
     const { name, lastName, email, age, password } = req.body;
+
+    logger.info(`registrando usuario con email: ${email}`)
 
     const exists = await userService.findByUsername(email);
 
     if (exists) {
-        CustomError.createError({ name: "JWTControllerError", message: "Usuario ya existe.", code: EErrors.UNAUTHORIZED, logger})
+        const error = {
+            name: "JWTControllerError",
+            cause: "Usuario ya existe",
+            code: EErrors.UNAUTHORIZED,
+            message: "Usuario ya existe en la base de datos"
+        };
+        throw error;
     }
 
     const user = {
@@ -69,47 +88,59 @@ export const registerUser = async (req, res) => {
     
     try {
         await userService.save(userDto);
-        res.status(201).send({ status: "success", message: "Usuario creado con éxito." });
+        res.status(200).json({ status: "success", message: "Usuario creado con éxito" });
     } catch (error) {
-        CustomError.createError({ name: "JWTControllerError", cause: error, message: "Error interno de la aplicación.", code: EErrors.SERVER_ERROR, logger });
+        next(error);
     }
 };
 
 
-export const resetPassword = async (req, res) => {
+export const resetPassword = async (req, res, next) => {
     try {
         const { token, email, newPassword } = req.body;
 
         const verifyToken = verifyResetToken(token)
 
         if (verifyToken) {
-            return res.status(400).json({
-                status: "error",
-                error: "Token inválido",
-                message: "El token de restablecimiento de contraseña no es válido o ha expirado. Por favor, ingresa tu correo electrónico nuevamente."
-            });
+            const error = {
+                name: "Token invalid",
+                cause: "El token es invalido o ya expiro",
+                code: EErrors.TOKEN_ERROR,
+                message: "El token es invalido o ya expiro"
+            };
+            throw error;
         }
-
 
         const user = await userService.findByUsername(email);
 
+        logger.info(`Iniciando Reset password del usuario con email: ${email}`)
+
         if (!user) {
-            return res.status(404).send({ status: "error", error: "El usuario no existe" });
+            const error = {
+                name: "JWTControllerError",
+                cause: "Usuario no encontrado con username: " + email,
+                code: EErrors.NOT_FOUND,
+                message: "User Not Found"
+            };
+            throw error;
         }
 
         const hashedPassword = createHash(newPassword);
 
         const updateResult = await userService.update({ email }, { password: hashedPassword });
 
-        console.log(updateResult);
-
         if (updateResult && updateResult.modifiedCount > 0) {
             return res.status(200).send({ status: "success", message: "Contraseña cambiada exitosamente" });
         } else {
-            throw new Error('Ocurrió un error al momento de restablecer la contraseña');
+            const error = {
+                name: "Internal Error",
+                cause: "Ocurrio un error al restablecer la contraseña del usuario con email: " + email,
+                code: EErrors.INTERNAL_SERVER_ERROR,
+                message: "No se pudo realizar el reset password"
+            };
+            throw error;
         }
     } catch (error) {
-        console.error('Error al restablecer la contraseña:', error);
-        return res.status(500).send({ status: "error", error: "Error interno de la aplicación." });
+        next(error)
     }
 };

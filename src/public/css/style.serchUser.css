@@ -13,9 +13,9 @@ form {
     max-width: 400px;
     width: 100%;
     padding: 30px;
-    background-color: #1f1f1f; 
+    background-color: rgba(255, 255, 255, 0.1); 
     border-radius: 10px;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); 
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);  
 }
 
 h2 {
@@ -67,7 +67,7 @@ button:hover {
 }
 
 a {
-    color: #ffffff;
+    color: #8a2be2; 
     text-decoration: none;
     margin-top: 20px;
     display: inline-block;
@@ -75,5 +75,5 @@ a {
 }
 
 a:hover {
-    color:  #4c0053; 
+    color: #7a0086; 
 }

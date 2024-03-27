@@ -1,26 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+    <link rel="stylesheet" href="/styles/chat.css">
 </head>
 <body>
-  <section class="main_container">
-    <div id="chat-container">
-    <div>
-      <input type="text" id="chatbox" placeholder="Escribe tu mensaje" />
-    </div>
+    <section class="main_container">
+        <div id="chat-container">
+            <div id="messages"></div>
+            <input type="text" id="chatbox" placeholder="Escribe tu mensaje" />
+            <input type="hidden" id="userName" value="{{userName}}">
+        </div>
+    </section>
 
-    <div>
-      <input type="hidden" id="userName" value="{{userName}}">
-      <p id="messages"></p>
-    </div>
-  </div>
-  </section>
-  
-  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="/js/chat.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/chat.js"></script>
 </body>
 </html>

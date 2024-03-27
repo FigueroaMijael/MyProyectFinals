@@ -22,7 +22,7 @@ export const generateJWToken = (user) => {
 
 export const generateResetToken = () => {
    
-    return jwt.sign({ expiresIn: '60s' }, config.resetJwtPrivateKey);
+    return jwt.sign({ expiresIn: '1h' }, config.resetJwtPrivateKey);
 }
 
 export const verifyResetToken = (token) => {

@@ -3,8 +3,7 @@ import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import GithubStrategy from 'passport-github2';
 import config from '../config.js';
 import { usersModel } from "../../services/dao/mongodb/models/users.model.js";
-import CustomError from '../Errors/customError/customError.js';
-import { EErrors } from '../Errors/customError/errors-enum.js'
+import { EErrors } from '../Errors/customError/errors-enum.js';
 
 const cookieExtractor = req => {
     let token = null;
@@ -24,12 +23,7 @@ const initializePassport = () => {
             try {
                 return done(null, jwt_payload.user)
             } catch (error) {
-                CustomError.createError({
-                    name: "PassportJWTError",
-                    cause: error,
-                    message: "Error en la estrategia de autenticación JWT",
-                    code: EErrors.INVALID_TYPES_ERROR
-                });
+                return done(error);
             }
         }
     ));
@@ -58,12 +52,7 @@ const initializePassport = () => {
                     return done(null, user)
                 }  
             } catch (error) {
-                CustomError.createError({
-                    name: "PassportGithubError",
-                    cause: error,
-                    message: "Error en la estrategia de autenticación GitHub",
-                    code: EErrors.INVALID_TYPES_ERROR
-                });
+                return done(error);
             }
         })
     );
@@ -77,12 +66,7 @@ const initializePassport = () => {
             let user = await usersModel.findById(_id);
             done(null, user);
         } catch (error) {
-            CustomError.createError({
-                name: "PassportDeserializeError",
-                cause: error,
-                message: "Error deserializando el usuario",
-                code: EErrors.DATABASE_ERROR
-            });
+            return done(error);
         }
     });
 }

@@ -30,7 +30,7 @@ router.get("/profile", passportCall('jwt'),authorization(['user', 'admin', 'prem
 
 //buscar usuario
 router.get("/searchUser", (req, res) => {
-    res.render("serchUser");
+res.render("serchUser", {fileCss: 'style.serchUser.css'});
 });
 
 // Cambio de contraseña
@@ -40,7 +40,7 @@ router.get("/updatePassword/reset", renderUpdatePasswordControllers)
 router.get("/github/login", renderGtiHubControllers)
 
 //chat
-router.get('/chat', passportCall('jwt'), authorization(['user']), (req, res) => {
+router.get('/chat', passportCall('jwt'), authorization(['user', 'admin', 'premium']), (req, res) => {
     const userName = req.user ? req.user.name : null; 
     res.render('chat', { userName, fileCss: 'styles.chat.css' });
 });

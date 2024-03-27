@@ -1,10 +1,12 @@
 // controllers/emailController.js
 import nodemailer from "nodemailer";
 import config from "../config/config.js";
-import CustomError from '../config/Errors/customError/customError.js';
+import { prodLogger, devLogger } from "../config/logger/logger.js"
 import { EErrors } from '../config/Errors/customError/errors-enum.js';
 import { userService } from "../services/service.js";
 import { generateResetToken }  from "../../utils.js";
+
+const logger = config.environment === 'production' ? prodLogger : devLogger;
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -15,23 +17,37 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-transporter.verify(function (error, success) {
-    if (error) {
-        CustomError.createError({ name: "EmailControllerError", cause: error, message: "Error al verificar el servidor de correo", code: EErrors.SERVER_ERROR, logger: console });
-    } else {
-        console.info('Server is ready to take our messages');
+transporter.verify(function (error, success, next) {
+    try {
+        if (error) {
+            const errorData = {
+                name: "EmailControllerError",
+                cause: "No se pudo verificar el servidor de correo",
+                message: "Error al verificar el servidor de correo",
+                code: EErrors.INTERNAL_SERVER_ERROR
+            };
+            throw errorData
+        } else {
+            logger.info('Server is ready to take our messages' + success);
+        }
+    } catch (error) {
+        next(error);
     }
+    
 });
 
-export const sendEmailFinalyPurchase = (req, res) => {
+export const sendEmailFinalyPurchase = (req, res, next) => {
     try {
+        logger.info("Enviando correo de confirmación de compra");
+
         const userEmail = req.user ? req.user.email : null;
+
         const { purchaseId, totalAmount } = req.body;
 
         const mailOptions = {
             from: "ecommers gigabyte Test - " + config.gmailAccount,
             to: userEmail,
-            subject: 'Correo de prueba de la finalización de la compra',
+            subject: 'Correo de confirmación de compra',
             html: `
                 <h1>¡Gracias por tu compra!</h1>
                 <p>Detalles de la compra:</p>
@@ -44,23 +60,41 @@ export const sendEmailFinalyPurchase = (req, res) => {
 
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
-                CustomError.createError({ name: "EmailControllerError", cause: error, message: "Error al enviar correo electrónico", code: EErrors.EMAIL_ERROR, logger: console });
+                const errorData = {
+                    name: "EmailControllerError",
+                    cause: "Error al enviar correo electrónico de confirmación de compra" ,
+                    message: "Error al enviar correo electrónico",
+                    code: EErrors.EMAIL_ERROR
+                };
+                throw errorData
             } else {
-                console.info('Message sent: %s', info.messageId);
-                res.send({ message: "Correo electrónico enviado correctamente", payload: info });
+                req.logger.info('Correo electrónico de confirmación enviado con éxito');
+                res.status(200).json({ status: "success", payload: info});
             }
         });
     } catch (error) {
-        CustomError.createError({ name: "EmailControllerError", cause: error, message: "Error al enviar correo electrónico", code: EErrors.EMAIL_ERROR, logger: console });
+        next(error);
     }
 };
 
 
-export const sendEmailUpdatePassword = async (req, res) => {
+export const sendEmailUpdatePassword = async (req, res, next) => {
     try {
+        logger.info("Enviando correo de cambio de contraseña");
+
         const { email } = req.body;
 
         const user = await userService.findByUsername(email)
+
+        if (!user) {
+            const error = {
+                name: "User not found",
+                cause: "Usuario no encontrado con username: " + email,
+                code: EErrors.NOT_FOUND,
+                message: "User Not Found"
+            };
+            throw error;
+        }
 
         if (user) {
             const resetToken = generateResetToken(); 
@@ -80,18 +114,19 @@ export const sendEmailUpdatePassword = async (req, res) => {
 
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
-                    CustomError.createError({ name: "EmailControllerError", cause: error, message: "Error al enviar correo electrónico", code: EErrors.EMAIL_ERROR, logger });
-                    res.status(500).json({ error: "Ha ocurrido un error al enviar el correo electrónico." });
+                    const errorData = {
+                        name: "EmailControllerError",
+                        cause: "Error al enviar correo electrónico para resetear la contraseña",
+                        message: "Error al enviar correo electrónico",
+                        code: EErrors.EMAIL_ERROR
+                    };
+                    throw errorData;
                 } else {
-                    console.info('Message sent: %s', info.messageId);
                     res.status(200).json({ message: "Correo electrónico enviado correctamente", payload: info });
                 }
             });
-        } else {
-            res.status(404).json({ error: "El correo electrónico no existe en la base de datos." });
         }
     } catch (error) {
-        console.error('Error al buscar el usuario:', error);
-        res.status(500).json({ error: "Error interno del servidor." });
+        next(error);
     }
 };

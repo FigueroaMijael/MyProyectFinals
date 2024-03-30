@@ -12,7 +12,7 @@ export default class ProductRepository {
     }
     
     update = (_id, updateData ) => {
-        return this.dao.update(id, updateData);
+        return this.dao.update(_id, updateData);
     }
     
     delete = async (_id) => {

@@ -1,3 +1,16 @@
 error: POST en /api/jwt/login - Causa del error: Usuario no encontrado con username: guadaplizarazo@gmail.com - Code error: 404 - at 26/3/2024 - 20:57:08
 error: POST en /api/jwt/login - Causa del error: Error interno del servidor - Code error: 500 - at 26/3/2024 - 20:57:34
 error: POST en /api/jwt/login - Causa del error: Error interno del servidor - Code error: 500 - at 26/3/2024 - 20:58:19
+error: PUT en /api/product/update/658b6d03a27fd9e1811d5d1d - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 00:39:44
+error: PUT en /api/product/update/658b6d03a27fd9e1811d5d1d - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 00:43:38
+error: POST en /api/product/create - Causa del error: El usuario no completo todos lo campos - Code error: 401 - at 30/3/2024 - 00:48:48
+error: POST en /api/product/create - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 00:50:00
+error: POST en /api/product/create - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 00:56:36
+error: POST en /api/product/create - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 00:56:57
+error: POST en /api/product/create - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 00:57:36
+error: PUT en /api/cart/update/65f4f3cfbd2a9acf01058916/product/658b6d31a27fd9e1811d5d23/100 - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 01:46:19
+error: PUT en /api/cart/update/65f4f3cfbd2a9acf01058916/product/65f4f3cfbd2a9acf01058916/100 - Causa del error: No se puedo encontrar el producto con _id: 65f4f3cfbd2a9acf01058916 en la base de datos - Code error: 404 - at 30/3/2024 - 01:46:38
+error: PUT en /api/cart/update/65f4f3cfbd2a9acf01058916/product/65f4f3cfbd2a9acf01058916/100 - Causa del error: No se puedo encontrar el producto con _id: 65f4f3cfbd2a9acf01058916 en la base de datos - Code error: 404 - at 30/3/2024 - 01:47:23
+error: PUT en /api/cart/update/65f4f3cfbd2a9acf01058916/product/65f4f3cfbd2a9acf01058916/100 - Causa del error: No se puedo encontrar el producto con _id: 65f4f3cfbd2a9acf01058916 en la base de datos - Code error: 404 - at 30/3/2024 - 01:52:42
+error: PUT en /api/cart/update/66079612f88f89cf5681df08/product/658b6d7aa27fd9e1811d5d31/2 - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 02:02:06
+error: DELETE en /api/cart/delete/65f4f3cfbd2a9acf01058916/product/658b6d7aa27fd9e1811d5d31 - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 02:03:17

@@ -2,16 +2,20 @@ export default class UsersRepository {
     constructor(dao) {
         this.dao = dao;
     }
-    getAll = () => {
-        return this.dao.getAll();
+    getAll = (_id) => {
+        return this.dao.getAll(_id);
     }
     save = (user) => {
         return this.dao.save(user);
     }
-    update = (filter, updateValues) => {
-        return this.dao.update(filter, updateValues);
+    update = (_id, updateData) => {
+        return this.dao.update(_id, updateData);
     }
     findByUsername = async (email) => {
         return this.dao.findByUsername(email);
     };
+
+    delete = async (_id) => {
+        return this.dao.delete(_id)
+    }
 };

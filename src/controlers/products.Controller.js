@@ -34,8 +34,9 @@ export const getDatosControllers = async (req, res, next) => {
 export const postDatosControllers = async (req, res, next) => {
     try {
         logger.info("Creando nuevo producto");
-
-        const { title, description, category, thumbnail, code } = req.body;
+        
+        //descomentar owner y comentar el codigo de la linea 75 a la 78 para testing
+        const { title, description, category, thumbnail, code, /* owner */} = req.body;
         let { price, stock } = req.body;
 
         price = parseInt(price);
@@ -74,7 +75,7 @@ export const postDatosControllers = async (req, res, next) => {
         const { user } = req;
         const { role, email } = user;
 
-        const owner = (role === 'premium') ? email : 'admin';
+        const owner = (role === 'premium') ? email : 'admin'; 
         
         const productoACrear = { title, description, price, category, thumbnail, code, stock, owner };
 
@@ -92,7 +93,8 @@ export const updateDatosControllers = async (req, res, next) => {
         const { _id } = req.params;
         const newData = req.body;
 
-        const existingProduct = await productModel.findById(_id);
+        const existingProduct = await productService.getAll(_id);
+
         if (!existingProduct) {
             const error = {
                 name: "Not Found",
@@ -114,11 +116,11 @@ export const deleteDatosControllers = async (req, res, next) => {
     try {
         logger.info("Eliminando producto");
 
-        let { id } = req.params;
+        let { _id } = req.params;
 
-        const deleteProd = await productService.delete(id);
+        const deleteProd = await productService.delete(_id);
 
-        res.status(200).json({ message: `Producto con id: ${id} eliminado con éxito`, deletedProduct: deleteProd });
+        res.status(200).json({ message: `Producto con id: ${_id} eliminado con éxito`, deletedProduct: deleteProd });
     } catch (error) {
         next(error); 
     }

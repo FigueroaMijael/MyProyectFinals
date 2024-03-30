@@ -1,0 +1,341 @@
+openapi: 3.0.0
+info:
+  title: API de Usuarios
+  version: 1.0.0
+paths:
+  /api/users:
+    get:
+      summary: Obtiene todos los usuarios de la App.
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Respuesta exitosa! se retorna un arreglo con los usuarios.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Se envió un dato no válido.
+        '500':
+          description: Error inesperado en el servidor, no se pudo manejar el proceso.
+
+  /api/users/{uid}:
+    get:
+      summary: Obtiene un usuario de la App buscando por uid.
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: Id del usuario que se desea solicitar.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Respuesta exitosa! se retorna un arreglo con los usuarios.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Se envió un dato no válido.
+        '500':
+          description: Error inesperado en el servidor, no se pudo manejar el proceso.
+          
+    put:
+      summary: Actualiza un usuario existente.
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: Id del usuario que se desea actualizar.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                lastName:
+                  type: string
+                age:
+                  type: integer
+                  format: int32
+              required:
+                - name
+                - lastName
+                - age
+      responses:
+        '200':
+          description: Usuario actualizado exitosamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+        '404':
+          description: Usuario no encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    example: User not found
+
+    delete:
+      summary: Elimina un usuario existente.
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: Id del usuario que se desea eliminar.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Usuario eliminado exitosamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+        '404':
+          description: Usuario no encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    example: User not found
+
+  /api/jwt/login:
+    post:
+      summary: Inicia sesión de usuario.
+      tags:
+        - JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Usuario logueado exitosamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+        '401':
+          description: Usuario no autorizado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    example: Invalid username or password
+
+  /api/jwt/register:
+    post:
+      summary: Registra un nuevo usuario.
+      tags:
+        - JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                age:
+                  type: integer
+                  format: int32
+                password:
+                  type: string
+              required:
+                - name
+                - lastName
+                - email
+                - age
+                - password
+      responses:
+        '200':
+          description: Usuario registrado exitosamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+        '401':
+          description: Usuario ya existe en la base de datos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    example: Usuario ya existe en la base de datos
+                    
+  /api/jwt/resetPassword:
+    put:
+      summary: Restablece la contraseña de un usuario.
+      tags:
+        - JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                newPassword:
+                  type: string
+              required:
+                - token
+                - email
+                - newPassword
+      responses:
+        '200':
+          description: Contraseña cambiada exitosamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+        '404':
+          description: Usuario no encontrado con el email proporcionado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    example: User Not Found
+        '500':
+          description: Ocurrió un error interno al restablecer la contraseña.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    example: No se pudo realizar el reset password
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Id autogenerado de Mongo.
+        name:
+          type: string
+          description: Nombre del usuario.
+        last_name:
+          type: string
+          description: Apellido del usuario.
+        email:
+          type: string
+          description: Email del usuario.
+          format: email
+        password:
+          type: string
+          description: Password hasheado del usuario.
+        loggedBy:
+          type: string
+          description: Método de login del usuario.
+        role:
+          type: string
+          description: Rol del usuario.
+      example:
+        _id: "655eacde18d63f2d8e18f8c5"
+        name: Usuario de prueba 1
+        last_name: Apellido de prueba 1
+        email: correodeprueba1@gmail.com
+        password: $2b$10$jo8EM4kblYt2BXI/K5t12OsScO6fTAgjlMFxLJVAnWO6xn4tmd7T2
+        loggedBy: form
+        role: user

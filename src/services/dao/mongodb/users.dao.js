@@ -1,35 +1,38 @@
 import { usersModel } from './models/users.model.js'
 
-export default class userService {
+export default class userDao {
 
+    getAll = async (_id) => {
 
-    getAll = async () => {
-        let user = await usersModel.find();
-        return user.map(student=>student.toObject());
-    }
-    save = async (user) => {
-        let result = await usersModel.create(user);
-        return result;
-    }
+        if (!_id) {
+            const users = await usersModel.find();
+            return users;   
+        } else {
+            const user = await usersModel.findById(_id);
+            return user; 
+        }
+    };
 
     findByUsername = async (email) => {
         const result = await usersModel.findOne({email: email});
         return result;
     };
 
-    update = async (filter, updateValues) => {
-    let result;
-    if (filter._id) {
+    save = async (obj) => {
+        const result = await usersModel.create(obj);
+        return result;
+    };
 
-        result = await usersModel.updateOne({ _id: filter._id }, updateValues);
-    } else if (filter.email) {
 
-        result = await usersModel.updateOne({ email: filter.email }, updateValues);
-    } else {
+    update = async ( _id, updateData) => {
 
-        throw new Error('Filtro no válido proporcionado para la actualización.');
+        const newProductUpdate = await usersModel.findByIdAndUpdate( _id, updateData);
+
+        return newProductUpdate
+    };
+    
+    delete = async (_id) => {
+        const userDelete = usersModel.findByIdAndDelete(_id);
+        return userDelete
     }
-    return result;
-}
-
 }

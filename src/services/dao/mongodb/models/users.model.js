@@ -11,6 +11,8 @@ const stringTypeSchemaNonUniqueRequired = {
 
 };
 
+const collection = "Users";
+
 const usersSchema = new Schema({
     name: stringTypeSchemaNonUniqueRequired,
 
@@ -21,10 +23,11 @@ const usersSchema = new Schema({
     age: stringTypeSchemaNonUniqueRequired,
 
     password: stringTypeSchemaNonUniqueRequired,
+
     loggedBy: {
         type: String,
-        default: 'form', // Valor por defecto
-        enum: ['form', 'github'], // Valores permitidos
+        default: 'form',
+        enum: ['form', 'github'],
     },
     
     role: {
@@ -34,6 +37,6 @@ const usersSchema = new Schema({
     }
 });
 
-const usersModel = model("users", usersSchema);
+const usersModel = model(collection, usersSchema);
 
 export {usersModel}

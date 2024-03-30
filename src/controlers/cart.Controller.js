@@ -4,9 +4,7 @@ import {cartService} from '../services/factory.js'
 
 //IMPLEMENTACION CON REPOSITORY
 // controllers/cartControllers.js
-import { cartService, ticketService } from '../services/service.js';
-import { cartModel } from '../services/dao/mongodb/models/cart.model.js';
-import { productModel } from '../services/dao/mongodb/models/products.model.js';
+import { cartService, ticketService, productService } from '../services/service.js';
 import CartDto from '../services/dto/cart.dto.js';
 import { EErrors } from '../config/Errors/customError/errors-enum.js';
 import { devLogger, prodLogger } from '../config/logger/logger.js'
@@ -47,7 +45,7 @@ export const postCartControllers = async (req, res, next) => {
             throw error;
         }
 
-        const cartExists = await cartModel.findById(CId);
+        const cartExists = await cartService.getAll(CId);
         if (!cartExists) {
             const error = {
                 name: "CartControllerError",
@@ -58,7 +56,7 @@ export const postCartControllers = async (req, res, next) => {
             throw error;
         }
 
-        const prodExists = await productModel.findById(PId);
+        const prodExists = await productService.getAll(PId);
         if (!prodExists) {
             const error = {
                 name: "CartControllerError",
@@ -109,7 +107,7 @@ export const putCartControllers = async (req, res, next) => {
             throw error;
         }
 
-        const cartExists = await cartModel.findById(CId);
+        const cartExists = await cartService.getAll(CId);
         if (!cartExists) {
             const error = {
                 name: "CartControllerError",
@@ -120,7 +118,7 @@ export const putCartControllers = async (req, res, next) => {
             throw error;
         }
 
-        const prodExists = await productModel.findById(PId);
+        const prodExists = await productService.getAll(PId);
         if (!prodExists) {
             const error = {
                 name: "CartControllerError",
@@ -134,7 +132,7 @@ export const putCartControllers = async (req, res, next) => {
         prodExists.stock += parsedQuantity;
         await prodExists.save();
 
-        const newCartUpdate = await cartService.update(cartExists, prodExists, parsedQuantity);
+        const newCartUpdate = await cartService.update(CId, PId, parsedQuantity);
 
         res.status(200).json({ message: "Datos del carrito actualizados correctamente", cart: newCartUpdate });
     } catch (error) {
@@ -147,7 +145,7 @@ export const deleteCartControllers = async (req, res, next) => {
         logger.info("Eliminando producto del carrito");
         const { CId, PId } = req.params;
 
-        const cartExists = await cartModel.findById(CId);
+        const cartExists = await cartService.getAll(CId);
         if (!cartExists) {
             const error = {
                 name: "CartControllerError",
@@ -165,7 +163,7 @@ export const deleteCartControllers = async (req, res, next) => {
             return;
         }
 
-        const prodExists = await productModel.findById(PId);
+        const prodExists = await productService.getAll(PId);
         if (!prodExists) {
             const error = {
                 name: "CartControllerError",

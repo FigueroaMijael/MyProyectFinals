@@ -22,12 +22,17 @@ import initializePassport from './src/config/passport/passport.config.js'
 import renderRouter from './src/routes/renderView.router.js'
 import productRouter from './src/routes/product.router.js';
 import cartRouter from './src/routes/cart.router.js'
+import usersRouter from './src/routes/user.router.js'
 import jwtRouter from './src/routes/jwt.router.js'
 import emailRouter from './src/routes/email.router.js'
 import testUserFaker from './src/routes/test-faker.router.js'
 
 // LOGGER
 import {  customErrorMiddleware } from './src/config/logger/logger.js';
+
+//SWAGGER
+import swaggerUiExpress from "swagger-ui-express"
+import swaggerJSDoc from "swagger-jsdoc";
 
 //Custom - Extended
 const app = express();
@@ -62,11 +67,26 @@ Handlebars.registerHelper('eq', function (a, b) {
     return a === b;
   });
 
+const swaggerOptions = { 
+    definition: {
+        openapi: "3.0.1",
+        info: {
+            title: "Documentacion API Adopme",
+            description: "Documentacion para el uso de swagger. Modifica la ruta /api/cart/{CId}/product/{PId}/{quantity} y la ruta /api/cart/{CId}/product/{PId}/{quantity}. Analizar la ruta /api/cart/finalizePurchase "
+        }
+    },
+    apis: [`./src/docs/**/*.yaml`]
+};
+
+const specs = swaggerJSDoc(swaggerOptions)
+
+app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
 //Declare routers:
 app.use("/", renderRouter);
 app.use("/api/product", productRouter);
 app.use("/api/cart", cartRouter);
+app.use("/api/users", usersRouter)
 app.use("/api/jwt", jwtRouter);
 app.use("/api/email", emailRouter);
 app.use("/api/testFaker", testUserFaker)

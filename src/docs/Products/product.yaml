@@ -1,0 +1,186 @@
+openapi: 3.0.0
+info:
+  title: API de Productos
+  version: 1.0.0
+paths:
+  /api/product:
+    get:
+      summary: Obtiene todos los productos de la App.
+      tags:
+        - Productos
+      responses:
+        '200':
+          description: Respuesta exitosa! Se retorna un arreglo con los productos.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '400':
+          description: Se envió un dato no válido.
+        '500':
+          description: Error inesperado en el servidor, no se pudo manejar el proceso.
+
+  /api/product/{_id}:
+    get:
+      summary: Obtiene un producto de la App buscando por _id.
+      tags:
+        - Productos
+      parameters:
+        - name: _id
+          in: path
+          required: true
+          description: Id del producto que se desea solicitar.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Respuesta exitosa! Se retorna un producto.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Se envió un dato no válido.
+        '500':
+          description: Error inesperado en el servidor, no se pudo manejar el proceso.
+
+  /api/product/update/{_id}:        
+    put:
+      summary: Actualiza un producto existente.
+      tags:
+        - Productos
+      parameters:
+        - name: _id
+          in: path
+          required: true
+          description: Id del producto que se desea actualizar.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Producto actualizado exitosamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+        '404':
+          description: Producto no encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    example: Product not found
+
+  /api/product/delete/{_id}:
+    delete:
+      summary: Elimina un producto existente.
+      tags:
+        - Productos
+      parameters:
+        - name: _id
+          in: path
+          required: true
+          description: Id del producto que se desea eliminar.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Producto eliminado exitosamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+        '404':
+          description: Producto no encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    example: Product not found
+
+  /api/product/create:
+    post:
+      summary: Crea un nuevo producto.
+      tags:
+        - Productos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Producto creado exitosamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+        '400':
+          description: Datos de producto no válidos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    example: Invalid product data
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+        thumbnail:
+          type: string
+        code:
+          type: string
+        price:
+          type: number
+        stock:
+          type: integer

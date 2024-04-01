@@ -1,4 +1,5 @@
 import { cartModel } from "./models/cart.model.js";
+import { productModel } from "./models/products.model.js";
 
 export default class CartService {
 
@@ -43,35 +44,96 @@ export default class CartService {
         });
     }
 
-    await cartModel.findByIdAndUpdate(CId, { products: cart.products });
-
-    return cart.products;
+    return await cartModel.findByIdAndUpdate(CId, { products: cart.products });
 
     }
 
-    update = async ( CId, PId, quantity ) => {
-    const cart = await cartModel.findById( CId )
-
-    if (!cart) {
-        throw new Error('Cart not found');
-    }
-
-    const prod = cart.products.find(product => product.product.toString() === PId._id.toString());
+    increaseQuantityAndSubtractStock = async (CId, PId, quantity) => {
+        try {
+            const cart = await cartModel.findById(CId);
+            if (!cart) {
+                const error = new Error("Carrito no encontrado");
+                error.statusCode = 404;
+                throw error;
+            }
     
-    if (prod) {
-
-        if (quantity > PId.stock) {
-            throw new Error('Insufficient stock');
+            const product = await productModel.findById(PId);
+            if (!product) {
+                const error = new Error("Producto no encontrado");
+                error.statusCode = 404;
+                throw error;
+            }
+    
+            const productIndex = cart.products.findIndex(cartItem => cartItem.product.toString() === PId);
+            if (productIndex === -1) {
+                const error = new Error("El producto no está en el carrito");
+                error.statusCode = 404;
+                throw error;
+            }
+    
+            const productInCart = cart.products[productIndex];
+    
+            // Se suma la cantidad nueva a la cantidad existente en el carrito
+            productInCart.quantity += quantity;
+    
+            const stockDifference = quantity; // No es necesario restar oldQuantity aquí
+    
+            if (stockDifference > product.stock) {
+                const error = new Error("No hay suficiente stock disponible");
+                error.statusCode = 400;
+                throw error;
+            }
+    
+            product.stock -= stockDifference;
+            await product.save();
+    
+            // Guardamos el carrito actualizado
+            const nuevoCarritoActualizado = await cart.save();
+    
+            return nuevoCarritoActualizado;
+        } catch (error) {
+            throw error;
         }
-
-        prod.quantity = quantity;
-        await cart.save();
-        return cart.products;
-    } else {
-        throw new Error('Product not found in cart');
     }
 
+    decreaseQuantityAndAddStock = async (CId, PId, quantity) => {
+        try {
+            const cart = await cartModel.findById(CId);
+            if (!cart) {
+                const error = new Error("Carrito no encontrado");
+                error.statusCode = 404;
+                throw error;
+            }
+    
+            const product = await productModel.findById(PId);
+            if (!product) {
+                const error = new Error("Producto no encontrado");
+                error.statusCode = 404;
+                throw error;
+            }
+    
+            const productIndex = cart.products.findIndex(cartItem => cartItem.product.toString() === PId);
+            if (productIndex === -1) {
+                const error = new Error("El producto no está en el carrito");
+                error.statusCode = 404;
+                throw error;
+            }
+    
+            const productInCart = cart.products[productIndex];
+    
+            productInCart.quantity -= quantity;
+    
+            product.stock += quantity;
+            await product.save();
+    
+            const nuevoCarritoActualizado = await cart.save();
+    
+            return nuevoCarritoActualizado;
+        } catch (error) {
+            throw error;
+        }
     }
+    
 
     delete = async ( CId, PId ) => {
         const cart = await cartModel.findById( CId._id );

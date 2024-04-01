@@ -8,8 +8,11 @@ export default class CartRepository {
     save = (CId, PId, quantity) => {
         return this.dao.save(CId, PId, quantity);
     }
-    update = (CId, PId, quantity) => {
-        return this.dao.update(CId, PId, quantity);
+    increaseQuantityAndSubtractStock = (CId, PId, quantity) => {
+        return this.dao.increaseQuantityAndSubtractStock(CId, PId, quantity);
+    }
+    decreaseQuantityAndAddStock = (CId, PId, quantity) => {
+        return this.dao.decreaseQuantityAndAddStock(CId, PId, quantity);
     }
     delete = async (CId, PId) => {
         return this.dao.delete(CId, PId);

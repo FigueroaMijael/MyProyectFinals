@@ -44,7 +44,7 @@ paths:
         '500':
           description: Error inesperado en el servidor, no se pudo manejar el proceso.
           
-  /api/cart/{CId}/product/{PId}/{quantity}:
+  /api/cart/increase/{CId}/product/{PId}/{quantity}:
     post:
       summary: Añade un producto al carrito.
       tags:
@@ -116,45 +116,40 @@ paths:
                     type: string
                     example: Insufficient stock
 
-  /api/cart/update/{CId}/product/{PId}/{quantity}:
+    /api/cart/increase/{CId}/product/{PId}/{quantity}:
     put:
-      summary: Actualiza la cantidad de un producto en el carrito.
+      summary: Aumenta la cantidad de un producto en el carrito y resta el stock del producto.
       tags:
         - Carrito
       parameters:
         - name: CId
           in: path
           required: true
-          description: Id del carrito en el que se desea actualizar la cantidad del producto.
+          description: Id del carrito al que se desea aumentar la cantidad del producto.
           schema:
             type: string
         - name: PId
           in: path
           required: true
-          description: Id del producto cuya cantidad se desea actualizar en el carrito.
+          description: Id del producto al que se desea aumentar la cantidad en el carrito.
           schema:
             type: string
         - name: quantity
           in: path
           required: true
-          description: Nueva cantidad del producto en el carrito.
+          description: Cantidad que se desea aumentar al producto en el carrito.
           schema:
             type: integer
             minimum: 1
       responses:
         '200':
-          description: Cantidad del producto en el carrito actualizada exitosamente.
+          description: Cantidad del producto en el carrito aumentada exitosamente y stock del producto restado.
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                  message:
-                    type: string
+                $ref: '#/components/schemas/Cart'
         '400':
-          description: Cantidad no válida.
+          description: Datos no válidos.
           content:
             application/json:
               schema:
@@ -165,7 +160,7 @@ paths:
                     example: error
                   error:
                     type: string
-                    example: Invalid quantity
+                    example: Invalid data
         '404':
           description: Carrito o producto no encontrado.
           content:
@@ -179,6 +174,79 @@ paths:
                   error:
                     type: string
                     example: Cart or product not found
+        '409':
+          description: Stock insuficiente del producto.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    example: Insufficient stock
+
+  /api/cart/decrease/{CId}/product/{PId}/{quantity}:
+    put:
+      summary: Disminuye la cantidad de un producto en el carrito y aumenta el stock del producto.
+      tags:
+        - Carrito
+      parameters:
+        - name: CId
+          in: path
+          required: true
+          description: Id del carrito al que se desea disminuir la cantidad del producto.
+          schema:
+            type: string
+        - name: PId
+          in: path
+          required: true
+          description: Id del producto al que se desea disminuir la cantidad en el carrito.
+          schema:
+            type: string
+        - name: quantity
+          in: path
+          required: true
+          description: Cantidad que se desea disminuir al producto en el carrito.
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Cantidad del producto en el carrito disminuida exitosamente y stock del producto aumentado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '400':
+          description: Datos no válidos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    example: Invalid data
+        '404':
+          description: Carrito o producto no encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    example: Cart or product not found
+
 
   /api/cart/delete/{CId}/product/{PId}:
     delete:

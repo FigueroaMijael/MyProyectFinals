@@ -83,21 +83,20 @@ export const postCartControllers = async (req, res, next) => {
 
         const newCart = await cartService.save(cartExists, prodExists, parsedQuantity);
 
-        res.status(200).json(newCart);
+        res.status(200).json({ message: "Producto agregado con exito al carrito!!", cart: newCart });
     } catch (error) {
         next(error);
     }
 };
 
-export const putCartControllers = async (req, res, next) => {
+export const increaseQuantityAndSubtractStockController = async (req, res, next) => {
     try {
-        logger.info("Actualizando datos del carrito");
+        logger.info("Agregando cantidad al carrito y restando del stock del producto");
         const { CId, PId, quantity = 1 } = req.params;
 
         const parsedQuantity = parseInt(quantity);
 
         if (isNaN(parsedQuantity) || parsedQuantity <= 0) {
-
             const error = {
                 name: "CartControllerError",
                 cause: "Quantity debe ser un numero y no un string",
@@ -107,34 +106,34 @@ export const putCartControllers = async (req, res, next) => {
             throw error;
         }
 
-        const cartExists = await cartService.getAll(CId);
-        if (!cartExists) {
+        const newCart = await cartService.increaseQuantityAndSubtractStock(CId, PId, parsedQuantity);
+
+        res.status(200).json({ message: "Datos del carrito actualizados correctamente", cart: newCart });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const decreaseQuantityAndAddStockController = async (req, res, next) => {
+    try {
+        logger.info("Disminuyendo cantidad del carrito y agregando al stock del producto");
+        const { CId, PId, quantity = 1 } = req.params;
+
+        const parsedQuantity = parseInt(quantity);
+
+        if (isNaN(parsedQuantity) || parsedQuantity <= 0) {
             const error = {
                 name: "CartControllerError",
-                cause: "No se puedo encontrar el carrito con _id: " + CId + " en la base de datos",
-                code: EErrors.NOT_FOUND,
-                message: "Carrito no encontrado",
+                cause: "Quantity debe ser un numero y no un string",
+                code: EErrors.VALIDATION_ERROR,
+                message: "Cantidad no válida",
             };
             throw error;
         }
 
-        const prodExists = await productService.getAll(PId);
-        if (!prodExists) {
-            const error = {
-                name: "CartControllerError",
-                cause: "No se puedo encontrar el producto con _id: " + PId + " en la base de datos",
-                code: EErrors.NOT_FOUND,
-                message: "Producto no encontrado",
-            };
-            throw error;
-        }
+        const newCart = await cartService.decreaseQuantityAndAddStock(CId, PId, parsedQuantity);
 
-        prodExists.stock += parsedQuantity;
-        await prodExists.save();
-
-        const newCartUpdate = await cartService.update(CId, PId, parsedQuantity);
-
-        res.status(200).json({ message: "Datos del carrito actualizados correctamente", cart: newCartUpdate });
+        res.status(200).json({ message: "Datos del carrito actualizados correctamente", cart: newCart });
     } catch (error) {
         next(error);
     }

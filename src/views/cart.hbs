@@ -1,25 +1,31 @@
 <body>
     <div class="cart-container">
-    <h1>Tu Carrito de Compras</h1>
-    <ul class="cart-products-container">
-        {{#each cartDto.products}}
-            <li class="cart-item">
-                <strong class="product-title">{{this.title}}</strong>
-                <div class="details">
-                    <p class="detail-title"><b>Precio:</b></p>
-                    <p class="detail-content">{{this.price}} USD</p>
-                </div>
-                <div class="details">
-                    <p class="detail-title"><b>Cantidad:</b></p>
-                    <p class="detail-content">{{this.quantity}}</p>
-                </div>
-                <button class="btn-delete-product">Eliminar</button>
-            </li>
-        {{/each}}
-    </ul>
-    <p class="total">Total: {{cartDto.totalAmount}} USD</p>
-    
-    <button class="btn-finish-purchase" id="btn">Finalizar Compra</button>
-</div>
-<script src="/js/finalizePurchase.js"></script>
+        <h1>Tu Carrito de Compras</h1>
+        <ul class="cart-products-container">
+            {{#each cartDto.products}}
+                <input type="hidden" id="productId" value="{{this.product}}">
+
+                <li class="cart-item">
+                    <strong class="product-title">{{this.title}}</strong>
+                    <div class="details">
+                        <p class="detail-title"><b>Precio:</b></p>
+                        <p class="detail-content">{{this.price}} USD</p>
+                    </div>
+                    <div class="details">
+                        <p class="detail-title"><b>Cantidad:</b></p>
+                        <button id="decreaseBtn">-</button>
+                        <p class="detail-content">{{this.quantity}}</p>
+                        <button id="increaseBtn">+</button>
+                        <button class="btn-delete-product">Eliminar</button>
+                    </div>
+                </li>
+            {{/each}}
+        </ul>
+        <p class="total">Total: {{cartDto.totalAmount}} USD</p>
+        
+        <button class="btn-finish-purchase" id="btn">Finalizar Compra</button>
+    </div>
+    <script src="/js/cart.js"></script>
+    <script src="/js/finalizePurchase.js"></script>
+
 </body>

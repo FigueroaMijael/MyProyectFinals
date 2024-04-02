@@ -59,6 +59,7 @@ export const getDatosCartRenderViewControllers = async (req, res) => {
     
         const CartId = await cartService.getAll(CId);
         const cartDto = new CartDto(CartId);
+        console.log(cartDto);
             
         res.render("cart", {
             title: "Vista del Carrito",

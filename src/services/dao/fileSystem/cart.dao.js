@@ -1,6 +1,6 @@
 import __dirname from '../../../../utils.js';
 import fileSystem from 'fs';
-import Cart from './models/cart.model.fs.js';
+import Cart from '../../../modelsFS/cart.model.fs.js';
 
 export default class CartService {
     #cart;

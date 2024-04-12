@@ -1,9 +1,8 @@
 import passport from "passport";
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import GithubStrategy from 'passport-github2';
-import config from '../config.js';
-import { usersModel } from "../../services/dao/mongodb/models/users.model.js";
-import { EErrors } from '../Errors/customError/errors-enum.js';
+import config from '../config/config.js';
+import  usersModel  from "../modelsMongo/users.model.js";
 
 const cookieExtractor = req => {
     let token = null;

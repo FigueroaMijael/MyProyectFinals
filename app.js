@@ -4,20 +4,16 @@ import Handlebars from "handlebars";
 import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access";
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-
 // chat
 import { Server } from "socket.io"
 import {chatService} from './src/services/service.js'
-
 // configuracion
 import config from './src/config/config.js';
 import __dirname from './utils.js';
-
 // Mongo connect 
 import MongoSingleton from './src/config/DBConect/mongodb-singleton.js';
-
 //Passport imports
-import initializePassport from './src/config/passport/passport.config.js'
+import initializePassport from './src/config/passport.config.js'
 //Routers
 import renderRouter from './src/routes/renderView.router.js'
 import productRouter from './src/routes/product.router.js';
@@ -26,13 +22,12 @@ import usersRouter from './src/routes/user.router.js'
 import jwtRouter from './src/routes/jwt.router.js'
 import emailRouter from './src/routes/email.router.js'
 import testUserFaker from './src/routes/test-faker.router.js'
-
 // LOGGER
-import {  customErrorMiddleware } from './src/config/logger/logger.js';
-
+import {  customErrorMiddleware } from './src/utils/logger.js';
 //SWAGGER
 import swaggerUiExpress from "swagger-ui-express"
 import swaggerJSDoc from "swagger-jsdoc";
+
 
 //Custom - Extended
 const app = express();
@@ -57,15 +52,18 @@ app.engine(
     })
   );
 
+  Handlebars.registerHelper('add', function (a, b) {
+    return a + b;
+});
+
   app.set("view engine", "hbs");
   app.set("views", `${__dirname}/src/views`);
   app.use(express.static(__dirname + '/src/public'))
   app.use("/socket.io", express.static(__dirname + '/socket.io/client-dist'));
 
 
-Handlebars.registerHelper('eq', function (a, b) {
-    return a === b;
-  });
+
+
 
 const swaggerOptions = { 
     definition: {

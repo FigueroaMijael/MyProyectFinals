@@ -6,13 +6,13 @@ import {cartService} from '../services/factory.js'
 // controllers/cartControllers.js
 import { cartService, ticketService, productService } from '../services/service.js';
 import CartDto from '../services/dto/cart.dto.js';
-import { EErrors } from '../config/Errors/customError/errors-enum.js';
-import { devLogger, prodLogger } from '../config/logger/logger.js'
+import { EErrors } from '../utils/customLogger/errors-enum.js';
+import { devLogger, prodLogger } from '../utils/logger.js'
 import config from '../config/config.js';
 
 const logger = config.environment === 'production' ? prodLogger : devLogger;
 
-export const getCartControllers = async (req, res, next) => {
+ const getAllCart = async (req, res, next) => {
     try {
         logger.info("Obteniendo datos del carrito");
         const { _id } = req.params;
@@ -27,7 +27,7 @@ export const getCartControllers = async (req, res, next) => {
     }
 };
 
-export const postCartControllers = async (req, res, next) => {
+ const postCart = async (req, res, next) => {
     try {
         logger.info("Creando nuevo producto en el carrito");
         const { CId, PId, quantity = 1 } = req.params;
@@ -89,7 +89,7 @@ export const postCartControllers = async (req, res, next) => {
     }
 };
 
-export const increaseQuantityAndSubtractStockController = async (req, res, next) => {
+ const increaseQuantityAndSubtractStock = async (req, res, next) => {
     try {
         logger.info("Agregando cantidad al carrito y restando del stock del producto");
         const { CId, PId, quantity = 1 } = req.params;
@@ -114,7 +114,7 @@ export const increaseQuantityAndSubtractStockController = async (req, res, next)
     }
 };
 
-export const decreaseQuantityAndAddStockController = async (req, res, next) => {
+ const decreaseQuantityAndAddStock = async (req, res, next) => {
     try {
         logger.info("Disminuyendo cantidad del carrito y agregando al stock del producto");
         const { CId, PId, quantity = 1 } = req.params;
@@ -139,7 +139,7 @@ export const decreaseQuantityAndAddStockController = async (req, res, next) => {
     }
 };
 
-export const deleteCartControllers = async (req, res, next) => {
+ const deleteCart = async (req, res, next) => {
     try {
         logger.info("Eliminando producto del carrito");
         const { CId, PId } = req.params;
@@ -181,7 +181,7 @@ export const deleteCartControllers = async (req, res, next) => {
     }
 };
 
-export const finalizePurchase = async (req, res, next) => {
+ const finalizePurchase = async (req, res, next) => {
     try {
         logger.info("Finalizando compra");
         const { amount } = req.body;
@@ -209,3 +209,11 @@ export const finalizePurchase = async (req, res, next) => {
     }
 };
 
+export default  {
+    getAllCart, 
+    postCart, 
+    increaseQuantityAndSubtractStock,
+    decreaseQuantityAndAddStock, 
+    deleteCart,
+    finalizePurchase 
+}

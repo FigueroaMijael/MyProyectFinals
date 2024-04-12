@@ -3,9 +3,9 @@ export default class ProductRepository {
         this.dao = dao;
     }
     
-    getAll = (_id, limit = 10, page = 1, sort, query, category, availability) => {
-        return this.dao.getAll(_id, limit, page, sort, query, category, availability);
-    }
+    getAll = async (_id, limit = 10, page = 1, sort, query, category, availability) => {
+        return await this.dao.getAll(_id, limit, page, sort, query, category, availability);
+    }    
     
     save = (prod) => {
         return this.dao.save(prod);

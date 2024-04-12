@@ -1,42 +1,6 @@
-error: POST en /api/jwt/login - Causa del error: Usuario no encontrado con username: guadaplizarazo@gmail.com - Code error: 404 - at 26/3/2024 - 20:57:08
-error: POST en /api/jwt/login - Causa del error: Error interno del servidor - Code error: 500 - at 26/3/2024 - 20:57:34
-error: POST en /api/jwt/login - Causa del error: Error interno del servidor - Code error: 500 - at 26/3/2024 - 20:58:19
-error: PUT en /api/product/update/658b6d03a27fd9e1811d5d1d - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 00:39:44
-error: PUT en /api/product/update/658b6d03a27fd9e1811d5d1d - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 00:43:38
-error: POST en /api/product/create - Causa del error: El usuario no completo todos lo campos - Code error: 401 - at 30/3/2024 - 00:48:48
-error: POST en /api/product/create - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 00:50:00
-error: POST en /api/product/create - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 00:56:36
-error: POST en /api/product/create - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 00:56:57
-error: POST en /api/product/create - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 00:57:36
-error: PUT en /api/cart/update/65f4f3cfbd2a9acf01058916/product/658b6d31a27fd9e1811d5d23/100 - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 01:46:19
-error: PUT en /api/cart/update/65f4f3cfbd2a9acf01058916/product/65f4f3cfbd2a9acf01058916/100 - Causa del error: No se puedo encontrar el producto con _id: 65f4f3cfbd2a9acf01058916 en la base de datos - Code error: 404 - at 30/3/2024 - 01:46:38
-error: PUT en /api/cart/update/65f4f3cfbd2a9acf01058916/product/65f4f3cfbd2a9acf01058916/100 - Causa del error: No se puedo encontrar el producto con _id: 65f4f3cfbd2a9acf01058916 en la base de datos - Code error: 404 - at 30/3/2024 - 01:47:23
-error: PUT en /api/cart/update/65f4f3cfbd2a9acf01058916/product/65f4f3cfbd2a9acf01058916/100 - Causa del error: No se puedo encontrar el producto con _id: 65f4f3cfbd2a9acf01058916 en la base de datos - Code error: 404 - at 30/3/2024 - 01:52:42
-error: PUT en /api/cart/update/66079612f88f89cf5681df08/product/658b6d7aa27fd9e1811d5d31/2 - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 02:02:06
-error: DELETE en /api/cart/delete/65f4f3cfbd2a9acf01058916/product/658b6d7aa27fd9e1811d5d31 - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 02:03:17
-error: POST en /api/cart/65d68c12d3144c3a19596811/product/658b6d86a27fd9e1811d5d33/4 - Causa del error: No se puedo encontrar el carrito con _id: 65d68c12d3144c3a19596811 en la base de datos - Code error: 404 - at 30/3/2024 - 16:09:04
-error: PUT en /api/cart/update/65f4f3cfbd2a9acf01058916/product/658b6d86a27fd9e1811d5d33/5 - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 22:23:08
-error: PUT en /api/cart/update/65f4f3cfbd2a9acf01058916/product/658b6d86a27fd9e1811d5d33/5 - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 22:24:42
-error: PUT en /api/cart/update/65f4f3cfbd2a9acf01058916/product/658b6d86a27fd9e1811d5d33/5 - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 22:27:43
-error: PUT en /api/cart/update/65f4f3cfbd2a9acf01058916/product/658b6d86a27fd9e1811d5d33/5 - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 22:28:43
-error: PUT en /api/cart/update/65f4f3cfbd2a9acf01058916/product/658b6d86a27fd9e1811d5d33/5 - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 22:49:14
-error: PUT en /api/cart/update/65f4f3cfbd2a9acf01058916/product/658b6d86a27fd9e1811d5d33/5 - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 22:52:03
-error: PUT en /api/cart/update/65f4f3cfbd2a9acf01058916/product/658b6d86a27fd9e1811d5d33/5 - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 23:00:14
-error: PUT en /api/cart/update/65f4f3cfbd2a9acf01058916/product/658b6d86a27fd9e1811d5d33/5 - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 23:08:22
-error: PUT en /api/cart/update/65f4f3cfbd2a9acf01058916/product/658b6d86a27fd9e1811d5d33/5 - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 23:09:34
-error: PUT en /api/cart/update/65f4f3cfbd2a9acf01058916/product/658b6d86a27fd9e1811d5d33/5 - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 23:10:33
-error: PUT en /api/cart/update/65f4f3cfbd2a9acf01058916/product/658b6d86a27fd9e1811d5d33/5 - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 23:10:37
-error: PUT en /api/cart/update/65f4f3cfbd2a9acf01058916/product/658b6d86a27fd9e1811d5d33/5 - Causa del error: Error interno del servidor - Code error: 500 - at 30/3/2024 - 23:16:32
-error: PUT en /api/cart/update/65f4f3cfbd2a9acf01058916/product/658b6d86a27fd9e1811d5d33/5 - Causa del error: Error interno del servidor - Code error: 500 - at 1/4/2024 - 12:48:00
-error: PUT en /api/cart/update/65f4f3cfbd2a9acf01058916/product/658b6d86a27fd9e1811d5d33/5 - Causa del error: Error interno del servidor - Code error: 500 - at 1/4/2024 - 12:49:10
-error: PUT en /api/cart/update/65f4f3cfbd2a9acf01058916/product/658b6d86a27fd9e1811d5d33/5 - Causa del error: Error interno del servidor - Code error: 500 - at 1/4/2024 - 13:02:51
-error: PUT en /api/cart/update/65f4f3cfbd2a9acf01058916/product/658b6d86a27fd9e1811d5d33/5 - Causa del error: Error interno del servidor - Code error: 500 - at 1/4/2024 - 13:14:45
-error: PUT en /api/cart/update/65f4f3cfbd2a9acf01058916/product/658b6d86a27fd9e1811d5d33/5 - Causa del error: Error interno del servidor - Code error: 500 - at 1/4/2024 - 13:15:12
-error: PUT en /api/cart/update/65f4f3cfbd2a9acf01058916/product/658b6d86a27fd9e1811d5d33/5 - Causa del error: Error interno del servidor - Code error: 500 - at 1/4/2024 - 13:15:34
-error: PUT en /api/cart/update/65e36c7aded887fe63719c74/product/658b6d31a27fd9e1811d5d23/1 - Causa del error: Error interno del servidor - Code error: 500 - at 1/4/2024 - 13:18:24
-error: PUT en /api/cart/update/65e36c7aded887fe63719c74/product/658b6d31a27fd9e1811d5d23/1 - Causa del error: Error interno del servidor - Code error: 500 - at 1/4/2024 - 13:19:28
-error: PUT en /api/cart/update/65e36c7aded887fe63719c74/product/658b6d31a27fd9e1811d5d23/1 - Causa del error: Error interno del servidor - Code error: 500 - at 1/4/2024 - 13:20:39
-error: PUT en /api/cart/update/65e36c7aded887fe63719c74/product/658b6d31a27fd9e1811d5d23/200 - Causa del error: Error interno del servidor - Code error: 500 - at 1/4/2024 - 13:39:06
-error: PUT en /api/cart/decrease/660ae84fccdca1711b85dadc/product/660ae84fccdca1711b85dadc/1 - Causa del error: Error interno del servidor - Code error: 500 - at 2/4/2024 - 19:08:12
-error: PUT en /api/cart/increase/660ae84fccdca1711b85dadc/product/660ae84fccdca1711b85dadc/1 - Causa del error: Error interno del servidor - Code error: 500 - at 2/4/2024 - 19:08:19
-error: PUT en /api/cart/increase/660ae84fccdca1711b85dadc/product/660ae84fccdca1711b85dadc/1 - Causa del error: Error interno del servidor - Code error: 500 - at 2/4/2024 - 19:10:37
+error: GET en /?page=1&sort=desc - Causa del error: Error interno del servidor - Code error: 500 - at 12/4/2024 - 12:15:08
+error: GET en / - Causa del error: Error interno del servidor - Code error: 500 - at 12/4/2024 - 12:15:50
+error: GET en / - Causa del error: Error interno del servidor - Code error: 500 - at 12/4/2024 - 12:16:09
+error: GET en / - Causa del error: Error interno del servidor - Code error: 500 - at 12/4/2024 - 12:16:39
+error: GET en / - Causa del error: Error interno del servidor - Code error: 500 - at 12/4/2024 - 12:16:44
+error: GET en /?page=1&sort=asc - Causa del error: Error interno del servidor - Code error: 500 - at 12/4/2024 - 12:22:30

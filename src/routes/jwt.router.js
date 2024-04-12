@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { loginUser, registerUser, resetPassword } from '../controlers/jwt.Controllers.js';
+import usersController from '../controlers/jwt.Controllers.js';
 
 const router = Router();
 
-router.post("/login", loginUser);
+router.post("/login", usersController.login );
 
-router.post("/register", registerUser);
+router.post("/register", usersController.register);
 
-router.put("/resetPassword", resetPassword);
+router.put("/resetPassword", usersController.resetPassword);
 
 export default router;

@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nodemon ./app.js --mode development",
     "start": "node ./app.js --mode production",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha ./test/supertest.test.js"  
   },
   "keywords": [
     "express",
@@ -37,6 +37,7 @@
     "mongodb": "^6.3.0",
     "mongoose": "^8.1.2",
     "mongoose-paginate-v2": "^1.8.0",
+    "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.11",
     "nodemon": "^3.0.3",
     "passport": "^0.7.0",
@@ -52,6 +53,9 @@
   },
   "repository": "https://github.com/FigueroaMijael/MyProyectFinals.git",
   "devDependencies": {
-    "@faker-js/faker": "^8.4.1"
+    "@faker-js/faker": "^8.4.1",
+    "chai": "^5.1.0",
+    "mocha": "^10.4.0",
+    "supertest": "^6.3.4"
   }
 }

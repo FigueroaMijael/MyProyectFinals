@@ -4,18 +4,20 @@ import {userService} from '../services/factory.js'
 
 //IMPLEMENTACION CON REPOSITORY
 import {userService} from '../services/service.js'
-import { isValidPassword, generateJWToken, createHash, verifyResetToken } from '../../utils.js';
+import { createHash, isValidPassword } from '../utils/bcrypt.js';
+import { generateJWToken, verifyResetToken } from '../utils/jwt.js'
 import UsersDto from '../services/dto/users.dto.js'
-import { EErrors } from '../config/Errors/customError/errors-enum.js';
-import { devLogger, prodLogger } from '../config/logger/logger.js'
+import { EErrors } from '../utils/customLogger/errors-enum.js';
+import { devLogger, prodLogger } from '../utils/logger.js'
 import config from '../config/config.js';
 
 
 const logger = config.environment === 'production' ? prodLogger : devLogger;
 
-export const loginUser = async (req, res, next) => {
+ const login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
+        if (!email || !password) return res.status(400).send({ status: "error", error: "Incomplete values" });
 
         const user = await userService.findByUsername(email);
 
@@ -41,26 +43,21 @@ export const loginUser = async (req, res, next) => {
             throw error;
         }
 
-        const tokenUser = {
-            name: user.name, 
-            lastName: user.lastName,
-            email: user.email,
-            age: user.age,
-            role: user.role
-        };
+        const tokenUserDto = UsersDto.getUserTokenFrom(user)
 
-        const access_token = generateJWToken(tokenUser);
+        const access_token = generateJWToken(tokenUserDto);
 
-        res.cookie('jwtCookieToken', access_token, { httpOnly: true });
+        res.cookie('CookieToken', access_token, { maxAge: 3600000 }).send({ status: "success", message: "Logged in" })
         res.status(200).json({ status: "success", message: "Usuario logueado con éxito"});
     } catch (error) {
         next(error);
     }
 };
 
-export const registerUser = async (req, res, next) => {
+ const register = async (req, res, next) => {
     
     const { name, lastName, email, age, password } = req.body;
+    if (!name || !lastName || !email || !age || !password) return res.status(400).send({ status: "error", error: "Incomplete values" });
 
     logger.info(`registrando usuario con email: ${email}`)
 
@@ -83,19 +80,17 @@ export const registerUser = async (req, res, next) => {
         email,
         password: createHash(password)
     };
-
-    const userDto = new UsersDto(user);
     
     try {
-        await userService.save(userDto);
-        res.status(200).json({ status: "success", message: "Usuario creado con éxito" });
+        const userCreate = await userService.save(user);
+        res.status(200).json({ status: "success", message: "Usuario creado con éxito", payload: userCreate });
     } catch (error) {
         next(error);
     }
 };
 
 
-export const resetPassword = async (req, res, next) => {
+ const resetPassword = async (req, res, next) => {
     try {
         const { token, email, newPassword } = req.body;
 
@@ -131,7 +126,7 @@ export const resetPassword = async (req, res, next) => {
 
         if (updateResult && updateResult.modifiedCount > 0) {
             return res.status(200).send({ status: "success", message: "Contraseña cambiada exitosamente" });
-        } else {
+        } else { 
             const error = {
                 name: "Internal Error",
                 cause: "Ocurrio un error al restablecer la contraseña del usuario con email: " + email,
@@ -144,3 +139,9 @@ export const resetPassword = async (req, res, next) => {
         next(error)
     }
 };
+
+export default {
+    login,
+    register,
+    resetPassword
+}

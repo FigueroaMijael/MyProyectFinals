@@ -1,5 +1,5 @@
-import { cartModel } from "./models/cart.model.js";
-import { productModel } from "./models/products.model.js";
+import { cartModel } from "../../../modelsMongo/cart.model.js";
+import { productModel } from "../../../modelsMongo/products.model.js";
 
 export default class CartService {
 

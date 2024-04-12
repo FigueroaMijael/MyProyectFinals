@@ -8,23 +8,26 @@ Handlebars.registerHelper('eq', function (a, b) {
   });
 
 
-  export const getDatosRenderViewControllers = async (req, res) => {
+   const prodRender= async (req, res) => {
     try {
         const { limit = 10, page = 1, sort, query, category, availability } = req.query;
     
         const limitInt = parseInt(limit);
         const pageInt = parseInt(page);
     
-        const result = await productService.getAll(null, {
-            limit: limitInt,
-            page: pageInt,
+        const result = await productService.getAll(
+            null,
+            limitInt,
+            pageInt,
             sort,
             query,
             category,
-            availability,
-        });
+            availability
+        );
+
+        console.log(result);
         
-        res.render("home.hbs", {
+        res.render("home", {
             fileCss: "styles_products.css",
             products: result.products,
             total: result.total,
@@ -39,7 +42,7 @@ Handlebars.registerHelper('eq', function (a, b) {
     }
 }
 
-export const realTimeViewControllers = async (req,res) => {
+ const realTimeRender= async (req,res) => {
     try {
         const result = await productService.getAll();
 
@@ -53,7 +56,7 @@ export const realTimeViewControllers = async (req,res) => {
     }
 }
 
-export const getDatosCartRenderViewControllers = async (req, res) => {
+ const cartRender = async (req, res) => {
     try {
         const { CId } = req.params;
     
@@ -70,7 +73,7 @@ export const getDatosCartRenderViewControllers = async (req, res) => {
         next(error)    }
 }
 
-export const getDatosProductRenderViewControllers = async (req, res) => {
+ const prodDetailRender = async (req, res) => {
     try {
         const { PId } = req.params;
     
@@ -86,7 +89,7 @@ export const getDatosProductRenderViewControllers = async (req, res) => {
     }
 }
 
-export const getDatosUserRenderViewControllers = async (req, res) => {
+ const userRender = async (req, res) => {
     try {
         const user = req.user;
 
@@ -100,7 +103,7 @@ export const getDatosUserRenderViewControllers = async (req, res) => {
         next(error)    }
 };
 
-export const renderUpdatePasswordControllers = async (req, res) => {
+ const updatePasswordRender = async (req, res) => {
     try {
         const token = req.query.token;
 
@@ -113,7 +116,7 @@ export const renderUpdatePasswordControllers = async (req, res) => {
         next(error)    }
 }
 
-export const renderLoginControllers = async (req, res) => {
+ const loginRender = async (req, res) => {
     try {
         res.render("login", {
             title: "vista del login",
@@ -123,7 +126,7 @@ export const renderLoginControllers = async (req, res) => {
         next(error)    }
 }
 
-export const renderRegisterControllers = async (req, res) => {
+ const registerRender = async (req, res) => {
     try {
         res.render("register.hbs", {
             title: "vista del resgister",
@@ -133,14 +136,14 @@ export const renderRegisterControllers = async (req, res) => {
         next(error)    }
 }
 
-export const renderGtiHubControllers = async (req, res) => {
+ const gitHubRender = async (req, res) => {
     try {
         res.render("github-login");
     } catch (error) {
         next(error)    }
 }
 
-export const finalizePurchaseControllers = async (req, res) => {
+ const finalizePurchaseRender = async (req, res) => {
     try {
         const { _id } = req.params;
 
@@ -149,4 +152,17 @@ export const finalizePurchaseControllers = async (req, res) => {
         res.render('finalizepurchase', { ticket })
     } catch (error) {
         next(error)    }
+}
+
+export default {
+    prodRender,
+    prodDetailRender,
+    cartRender,
+    realTimeRender,
+    userRender,
+    loginRender,
+    registerRender,
+    updatePasswordRender,
+    gitHubRender,
+    finalizePurchaseRender
 }

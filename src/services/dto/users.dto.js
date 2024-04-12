@@ -1,8 +1,10 @@
 export default class UsersDto {
-    constructor(user) {
-        this.name = user.name;
-        this.age = user.age;
-        this.email = user.email;
-        this.role = user.role;
+    static getUserTokenFrom = (user) =>{
+        return {
+            name: `${user.name} ${user.lastName}`,
+            email:user.email,
+            age: user.age,
+            role: user.role,
+        }
     }
-};
+}

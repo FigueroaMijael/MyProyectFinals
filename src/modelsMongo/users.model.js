@@ -39,4 +39,4 @@ const usersSchema = new Schema({
 
 const usersModel = model(collection, usersSchema);
 
-export {usersModel}
+export default {usersModel}

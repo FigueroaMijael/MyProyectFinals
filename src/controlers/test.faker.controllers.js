@@ -1,6 +1,6 @@
-import { generateUser, generateProduct } from "../../utils.js";
+import { generateUser, generateProduct } from "../utils/faker.js";
 
-export const getAllUser = (req, res) => {
+ const getAllUser = (req, res) => {
     try {
         let users = [];
         for (let i = 0; i < 5; i++) {
@@ -13,7 +13,7 @@ export const getAllUser = (req, res) => {
     }
 };
 
-export const getAllProduct = (req, res) => {
+ const getAllProduct = (req, res) => {
     try {
         let product = [];
         for (let i = 0; i < 5; i++) {
@@ -25,3 +25,8 @@ export const getAllProduct = (req, res) => {
         res.status(500).send({ error: error, message: "No se pudo obtener los usuarios:" });
     }
 };
+
+export default {
+    getAllUser,
+    getAllProduct
+}

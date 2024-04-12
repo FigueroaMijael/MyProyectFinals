@@ -5,14 +5,14 @@ import {productService} from '../services/factory.js'
 //IMPLEMENTACION CON REPOSITORY
 // controllers/productControllers.js
 import { productService } from '../services/service.js';
-import { EErrors } from '../config/Errors/customError/errors-enum.js';
+import { EErrors } from '../utils/customLogger/errors-enum.js';
 import config from '../config/config.js';
-import { prodLogger ,devLogger } from '../config/logger/logger.js';
+import { prodLogger ,devLogger } from '../utils/logger.js';
 
 const logger = config.environment === 'production' ? prodLogger : devLogger;
 
 
-export const getDatosControllers = async (req, res, next) => {
+ const getProd = async (req, res, next) => {
     try {
         logger.info("Obteniendo datos de productos");
         const { _id } = req.params;
@@ -31,12 +31,12 @@ export const getDatosControllers = async (req, res, next) => {
     }
 };
 
-export const postDatosControllers = async (req, res, next) => {
+ const postProd = async (req, res, next) => {
     try {
         logger.info("Creando nuevo producto");
         
         //descomentar owner y comentar el codigo de la linea 75 a la 78 para testing
-        const { title, description, category, thumbnail, code, /* owner */} = req.body;
+        const { title, description, category, thumbnail, code,  /* owner */ } = req.body;
         let { price, stock } = req.body;
 
         price = parseInt(price);
@@ -75,18 +75,19 @@ export const postDatosControllers = async (req, res, next) => {
         const { user } = req;
         const { role, email } = user;
 
-        const owner = (role === 'premium') ? email : 'admin'; 
+        const owner = (role === 'premium') ? email : 'admin';
         
         const productoACrear = { title, description, price, category, thumbnail, code, stock, owner };
 
         const nuevoDato = await productService.save(productoACrear);
         res.status(200).json({ dato: nuevoDato });
+
     } catch (error) {
         next(error); 
     }
 };
 
-export const updateDatosControllers = async (req, res, next) => {
+ const updateProd = async (req, res, next) => {
     try {
         logger.info("Actualizando datos de producto");
 
@@ -112,7 +113,7 @@ export const updateDatosControllers = async (req, res, next) => {
     }
 };
 
-export const deleteDatosControllers = async (req, res, next) => {
+ const deleteProd = async (req, res, next) => {
     try {
         logger.info("Eliminando producto");
 
@@ -125,3 +126,10 @@ export const deleteDatosControllers = async (req, res, next) => {
         next(error); 
     }
 };
+
+export default {
+    getProd,
+    postProd,
+    updateProd,
+    deleteProd
+}

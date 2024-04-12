@@ -1,42 +1,14 @@
 // controllers/emailController.js
-import nodemailer from "nodemailer";
+import transporter from "../utils/email.js";
 import config from "../config/config.js";
-import { prodLogger, devLogger } from "../config/logger/logger.js"
-import { EErrors } from '../config/Errors/customError/errors-enum.js';
+import { prodLogger, devLogger } from "../utils/logger.js"
+import { EErrors } from '../utils/customLogger/errors-enum.js';
 import { userService } from "../services/service.js";
-import { generateResetToken }  from "../../utils.js";
+import { generateResetToken }  from "../utils/jwt.js";
 
 const logger = config.environment === 'production' ? prodLogger : devLogger;
 
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    port: 587,
-    auth: {
-        user: config.gmailAccount,
-        pass: config.gmailAppPassword   
-    }
-});
-
-transporter.verify(function (error, success, next) {
-    try {
-        if (error) {
-            const errorData = {
-                name: "EmailControllerError",
-                cause: "No se pudo verificar el servidor de correo",
-                message: "Error al verificar el servidor de correo",
-                code: EErrors.INTERNAL_SERVER_ERROR
-            };
-            throw errorData
-        } else {
-            logger.info('Server is ready to take our messages' + success);
-        }
-    } catch (error) {
-        next(error);
-    }
-    
-});
-
-export const sendEmailFinalyPurchase = (req, res, next) => {
+ const sendEmailFinalyPurchase = (req, res, next) => {
     try {
         logger.info("Enviando correo de confirmación de compra");
 
@@ -78,7 +50,7 @@ export const sendEmailFinalyPurchase = (req, res, next) => {
 };
 
 
-export const sendEmailUpdatePassword = async (req, res, next) => {
+ const sendEmailUpdatePassword = async (req, res, next) => {
     try {
         logger.info("Enviando correo de cambio de contraseña");
 
@@ -130,3 +102,8 @@ export const sendEmailUpdatePassword = async (req, res, next) => {
         next(error);
     }
 };
+
+export default {
+    sendEmailFinalyPurchase,
+    sendEmailUpdatePassword
+}

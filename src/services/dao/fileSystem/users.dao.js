@@ -1,4 +1,4 @@
-import { cartModel } from "./models/cart.model.js";
+import { usersModel } from "../../../modelsFS/users.model.fs";
 
 export default class CartService {
 

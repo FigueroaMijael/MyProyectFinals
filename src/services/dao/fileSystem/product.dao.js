@@ -1,4 +1,4 @@
-import ProductManager from './models/products.model.fs.js';
+import ProductManager from '../../../modelsFS/products.model.fs';
 
 export default class productService {
     #productManager;

@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import config from "../config.js";
-import { EErrors } from '../Errors/customError/errors-enum.js'
-import { prodLogger, devLogger } from "../logger/logger.js";
+import { prodLogger, devLogger } from "../../utils/logger.js";
 
 const logger = config.environment === 'production' ? prodLogger : devLogger;
 
@@ -21,10 +20,7 @@ export default class MongoSingleton {
 
     #connectMongoDB = async (next) => {
         try {
-            await mongoose.connect(config.urlMongo, {
-                useNewUrlParser: true,
-                useUnifiedTopology: true
-            });
+            await mongoose.connect(config.urlMongo);
             logger.info("Conectado con éxito a MongoDB usando Mongoose.");
         } catch (error) {
            next(error)

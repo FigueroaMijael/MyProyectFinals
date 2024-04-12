@@ -1,32 +1,32 @@
 import { Router } from "express";
-import { passportCall, authorization} from "../../utils.js";
-import {finalizePurchaseControllers ,getDatosRenderViewControllers, realTimeViewControllers, getDatosCartRenderViewControllers, getDatosProductRenderViewControllers, renderLoginControllers, renderRegisterControllers,  getDatosUserRenderViewControllers, renderUpdatePasswordControllers, renderGtiHubControllers} from '../controlers/viewControllers.js'
+import { passportCall, authorization} from "../utils/passport.js";
+import viewControllers from '../controlers/viewControllers.js'
 
 const router = Router();
 
 // VIEWS PRODUCTS
 //products (home)
-router.get("/", getDatosRenderViewControllers)
+router.get("/", viewControllers.prodRender)
 
 //detalle
-router.get("/detail/:PId", getDatosProductRenderViewControllers )
+router.get("/detail/:PId", viewControllers.prodDetailRender )
 
 //realTime
-router.get("/realtimeproducts", passportCall('jwt'), authorization(['user', 'admin', 'premium']) , realTimeViewControllers );
+router.get("/realtimeproducts", passportCall('jwt'), authorization(['user', 'admin', 'premium']) , viewControllers.realTimeRender );
 
 //VIEWS CART
 //carrito
-router.get("/cart/:CId", getDatosCartRenderViewControllers);
+router.get("/cart/:CId", viewControllers.cartRender);
 
 //VIEWS USERS
 //login
-router.get("/login", renderLoginControllers)
+router.get("/login", viewControllers.loginRender)
 
 //register
-router.get("/register", renderRegisterControllers)
+router.get("/register", viewControllers.registerRender)
 
 //profile
-router.get("/profile", passportCall('jwt'),authorization(['user', 'admin', 'premium']), getDatosUserRenderViewControllers)
+router.get("/profile", passportCall('jwt'),authorization(['user', 'admin', 'premium']), viewControllers.userRender)
 
 //buscar usuario
 router.get("/searchUser", (req, res) => {
@@ -34,10 +34,10 @@ res.render("serchUser", {fileCss: 'style.serchUser.css'});
 });
 
 // Cambio de contraseña
-router.get("/updatePassword/reset", renderUpdatePasswordControllers)
+router.get("/updatePassword/reset", viewControllers.updatePasswordRender)
 
 //GitHub login
-router.get("/github/login", renderGtiHubControllers)
+router.get("/github/login", viewControllers.gitHubRender)
 
 //chat
 router.get('/chat', passportCall('jwt'), authorization(['user', 'admin', 'premium']), (req, res) => {
@@ -45,6 +45,6 @@ router.get('/chat', passportCall('jwt'), authorization(['user', 'admin', 'premiu
     res.render('chat', { userName, fileCss: 'styles.chat.css' });
 });
 
-router.get('/finalizePurchase/:_id',  passportCall('jwt'), authorization(['user']), finalizePurchaseControllers) 
+router.get('/finalizePurchase/:_id',  passportCall('jwt'), authorization(['user']), viewControllers.finalizePurchaseRender) 
 
 export default router

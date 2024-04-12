@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { passportCall, authorization} from '../../utils.js'
-import {sendEmailFinalyPurchase, sendEmailUpdatePassword} from "../controlers/email.Controllers.js";
+import { passportCall, authorization} from '../utils/passport.js'
+import emailController from "../controlers/email.Controllers.js";
 
 const router = Router();
 
-router.post("/finalyPurchase", passportCall('jwt'), authorization(['user']), sendEmailFinalyPurchase);
+router.post("/finalyPurchase", passportCall('jwt'), authorization(['user']), emailController.sendEmailFinalyPurchase);
 
-router.post("/sendEmailUpdatePassword", sendEmailUpdatePassword);
+router.post("/sendEmailUpdatePassword", emailController.sendEmailUpdatePassword);
 
 export default router

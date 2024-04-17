@@ -106,7 +106,8 @@ const userRenderFormPremium = async (req, res) => {
         console.log(user);
 
         res.render("formPremium", {
-            user
+            user,
+            fileCss: 'style.formPremium.css'
         });
     } catch (error) {
         next(error)    }

@@ -2,7 +2,7 @@ import config from '../config/config.js'
 import jwt  from 'jsonwebtoken';
 
 export const generateJWToken = (user) => {
-    return jwt.sign({user}, config.jwtPrivateKey, {expiresIn: '24h'});
+    return jwt.sign({user, expiresIn: '24h'}, config.jwtPrivateKey);
 }
 
 export const generateResetToken = () => {

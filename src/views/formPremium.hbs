@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario para usuario premium</title>
+    <link rel="stylesheet" href="{{fileCss}}">
+</head>
+<body>
+    <input type="hidden" id="userId" value="{{user._id}}">
+
+    <form id="premiumForm" enctype="multipart/form-data">
+        <input type="file" name="documents" required>
+        <button type="submit" id="updatePremiumBtn">Actualizar a Premium</button>
+    </form>
+
+    <script src="/js/premium.js"></script>
+</body>
+</html>

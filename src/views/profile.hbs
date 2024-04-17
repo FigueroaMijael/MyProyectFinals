@@ -4,25 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil de Usuario</title>
-    <link rel="stylesheet" href="/styles/profile.css">
+    <link rel="stylesheet" href="{{fileCss}}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
 </head>
 <body>
     <div class="profile-container">
         <div class="profile-header">
-            <h1>¡Bienvenido a tu perfil, {{user.name}}!</h1>
+            <h1>¡Bienvenido a tu perfil, {{user.fullName}}!</h1>
         </div>
         <div class="profile-avatar">
             <img src="https://via.placeholder.com/150" alt="Avatar" class="avatar">
         </div>
         <div class="profile-info">
-            <p><strong>Nombre:</strong> {{user.name}}</p>
+            <input type="hidden" id="userId" value="{{user._id}}">
+            <p><strong>Nombre:</strong> {{user.fullName}}</p>
             <p><strong>Correo Electrónico:</strong> {{user.email}}</p>
             <p><strong>Edad:</strong> {{user.age}}</p>
             <p><strong>Role:</strong> {{user.role}}</p>
+        </div>
+        <div>
+            <button><a href="/formularioPremium">Quiero ser premium</a></button>
+        </div>
+        <div class="logout-button">
+            <button id="logoutBtn">Cerrar sesión</button>
         </div>
         <div class="back-to-home">
             <a href="/">Volver al Inicio</a>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="/js/profile.js"></script>
 </body>
 </html>

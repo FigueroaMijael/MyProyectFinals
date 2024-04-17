@@ -127,9 +127,40 @@ const logger = config.environment === 'production' ? prodLogger : devLogger;
     }
 };
 
+const uploadDocumentsProd = async (req, res) => {
+    const { uid } = req.params;
+    
+    // Verificar si el usuario existe
+    const user = await userService.getAll(uid);
+    if (!user) return res.status(404).send({ status: "error", error: "User not found" });
+
+    // Utilizar el middleware de Multer para cargar los archivos
+    uploader.array('productImage')(req, res, async (err) => {
+        if (err) {
+            console.error("Error al subir archivos:", err);
+            return res.status(500).send({ status: "error", error: "Error uploading files" });
+        }
+
+        // Obtener los archivos cargados
+        const files = req.files;
+
+        // Actualizar el estado del usuario para indicar que se han cargado documentos
+        user.documents = files.map(file => ({
+            name: file.originalname,
+            reference: file.path // Podrías cambiar esto dependiendo de cómo quieras guardar las referencias de los archivos
+        }));
+        
+        // Guardar los cambios en el usuario
+        await user.save();
+
+        return res.status(200).json({ message: "Documentos subidos y usuario actualizado correctamente", user });
+    });
+};
+
 export default {
     getProd,
     postProd,
     updateProd,
-    deleteProd
+    deleteProd,
+    uploadDocumentsProd
 }

@@ -24,8 +24,6 @@ Handlebars.registerHelper('eq', function (a, b) {
             category,
             availability
         );
-
-        console.log(result);
         
         res.render("home", {
             fileCss: "styles_products.css",
@@ -92,12 +90,23 @@ Handlebars.registerHelper('eq', function (a, b) {
  const userRender = async (req, res) => {
     try {
         const user = req.user;
-
-        const userDto = new UsersDto(user);
+        console.log(user);
 
         res.render("profile", {
-            user: userDto,
+            user,
             fileCss:"styles.profile.css"
+        });
+    } catch (error) {
+        next(error)    }
+};
+
+const userRenderFormPremium = async (req, res) => {
+    try {
+        const user = req.user;
+        console.log(user);
+
+        res.render("formPremium", {
+            user
         });
     } catch (error) {
         next(error)    }
@@ -164,5 +173,6 @@ export default {
     registerRender,
     updatePasswordRender,
     gitHubRender,
-    finalizePurchaseRender
+    finalizePurchaseRender,
+    userRenderFormPremium
 }

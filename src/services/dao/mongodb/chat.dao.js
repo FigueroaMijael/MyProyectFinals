@@ -1,4 +1,4 @@
-import  chatModel  from "../../../modelsMongo/users.model.js";
+import  {chatModel}  from '../../../modelsMongo/messages.model.js'
 
 class MessagesDao {
     async getAll() {

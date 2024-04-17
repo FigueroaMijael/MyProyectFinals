@@ -23,6 +23,8 @@ router.put('/update/:_id', passportCall('jwt'), authorization([ 'admin','premium
 router.delete('/delete/:_id', passportCall('jwt'), authorization([ 'admin','premium']), productController.deleteProd);
 
 // Delete
-router.delete('/delete/:code', productController.deleteProd); 
+router.delete('/delete/:code', passportCall('jwt'), authorization([ 'admin','premium']), productController.deleteProd); 
+
+router.post('/:uid/documents', passportCall('jwt'), authorization([ 'admin','premium']), productController.uploadDocumentsProd);
 
 export default router; 

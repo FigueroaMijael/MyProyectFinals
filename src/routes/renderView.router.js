@@ -12,7 +12,7 @@ router.get("/", viewControllers.prodRender)
 router.get("/detail/:PId", viewControllers.prodDetailRender )
 
 //realTime
-router.get("/realtimeproducts", passportCall('jwt'), authorization(['user', 'admin', 'premium']) , viewControllers.realTimeRender );
+router.get("/realtimeproducts", passportCall('jwt'), authorization([ 'admin', 'premium']) , viewControllers.realTimeRender );
 
 //VIEWS CART
 //carrito
@@ -26,7 +26,7 @@ router.get("/login", viewControllers.loginRender)
 router.get("/register", viewControllers.registerRender)
 
 //profile
-router.get("/profile", passportCall('jwt'),authorization(['user', 'admin', 'premium']), viewControllers.userRender)
+router.get("/profile", passportCall('jwt'), authorization(['user', 'admin', 'premium']), viewControllers.userRender)
 
 //buscar usuario
 router.get("/searchUser", (req, res) => {
@@ -40,11 +40,13 @@ router.get("/updatePassword/reset", viewControllers.updatePasswordRender)
 router.get("/github/login", viewControllers.gitHubRender)
 
 //chat
-router.get('/chat', passportCall('jwt'), authorization(['user', 'admin', 'premium']), (req, res) => {
+router.get('/chat', passportCall('jwt'), authorization([ 'admin', 'premium']), (req, res) => {
     const userName = req.user ? req.user.name : null; 
     res.render('chat', { userName, fileCss: 'styles.chat.css' });
 });
 
-router.get('/finalizePurchase/:_id',  passportCall('jwt'), authorization(['user']), viewControllers.finalizePurchaseRender) 
+router.get('/finalizePurchase/:_id',  passportCall('jwt'), authorization(['user','premium', 'admin']), viewControllers.finalizePurchaseRender) 
+
+router.get("/formularioPremium", passportCall('jwt'), authorization(['user','premium', 'admin']), viewControllers.userRenderFormPremium)
 
 export default router

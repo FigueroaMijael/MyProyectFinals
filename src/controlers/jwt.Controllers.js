@@ -47,8 +47,7 @@ const logger = config.environment === 'production' ? prodLogger : devLogger;
 
         const access_token = generateJWToken(tokenUserDto);
 
-        res.cookie('CookieToken', access_token, { maxAge: 3600000 }).send({ status: "success", message: "Logged in" })
-        res.status(200).json({ status: "success", message: "Usuario logueado con éxito"});
+        res.cookie('CookieToken', access_token, { maxAge: 3600000 }).send({ status: 200, message: "Logged in" })
     } catch (error) {
         next(error);
     }

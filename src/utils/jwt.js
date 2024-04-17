@@ -6,7 +6,6 @@ export const generateJWToken = (user) => {
 }
 
 export const generateResetToken = () => {
-  
    return jwt.sign({ expiresIn: '1h' }, config.resetJwtPrivateKey);
 }
 
@@ -63,7 +62,6 @@ export const authToken = (req,res,next) => {
 
         req.user = credential.user;
         req.user = decodedToken.user;
-        console.log(req.user);
         next();
     })
 }

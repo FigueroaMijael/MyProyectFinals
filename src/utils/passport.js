@@ -18,7 +18,7 @@ export const authorization = (roles) => {
         if (req.user && roles.includes(req.user.role)){
             next();
         } else {
-            res.status(403).json({ error: 'Acceso prohibido, El usuario no tiene permisos con este rol.' });
+            res.status(403).render('403');
         }
     }
 };

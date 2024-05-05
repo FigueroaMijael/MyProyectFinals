@@ -16,14 +16,14 @@ const getUser = async (req, res) => {
 const updateUser = async (req, res) => {
 
     const {uid} = req.params;
-    const {name, lastName, age}  = req.body;
+    const {name, lastName, age, email, role}  = req.body;
     
 
     const user = await userService.getAll(uid);
 
     if (!user) return res.status(404).send({ status: "error", error: "User not found" })
 
-    const updatedUser = await userService.update(uid, {name, lastName, age} );
+    const updatedUser = await userService.update(uid, {name, lastName, age, email, role} );
     return res.status(200).json({ message: "Dato actualizado correctamente", dato: updatedUser });
 }
 
@@ -58,26 +58,6 @@ const uploadDocuments = async (req, res) => {
 
         return res.status(200).json({ message: "Documentos subidos y usuario actualizado correctamente", user });
     });
-};
-
-const logoutUser = async (req, res) => {
-    const { uid } = req.params;
-
-    try {
-        const user = await userService.getAll(uid);
-
-        if (!user) {
-            return res.status(404).json({ status: "error", error: "User not found" });
-        }
-
-        // Limpiar la cookie de autenticación
-        res.clearCookie("CookieToken");
-
-        return res.status(200).json({ message: "Logout successful" });
-    } catch (error) {
-        console.error("Error logging out user:", error);
-        return res.status(500).json({ status: "error", error: "Internal server error" });
-    }
 };
 
 
@@ -127,7 +107,31 @@ const updateUserToPremium = async (req, res) => {
     }
 };
 
+// userController.js
 
+const deleteUserAFK = async (req, res, next) => {
+    try {
+        // Calcular la fecha límite para la inactividad (10 minutos atrás)
+        const inactiveSince = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+        console.log("Checking for inactive users since:", inactiveSince);
+
+        // Buscar usuarios que no hayan tenido conexión desde la fecha límite
+        const inactiveUsers = await userService.findInactiveUsers(inactiveSince);
+        console.log("Inactive users found:", inactiveUsers);
+
+        // Eliminar los usuarios inactivos
+        await Promise.all(inactiveUsers.map(async (user) => {
+            console.log("Deleting inactive user:", user.email);
+            await userService.delete(user._id);
+        }));
+
+        console.log("Inactive users deleted successfully");
+    } catch (error) {
+        console.error("Error checking or deleting inactive users:", error);
+    }
+};
+
+setInterval(deleteUserAFK, 20 * 24 * 60 * 60 * 1000);
 
 export default {
     deleteUser,
@@ -135,6 +139,6 @@ export default {
     getUser,
     updateUser,
     uploadDocuments,
-    logoutUser,
-    updateUserToPremium
+    updateUserToPremium, 
+    deleteUserAFK
 };

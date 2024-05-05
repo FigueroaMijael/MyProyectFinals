@@ -5,6 +5,8 @@ const router = Router();
 
 router.post("/login", usersController.login );
 
+router.post('/:uid/logout', usersController.logoutUser);
+
 router.post("/register", usersController.register);
 
 router.put("/resetPassword", usersController.resetPassword);

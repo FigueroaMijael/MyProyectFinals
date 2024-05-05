@@ -103,7 +103,11 @@ const logger = config.environment === 'production' ? prodLogger : devLogger;
     }
 };
 
+const sendInactiveUserNotification = async (email) => {
+};
+
 export default {
     sendEmailFinalyPurchase,
-    sendEmailUpdatePassword
+    sendEmailUpdatePassword,
+    sendInactiveUserNotification
 }

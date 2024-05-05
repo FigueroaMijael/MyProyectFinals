@@ -73,10 +73,9 @@ export default class CartService {
     
             const productInCart = cart.products[productIndex];
     
-            // Se suma la cantidad nueva a la cantidad existente en el carrito
             productInCart.quantity += quantity;
     
-            const stockDifference = quantity; // No es necesario restar oldQuantity aquí
+            const stockDifference = quantity; 
     
             if (stockDifference > product.stock) {
                 const error = new Error("No hay suficiente stock disponible");
@@ -87,7 +86,6 @@ export default class CartService {
             product.stock -= stockDifference;
             await product.save();
     
-            // Guardamos el carrito actualizado
             const nuevoCarritoActualizado = await cart.save();
     
             return nuevoCarritoActualizado;

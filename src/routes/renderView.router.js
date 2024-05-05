@@ -49,4 +49,10 @@ router.get('/finalizePurchase/:_id',  passportCall('jwt'), authorization(['user'
 
 router.get("/formularioPremium", passportCall('jwt'), authorization(['user','premium', 'admin']), viewControllers.userRenderFormPremium)
 
+router.get("/administrarApp", passportCall('jwt'), authorization(['admin']), viewControllers.adminRender)
+
+router.get("/administrarApp", passportCall('jwt'), authorization(['admin']), (req, res) => {
+    res.render('payFailed')
+})
+
 export default router

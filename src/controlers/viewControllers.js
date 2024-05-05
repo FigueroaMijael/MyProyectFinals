@@ -1,16 +1,11 @@
-import { productService, cartService, ticketService} from "../services/service.js";
-import UsersDto from "../services/dto/users.dto.js";
+import { productService, cartService, ticketService, userService} from "../services/service.js";
 import Handlebars from "handlebars";
 import CartDto from '../services/dto/cart.dto.js';
 
-Handlebars.registerHelper('eq', function (a, b) {
-    return a === b;
-  });
 
-
-   const prodRender= async (req, res) => {
+  const prodRender = async (req, res, next) => {
     try {
-        const { limit = 10, page = 1, sort, query, category, availability } = req.query;
+        const { limit = 10, page = 1, sort, query, category, availability, code } = req.query;
     
         const limitInt = parseInt(limit);
         const pageInt = parseInt(page);
@@ -22,9 +17,11 @@ Handlebars.registerHelper('eq', function (a, b) {
             sort,
             query,
             category,
-            availability
+            availability,
+            code
         );
-        
+
+        // Renderizar la vista y pasar la categoría seleccionada
         res.render("home", {
             fileCss: "styles_products.css",
             products: result.products,
@@ -32,7 +29,8 @@ Handlebars.registerHelper('eq', function (a, b) {
             hasPrevPage: result.hasPrevPage,
             hasNextPage: result.hasNextPage,
             page: parseInt(pageInt),
-            add: Handlebars.helpers.add
+            add: Handlebars.helpers.add,
+            selectedCategory: category // Pasar la categoría seleccionada a la vista
         });
       
     } catch (error) {
@@ -60,7 +58,6 @@ Handlebars.registerHelper('eq', function (a, b) {
     
         const CartId = await cartService.getAll(CId);
         const cartDto = new CartDto(CartId);
-        console.log(cartDto);
             
         res.render("cart", {
             title: "Vista del Carrito",
@@ -90,7 +87,6 @@ Handlebars.registerHelper('eq', function (a, b) {
  const userRender = async (req, res) => {
     try {
         const user = req.user;
-        console.log(user);
 
         res.render("profile", {
             user,
@@ -103,7 +99,6 @@ Handlebars.registerHelper('eq', function (a, b) {
 const userRenderFormPremium = async (req, res) => {
     try {
         const user = req.user;
-        console.log(user);
 
         res.render("formPremium", {
             user,
@@ -161,8 +156,20 @@ const userRenderFormPremium = async (req, res) => {
 
         res.render('finalizepurchase', { ticket })
     } catch (error) {
-        next(error)    }
-}
+        next(error)    
+    }
+};
+
+const adminRender = async (req, res) => {
+    try {
+        const users = await userService.getAll();
+        res.render('adminUsers', { users });
+    } catch (error) {
+        console.error('Error al obtener usuarios:', error);
+        res.status(500).send('Error al cargar la página de administración de usuarios');
+    }
+};
+
 
 export default {
     prodRender,
@@ -175,5 +182,6 @@ export default {
     updatePasswordRender,
     gitHubRender,
     finalizePurchaseRender,
-    userRenderFormPremium
+    userRenderFormPremium,
+    adminRender
 }

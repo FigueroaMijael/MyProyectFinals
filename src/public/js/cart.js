@@ -8,7 +8,6 @@ const adjustQuantity = async (change) => {
         const response = await fetch(url, { method: 'PUT' });
 
         if (response.ok) {
-            console.log('Cantidad ajustada exitosamente.');
             window.location.reload() 
         } else {
             console.log('Error al ajustar la cantidad en el carrito:', response.statusText);

@@ -21,8 +21,6 @@
   "license": "ISC",
   "dependencies": {
     "@handlebars/allow-prototype-access": "^1.0.5",
-    "artillery": "^2.0.7",
-    "artillery-plugin-metrics-by-endpoint": "^1.2.0",
     "bcrypt": "^5.1.1",
     "commander": "^12.0.0",
     "connect-mongo": "^5.1.0",
@@ -34,6 +32,7 @@
     "express-session": "^1.18.0",
     "handlebars": "^4.7.8",
     "jsonwebtoken": "^9.0.2",
+    "mercadopago": "^2.0.9",
     "mongodb": "^6.3.0",
     "mongoose": "^8.1.2",
     "mongoose-paginate-v2": "^1.8.0",
@@ -46,11 +45,10 @@
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "socket.io": "^4.7.4",
+    "stripe": "^15.4.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
-    "sweetalert2": "^11.10.5",
-    "winston": "^3.12.0",
-    "yarn": "^1.22.22"
+    "winston": "^3.12.0"
   },
   "repository": "https://github.com/FigueroaMijael/MyProyectFinals.git",
   "devDependencies": {

@@ -3,12 +3,11 @@ import multer from "multer";
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        // Determinar la carpeta de destino en función del tipo de archivo
         let uploadFolder;
         if (file.fieldname === 'avatar') {
             uploadFolder = 'profiles';
-        } else if (file.fieldname === 'productImage') {
-            uploadFolder = 'products';
+        } else if (file.fieldname === 'thumbnail') {
+            uploadFolder = 'thumbnail';
         } else if (file.fieldname === 'documents'){
             uploadFolder = 'documents';
         } else {
@@ -23,7 +22,6 @@ const storage = multer.diskStorage({
 
 export const uploader = multer({
     storage,
-    // Si se genera algún error, lo capturamos
     onError: function (err, next) {
         console.log(err);
         next();

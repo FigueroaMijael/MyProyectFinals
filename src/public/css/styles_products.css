@@ -53,7 +53,6 @@ body {
 }
 
 .dropdown-content {
-    display: none;
     position: absolute;
     background-color: #001f3f;
     min-width: 160px;

@@ -25,7 +25,6 @@ resetPasswordForm.addEventListener('submit', async (e) => {
     
         if (response.status === 200) {
             const result = await response.json();
-            console.log('Cambio de contraseña exitoso', result);
             window.location.replace('/login');
         } else if (response.status === 400) {
             const error = await response.json();

@@ -35,4 +35,9 @@ export default class userDao {
         const userDelete = usersModel.findByIdAndDelete(_id);
         return userDelete
     }
+
+    findInactiveUsers = async (inactiveSince) => {
+        const inactiveUsers = await usersModel.find({ last_connection: { $lt: inactiveSince } });
+        return inactiveUsers;
+    };
 }

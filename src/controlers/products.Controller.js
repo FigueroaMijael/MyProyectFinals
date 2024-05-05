@@ -15,12 +15,16 @@ const logger = config.environment === 'production' ? prodLogger : devLogger;
  const getProd = async (req, res, next) => {
     try {
         logger.info("Obteniendo datos de productos");
-        const { _id } = req.params;
+        const { _id , code, category} = req.params;
 
         let datos;
 
         if (_id) {
             datos = await productService.getAll(_id);
+        } else if (code) {
+            datos = await productService.getAll(null, null, null, null, null, null, null, code);
+        } else if (category) {
+            datos = await productService.getAll(null, null, null, null, null, category);
         } else {
             datos = await productService.getAll();
         }
@@ -31,63 +35,86 @@ const logger = config.environment === 'production' ? prodLogger : devLogger;
     }
 };
 
- const postProd = async (req, res, next) => {
+const postProd = async (req, res, next) => {
     try {
-        logger.info("Creando nuevo producto");
-        
-        //descomentar owner y comentar el codigo de la linea 75 a la 78 para testing
-        const { title, description, category, thumbnail, code,  /* owner */ } = req.body;
+        const { title, description, category, code } = req.body;
         let { price, stock } = req.body;
 
         price = parseInt(price);
         stock = parseInt(stock);
 
-        if (!title || !description || !price || !category || !thumbnail || !code || !stock) {
-            const error = { 
+        if (!title || !description || !price || !category || !code || !stock) {
+            const error = {
                 name: "ValidationError",
-                cause: "El usuario no completo todos lo campos",
+                cause: "El usuario no completó todos los campos",
                 message: "Todos los campos son obligatorios",
                 code: EErrors.VALIDATION_ERROR
             };
-            throw error
+            throw error;
         }
 
         if (typeof price !== 'number' || price <= 0) {
-            const error = { 
+            const error = {
                 name: "InvalidTypeError",
-                cause: "El precio debe ser un numero y no un string",
+                cause: "El precio debe ser un número y no una cadena",
                 message: "El precio no es válido",
                 code: EErrors.INVALID_TYPES_ERROR,
             };
-            throw error
+            throw error;
         }
 
         if (typeof stock !== 'number' || stock < 0) {
-            const error = { 
+            const error = {
                 name: "InvalidTypeError",
-                cause: "El stock debe ser un numero y no un string",
+                cause: "El stock debe ser un número y no una cadena",
                 message: "El stock no es válido",
                 code: EErrors.INVALID_TYPES_ERROR,
             };
-            throw error
+            throw error;
         }
 
         const { user } = req;
         const { role, email } = user;
-
         const owner = (role === 'premium') ? email : 'admin';
-        
-        const productoACrear = { title, description, price, category, thumbnail, code, stock, owner };
 
-        const nuevoDato = await productService.save(productoACrear);
+        const thumbnail = req.file;
+        if (!thumbnail) {
+            const error = {
+                name: "FileNotFoundError",
+                cause: "No se encontró el archivo thumbnail",
+                message: "Se requiere un archivo thumbnail",
+                code: EErrors.FILE_NOT_FOUND_ERROR,
+            };
+            throw error;
+        }
+
+
+        const productoACrear = {
+            title,
+            description,
+            price,
+            category,
+            thumbnail: {
+                url: thumbnail.path,
+                filename: thumbnail.filename 
+            },
+            code,
+            stock,
+            owner
+        };
+
+        const nuevoDato = await productService.save(productoACrear)
+        console.log("Producto creado exitosamente:", nuevoDato);
+
         res.status(200).json({ dato: nuevoDato });
 
     } catch (error) {
-        next(error); 
+        console.error("Error al crear el producto:", error);
+        next(error);
     }
 };
 
- const updateProd = async (req, res, next) => {
+const updateProd = async (req, res, next) => {
     try {
         logger.info("Actualizando datos de producto");
 
@@ -113,44 +140,40 @@ const logger = config.environment === 'production' ? prodLogger : devLogger;
     }
 };
 
- const deleteProd = async (req, res, next) => {
+
+const deleteProd = async (req, res, next) => {
     try {
         logger.info("Eliminando producto");
 
-        let { _id } = req.params;
+        const { _id } = req.params;
+        const deletedProduct = await productService.delete(_id);
 
-        const deleteProd = await productService.delete(_id);
-
-        res.status(200).json({ message: `Producto con id: ${_id} eliminado con éxito`, deletedProduct: deleteProd });
+        res.status(200).json({ message: `Producto con id: ${_id} eliminado con éxito`, deletedProduct });
     } catch (error) {
         next(error); 
     }
 };
 
+
 const uploadDocumentsProd = async (req, res) => {
     const { uid } = req.params;
     
-    // Verificar si el usuario existe
     const user = await userService.getAll(uid);
     if (!user) return res.status(404).send({ status: "error", error: "User not found" });
 
-    // Utilizar el middleware de Multer para cargar los archivos
     uploader.array('productImage')(req, res, async (err) => {
         if (err) {
             console.error("Error al subir archivos:", err);
             return res.status(500).send({ status: "error", error: "Error uploading files" });
         }
 
-        // Obtener los archivos cargados
         const files = req.files;
 
-        // Actualizar el estado del usuario para indicar que se han cargado documentos
         user.documents = files.map(file => ({
             name: file.originalname,
-            reference: file.path // Podrías cambiar esto dependiendo de cómo quieras guardar las referencias de los archivos
+            reference: file.path 
         }));
         
-        // Guardar los cambios en el usuario
         await user.save();
 
         return res.status(200).json({ message: "Documentos subidos y usuario actualizado correctamente", user });

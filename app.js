@@ -21,6 +21,8 @@ import cartRouter from './src/routes/cart.router.js'
 import usersRouter from './src/routes/user.router.js'
 import jwtRouter from './src/routes/jwt.router.js'
 import emailRouter from './src/routes/email.router.js'
+//Stripe Router:
+import MPaymentRouter from './src/routes/MPayments.router.js'
 // LOGGER
 import {  customErrorMiddleware } from './src/utils/logger.js';
 //SWAGGER
@@ -54,9 +56,6 @@ app.engine(
     })
   );
 
-  Handlebars.registerHelper('add', function (a, b) {
-    return a + b;
-});
 
   app.set("view engine", "hbs");
   app.set("views", `${__dirname}/src/views`);
@@ -85,6 +84,7 @@ app.use("/api/cart", passportCall('jwt'), authorization(['user', 'premium']), ca
 app.use("/api/users", usersRouter)
 app.use("/api/jwt", jwtRouter);
 app.use("/api/email", emailRouter);
+app.use("/api/payments", MPaymentRouter);
 
 app.use(customErrorMiddleware);
 app.use(notFoundMiddleware)

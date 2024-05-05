@@ -43,6 +43,8 @@ const logger = config.environment === 'production' ? prodLogger : devLogger;
             throw error;
         }
 
+        await userService.update(user._id, { last_connection: new Date() });
+
         const tokenUserDto = UsersDto.getUserTokenFrom(user)
 
         const access_token = generateJWToken(tokenUserDto);
@@ -136,11 +138,32 @@ const logger = config.environment === 'production' ? prodLogger : devLogger;
         }
     } catch (error) {
         next(error)
+    }    
+};
+
+const logoutUser = async (req, res) => {
+    const { uid } = req.params;
+
+    try {
+        const user = await userService.getAll(uid);
+
+        if (!user) {
+            return res.status(404).json({ status: "error", error: "User not found" });
+        }
+
+        res.clearCookie("CookieToken");
+
+        return res.status(200).json({ message: "Logout successful" });
+    } catch (error) {
+        console.error("Error logging out user:", error);
+        return res.status(500).json({ status: "error", error: "Internal server error" });
     }
 };
 
+
 export default {
     login,
+    logoutUser,
     register,
     resetPassword
 }

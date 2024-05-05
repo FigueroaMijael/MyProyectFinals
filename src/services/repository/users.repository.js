@@ -18,4 +18,8 @@ export default class UsersRepository {
     delete = async (_id) => {
         return this.dao.delete(_id)
     }
+
+    findInactiveUsers = async (inactiveSince) => {
+        return this.dao.findInactiveUsers(inactiveSince)
+    }
 };

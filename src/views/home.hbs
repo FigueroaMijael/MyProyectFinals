@@ -1,16 +1,16 @@
-<div class="navbar">
-        <a href="/home" class="nav-item">Inicio</a>
+<body>
+    <div class="navbar">
+        <a href="/" class="nav-item">Inicio</a>
         <div class="dropdown">
             <button class="dropbtn">Categorias
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-content">
-                <a href="#category1" class="dropdown-item">Categoría 1</a>
-                <a href="#category2" class="dropdown-item">Categoría 2</a>
-                <a href="#category3" class="dropdown-item">Categoría 3</a>
++                <a href="/?category=phone" class="dropdown-item">Teléfonos</a>
+                <a href="/?category=Electrodomésticos" class="dropdown-item">Electrodomésticos</a>
             </div>
         </div>
-
+        
         <a href="/realtimeproducts" class="nav-item">ReaLTimeProduct</a>
 
         <div class="user-section">
@@ -50,7 +50,7 @@
             {{#each products}}
             <li class="styleList">
                 <strong class="productTitle">{{this.title}}</strong>
-                <img src="{{this.thumbnail}}" alt="imagen del producto">
+                <img src="/assets/thumbnail/{{this.thumbnail.filename}}" alt="imagen del producto">
                 <p>{{this.description}}</p>
                 <div class="details">
                     <p class="detailTitle"><b>Precio:</b></p>
@@ -66,22 +66,18 @@
                 </div>
 
                 <a href="/detail/{{this._id}}" class="cta-details">Ver detalles</a>
-
-                <button class="cta-cart" id="addToCartBtn">Agregar al carrito</button>
             </li>
             {{/each}}
         </ul>
 
-    <div class="pagination-buttons">
-        {{#if hasPrevPage}}
-        <button><a href="/?page={{add page -1}}&sort={{sort}}" class="pagination-button">Anterior</a></button>
-        {{/if}}
-        {{#if hasNextPage}}
-        <a href="/?page={{add page 1}}&sort={{sort}}" class="pagination-button">Siguiente</a>
-        {{/if}}
+        <div class="pagination-buttons">
+            {{#if hasPrevPage}}
+            <button><a href="/?page={{add page -1}}&sort={{sort}}" class="pagination-button">Anterior</a></button>
+            {{/if}}
+            {{#if hasNextPage}}
+            <a href="/?page={{add page 1}}&sort={{sort}}" class="pagination-button">Siguiente</a>
+            {{/if}}
+        </div>
     </div>
 
-    </div>
-
-
-    <script src=""></script>
+</body>

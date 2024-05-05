@@ -5,7 +5,10 @@ const productSchema = new Schema({
     description: { type: String, required: true },
     price: { type: Number, required: true },
     category: { type: String, required: true },
-    thumbnail: { type: String, required: true },
+    thumbnail: {
+        url: { type: String, required: true },
+        filename: { type: String, required: true }
+    },
     code: { type: String, required: true },
     stock: { type: Number, required: true },
     owner: { type: String, default: 'admin' }

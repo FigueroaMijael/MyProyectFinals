@@ -1,0 +1,20 @@
+<body>
+    <h1>Administrar Usuarios</h1>
+    <div id="userList">
+        {{#each users}}
+        <div class="user">
+            <p>ID: {{this._id}}</p>
+            <p>Nombre: {{this.name}}</p>
+            <p>Apellido: {{this.lastName}}</p>
+            <p>Rol: {{this.role}}</p>
+            <button class="updateUserBtn" id="updateUserBtn" data-user-id="{{this._id}}">Actualizar</button>
+            <button class="deleteUserBtn" data-user-id="{{this._id}}">Eliminar</button>
+        </div>
+        {{/each}}
+    </div>
+    <div id="updateFormContainer">
+    </div>
+    <script src="/js/adminUsers.js"></script>
+</body>
+
+

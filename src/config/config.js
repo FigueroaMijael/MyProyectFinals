@@ -29,6 +29,7 @@ export default {
     resetJwtPrivateKey: process.env.RESET_JWT_PRIVATE_KEY,
     gmailAccount: process.env.GMAIL_ACCOUNT,
     gmailAppPassword: process.env.GMAIL_APP_PASSWD,
+    mpAccessTokenTest: process.env.MP_ACCESS_TOKEN_TEST,
     persistence: persistence, 
     environment: environment,
     test: test

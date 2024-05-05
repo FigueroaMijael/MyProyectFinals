@@ -40,7 +40,6 @@ const addToCart = async () => {
 
         const quantityDisplay = document.getElementById("quantity");
         const quantity = parseInt(quantityDisplay.textContent);
-        console.log(quantity);
         const response = await fetch(`/api/cart/${cartId}/product/${productId}/${quantity}`, {
             method: 'POST',
             headers: {
@@ -49,17 +48,13 @@ const addToCart = async () => {
         });
 
         if (response.ok) {
-            console.log(response);
             alert('Producto agregado al carrito');
+            window.location.reload()
         } else {
             const data = await response.json();
-            console.log(data);
             throw new Error(data.error || 'Error al agregar el producto al carrito');
-        }
-
-        
+        }        
 };
-
 
 const viewCart = () => {
     const cartId = localStorage.getItem('cartId');
@@ -67,8 +62,9 @@ const viewCart = () => {
     window.location.href = `/cart/${cartId}`;
 };
 
+ let viewCartbtn = viewCartBtn.style.display = 'none';
 if (localStorage.getItem('cartId')) {
-    viewCartBtn.style.display = 'block';
+   viewCartbtn = viewCartBtn.style.display = 'block';
 }
 
 addProductToCart.addEventListener("click", addToCart);

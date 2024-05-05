@@ -1,5 +1,4 @@
 const userId = document.getElementById('userId').value;
-console.log(userId);
 
 document.getElementById('logoutBtn').addEventListener('click', async () => {
     const result = await Swal.fire({
@@ -12,7 +11,7 @@ document.getElementById('logoutBtn').addEventListener('click', async () => {
     });
 
     if (result.isConfirmed) {
-        fetch(`/api/users/${userId}/logout`, {
+        fetch(`/api/jwt/${userId}/logout`, {
             method: 'POST'
         })
         .then(response => {

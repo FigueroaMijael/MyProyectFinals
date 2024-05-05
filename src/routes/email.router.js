@@ -8,4 +8,6 @@ router.post("/finalyPurchase", passportCall('jwt'), authorization(['user']), ema
 
 router.post("/sendEmailUpdatePassword", emailController.sendEmailUpdatePassword);
 
+router.post("/sendInactiveUserNotification", emailController.sendInactiveUserNotification);
+
 export default router

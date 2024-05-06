@@ -45,10 +45,23 @@ finalizePurchaseButton.addEventListener('click', finalizePurchase);
 
  */
 
-const mp = new MercadoPago('TEST-986055a7-9f23-4512-865f-c7ae51dd5952', {
+const mp = new MercadoPago('APP_USR-664ab158-83ac-4735-9fd3-30648967e4db', {
     locale: "es-Ar",
 });
 
+const generateIdempotencyKey = () => {
+    const length = 20;
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+    const characterslength = characters.length;
+    let idempotencyKey = "";
+    for(let i = 0; i < length; i++) {
+        idempotencyKey += characters.charAt(Math.floor(Math.random() *characterslength));
+    };
+    return idempotencyKey
+}
+
+const idempotencyKey = generateIdempotencyKey()
+ 
 document.getElementById("checkout-btn").addEventListener("click", async () => {
     try {
         const products = Array.from(document.querySelectorAll(".cart-item")).map(item => {
@@ -58,19 +71,22 @@ document.getElementById("checkout-btn").addEventListener("click", async () => {
                 price: parseFloat(item.querySelector(".price").innerText),
             };
         });
+        console.log(products);
 
         const totalAmount = parseFloat(document.querySelector(".totalAmount").innerText);
+        console.log(totalAmount);
 
         const orderData = {
             products: products,
             totalAmount: totalAmount,
         };
+        console.log(orderData);
 
-
-        const response = await fetch("http://localhost:9090/api/payments/create-preference", {
+        const response = await fetch("http://localhost:9092/api/payments/create-preference", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "X-Idempotency-Key": idempotencyKey
             },
             body: JSON.stringify(orderData),
         });
@@ -81,11 +97,32 @@ document.getElementById("checkout-btn").addEventListener("click", async () => {
 
         const preference = await response.json();
         createCheckoutButton(preference.id);
+
+        const emailData = {
+            products: products,
+            totalAmount: totalAmount,
+        };
+
+        const emailResponse = await fetch("http://localhost:9092/api/email/finalyPurchase", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(emailData),
+        });
+
+        if (!emailResponse.ok) {
+            throw new Error("Error al enviar el correo electrónico de confirmación");
+        }
+
+        console.log("Correo electrónico enviado con éxito");
+
     } catch (error) {
         console.error(error);
         alert("Ocurrió un error al procesar la compra :(");
     }
 });
+
 
 const createCheckoutButton = (preferenceId) => {
     const bricksBuilder = mp.bricks();

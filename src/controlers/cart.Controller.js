@@ -181,33 +181,7 @@ const logger = config.environment === 'production' ? prodLogger : devLogger;
     }
 };
 
- const finalizePurchase = async (req, res, next) => {
-    try {
-        logger.info("Finalizando compra");
-        const { amount } = req.body;
-        
-        const purchaser = req.user ? req.user.email : null; 
 
-        const generateRandomCode = () => {
-            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            const length = 10; 
-            let code = '';
-            for (let i = 0; i < length; i++) {
-                const randomIndex = Math.floor(Math.random() * characters.length);
-                code += characters.charAt(randomIndex);
-            }
-            return code;
-        };
-        
-        const code = generateRandomCode();
-
-        const ticket = await ticketService.save({ amount, purchaser, code });
-
-        res.status(200).json({ purchaseId: ticket._id });
-    } catch (error) {
-        next(error);
-    }
-};
 
 export default  {
     getAllCart, 
@@ -215,5 +189,4 @@ export default  {
     increaseQuantityAndSubtractStock,
     decreaseQuantityAndAddStock, 
     deleteCart,
-    finalizePurchase 
 }

@@ -23,7 +23,4 @@ router.delete('/delete/:CId/product/:PId', cartController.deleteCart);
 // DELETE CART
 router.delete('/delete/:CId', cartController.deleteCart);
 
-
-router.post('/finalizePurchase', cartController.finalizePurchase);
-
 export default router;

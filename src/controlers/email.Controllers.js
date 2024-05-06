@@ -8,25 +8,27 @@ import { generateResetToken }  from "../utils/jwt.js";
 
 const logger = config.environment === 'production' ? prodLogger : devLogger;
 
- const sendEmailFinalyPurchase = (req, res, next) => {
+const sendEmailFinalyPurchase = (req, res, next) => {
     try {
         logger.info("Enviando correo de confirmación de compra");
 
-        const userEmail = req.user ? req.user.email : null;
-
-        const { purchaseId, totalAmount } = req.body;
+        const userEmail = req.user.email; 
 
         const mailOptions = {
             from: "ecommers gigabyte Test - " + config.gmailAccount,
             to: userEmail,
             subject: 'Correo de confirmación de compra',
             html: `
-                <h1>¡Gracias por tu compra!</h1>
-                <p>Detalles de la compra:</p>
-                <ul>
-                    <li>ID de la compra: ${purchaseId}</li>
-                    <li>Precio total de la compra: ${totalAmount}</li>
-                </ul>
+                <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
+                    <h1 style="color: #333;">¡Gracias por tu compra!</h1>
+                    <p>Detalles de la compra:</p>
+                    <ul>
+                        ${req.body.products.map(product => `
+                            <li><strong>${product.title}</strong>: Cantidad: ${product.quantity}, Precio: ${product.price}</li>
+                        `).join('')}
+                    </ul>
+                    <p style="font-size: 16px; font-weight: bold;">Precio total de la compra: ${req.body.totalAmount}</p>
+                </div>
             `,
         };
 
@@ -38,16 +40,17 @@ const logger = config.environment === 'production' ? prodLogger : devLogger;
                     message: "Error al enviar correo electrónico",
                     code: EErrors.EMAIL_ERROR
                 };
-                throw errorData
+                throw errorData;
             } else {
                 req.logger.info('Correo electrónico de confirmación enviado con éxito');
-                res.status(200).json({ status: "success", payload: info});
+                res.status(200).json({ status: "success", payload: info });
             }
         });
     } catch (error) {
         next(error);
     }
 };
+
 
 
  const sendEmailUpdatePassword = async (req, res, next) => {

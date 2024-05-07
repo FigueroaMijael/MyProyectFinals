@@ -23,7 +23,7 @@ h1, h2 {
 }
 
 img {
-    max-width: 100%;
+    max-width: 40%;
     height: auto;
     margin: 20px 0;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

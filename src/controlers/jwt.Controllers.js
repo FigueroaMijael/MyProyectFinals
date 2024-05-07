@@ -1,8 +1,3 @@
-/* IMPLEMENTACION CON FACTORY
-import {userService} from '../services/factory.js' 
-*/
-
-//IMPLEMENTACION CON REPOSITORY
 import {userService} from '../services/service.js'
 import { createHash, isValidPassword } from '../utils/bcrypt.js';
 import { generateJWToken, verifyResetToken } from '../utils/jwt.js'

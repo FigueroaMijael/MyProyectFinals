@@ -1,4 +1,3 @@
-/* Reset de estilos */
 body, h1, h2, h3, p, ul, li, form, table {
     margin: 0;
     padding: 0;
@@ -9,7 +8,6 @@ body {
     background-color: #f4f4f4;
 }
 
-/* Barra de navegación */
 .navbar {
     background-color: #3498db;
     color: #fff;
@@ -71,13 +69,11 @@ body {
     margin-left: auto;
 }
 
-/* Contenedor principal */
 .container {
     margin-top: 80px;
     padding: 20px;
 }
 
-/* Formulario de productos en tiempo real */
 #realTimeForm {
     max-width: 600px;
     margin: 0 auto;
@@ -109,7 +105,6 @@ body {
     background-color: #2980b9;
 }
 
-/* Lista de productos en tiempo real */
 .realTimeProductsContainer {
     margin-top: 80px;
     padding: 20px;

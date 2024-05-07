@@ -1,42 +1,43 @@
 <body>
     <div class="navbar">
-        <a href="/" class="nav-item">Inicio</a>
-        <div class="dropdown">
-            <button class="dropbtn">Categorias
-                <i class="fa fa-caret-down"></i>
-            </button>
-            <div class="dropdown-content">
-+                <a href="/?category=phone" class="dropdown-item">Teléfonos</a>
-                <a href="/?category=Electrodomésticos" class="dropdown-item">Electrodomésticos</a>
-            </div>
-        </div>
-        
-        <a href="/realtimeproducts" class="nav-item">ReaLTimeProduct</a>
+    <a href="/" class="nav-item"><i class="bi bi-house"></i> Inicio </a>
 
-        <div class="user-section">
-            <a href="/login" class="nav-item" id="loginBtn">Iniciar Sesión</a>
-            <a href="/register" class="nav-item" id="registerBtn">Registrarse</a>
-            <a href="/profile" class="nav-item" id="registerBtn">Profile</a>
-            <a href="/chat" class="nav-item" id="registerBtn">Chat</a>
-            <div class="icon" id="userIcon">
-                <i class="fa fa-user"></i>
-            </div>
-        </div>
-
-        <div class="search-bar">
-            <input type="text" placeholder="Buscar..." id="searchInput">
-            <button type="submit" id="searchBtn"><i class="fa fa-search"></i></button>
-        </div>
-
-        <div class="icon" id="cartIcon">
-            <i class="fa fa-shopping-cart"></i>
-            <span class="badge" id="cartCount">0</span>
-        </div>
-
-        <div class="icon" id="languageIcon">
-            <i class="fa fa-language"></i>
+    <div class="dropdown" id="dropdown">
+        <button class="dropbtn">Categorias
+            <i class="bi bi-caret-down-fill"></i>
+        </button>
+        <div class="dropdown-content" id="dropdownContent">
+            <a href="/?category=phone" class="dropdown-item">Teléfonos</a>
+            <a href="/?category=Electrodomésticos" class="dropdown-item">Electrodomésticos</a>
         </div>
     </div>
+
+    <a href="/profile" class="nav-item" id="registerBtn">Profile</a>
+    <a href="/chat" class="nav-item" id="registerBtn"><i class="bi bi-chat-right-heart"></i> Chat </a>
+    {{#if user}}
+        {{#if canViewRealTimeProduct}}
+            <a href="/realtimeproducts" class="nav-item">ReaLTimeProduct</a>
+        {{/if}}
+    {{/if}}
+
+    <div class="search-bar">
+        <button type="submit" id="searchBtn"><i class="bi bi-search"></i></button>
+        <input type="text" placeholder="Buscar..." id="searchInput">
+    </div>
+
+    <div class="icon" id="cartIcon">
+        <i class="bi bi-cart" id="cartBtn"><p class="badge" id="cartCount">0</p></i>
+    </div>
+
+    <div class="user-section">
+        <a href="/login" class="nav-item" id="loginBtn"><i class="bi bi-person-fill"></i> Login </a>
+        <a href="/register" class="nav-item" id="registerBtn"><i class="bi bi-person"></i> SingUp </a>
+    </div>
+
+    <div class="icon" id="languageIcon">
+        <i class="bi bi-book-half"></i>
+    </div>
+</div>
 
     <div class="container">
         <h1>Listado de Productos</h1>
@@ -79,5 +80,7 @@
             {{/if}}
         </div>
     </div>
+
+    <script src="/js/home.js"></script>
 
 </body>

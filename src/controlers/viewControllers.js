@@ -1,9 +1,13 @@
 import { productService, cartService, ticketService, userService} from "../services/service.js";
 import Handlebars from "handlebars";
 import CartDto from '../services/dto/cart.dto.js';
+import { devLogger, prodLogger } from '../utils/logger.js'
+import config from '../config/config.js';
+
+const logger = config.environment === 'production' ? prodLogger : devLogger;
 
 
-  const prodRender = async (req, res, next) => {
+const prodRender = async (req, res, next) => {
     try {
         const { limit = 10, page = 1, sort, query, category, availability, code } = req.query;
     
@@ -21,7 +25,9 @@ import CartDto from '../services/dto/cart.dto.js';
             code
         );
 
-        // Renderizar la vista y pasar la categoría seleccionada
+        const user = req.user
+        const canViewRealTimeProduct = user && (user.role === 'admin' || user.role === 'premium');
+
         res.render("home", {
             fileCss: "styles_products.css",
             products: result.products,
@@ -30,11 +36,13 @@ import CartDto from '../services/dto/cart.dto.js';
             hasNextPage: result.hasNextPage,
             page: parseInt(pageInt),
             add: Handlebars.helpers.add,
-            selectedCategory: category // Pasar la categoría seleccionada a la vista
+            selectedCategory: category,
+            user,
+            canViewRealTimeProduct
         });
       
     } catch (error) {
-        next(error)
+        next(error);
     }
 }
 

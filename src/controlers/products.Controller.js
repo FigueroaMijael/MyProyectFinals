@@ -1,9 +1,3 @@
-/* IMPLEMENTACION CON FACTORY
-import {productService} from '../services/factory.js' 
-*/
-
-//IMPLEMENTACION CON REPOSITORY
-// controllers/productControllers.js
 import { productService } from '../services/service.js';
 import { EErrors } from '../utils/customLogger/errors-enum.js';
 import config from '../config/config.js';

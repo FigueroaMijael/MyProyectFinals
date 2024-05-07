@@ -1,10 +1,4 @@
-/* IMPLEMENTACION CON FACTORY
-import {cartService} from '../services/factory.js' 
-*/
-
-//IMPLEMENTACION CON REPOSITORY
-// controllers/cartControllers.js
-import { cartService, ticketService, productService } from '../services/service.js';
+import { cartService, productService } from '../services/service.js';
 import CartDto from '../services/dto/cart.dto.js';
 import { EErrors } from '../utils/customLogger/errors-enum.js';
 import { devLogger, prodLogger } from '../utils/logger.js'

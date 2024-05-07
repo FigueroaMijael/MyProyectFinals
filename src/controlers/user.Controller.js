@@ -1,5 +1,9 @@
 import { userService } from "../services/service.js";
 import { uploader } from "../utils/multer.js";
+import { devLogger, prodLogger } from '../utils/logger.js'
+import config from '../config/config.js';
+
+const logger = config.environment === 'production' ? prodLogger : devLogger;
 
 const getAllUsers = async (req, res) => {
     const users = await userService.getAll();
@@ -70,13 +74,10 @@ const updateUserToPremium = async (req, res) => {
             return res.status(404).json({ status: "error", error: "Usuario no encontrado" });
         }
 
-        // Verificar si el usuario ya es premium
         if (user.role === 'premium') {
             return res.status(400).json({ status: "error", error: "El usuario ya es premium" });
         }
 
-
-        // Promesa para subir los archivos
         const uploadFiles = new Promise((resolve, reject) => {
             uploader.array('documents')(req, res, (err) => {
                 if (err) {
@@ -88,7 +89,6 @@ const updateUserToPremium = async (req, res) => {
             });
         });
 
-        // Subir archivos y luego actualizar el usuario
         uploadFiles.then(async (files) => {
             user.role = 'premium';
             user.documents = files.map(file => ({
@@ -107,19 +107,14 @@ const updateUserToPremium = async (req, res) => {
     }
 };
 
-// userController.js
-
 const deleteUserAFK = async (req, res, next) => {
     try {
-        // Calcular la fecha límite para la inactividad (10 minutos atrás)
         const inactiveSince = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
         console.log("Checking for inactive users since:", inactiveSince);
 
-        // Buscar usuarios que no hayan tenido conexión desde la fecha límite
         const inactiveUsers = await userService.findInactiveUsers(inactiveSince);
         console.log("Inactive users found:", inactiveUsers);
 
-        // Eliminar los usuarios inactivos
         await Promise.all(inactiveUsers.map(async (user) => {
             console.log("Deleting inactive user:", user.email);
             await userService.delete(user._id);

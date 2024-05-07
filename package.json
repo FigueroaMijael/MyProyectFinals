@@ -5,8 +5,8 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon ./app.js --mode development",
-    "start": "node ./app.js --mode production",
+    "dev": "nodemon ./app.js",
+    "start": "node ./app.js",
     "test": "mocha ./test/supertest.test.js"
   },
   "keywords": [

@@ -1,6 +1,0 @@
-error: POST en /api/cart/6634ea5c1ee4b8f3a4c9ecae/product/66316fd7755698c8ebbde3bf/1 - Causa del error: No se puedo encontrar el carrito con _id: 6634ea5c1ee4b8f3a4c9ecae en la base de datos - Code error: 404 - at 4/5/2024 - 19:59:28
-error: POST en /api/cart/6634ea5c1ee4b8f3a4c9ecae/product/66316fd7755698c8ebbde3bf/1 - Causa del error: No se puedo encontrar el carrito con _id: 6634ea5c1ee4b8f3a4c9ecae en la base de datos - Code error: 404 - at 4/5/2024 - 20:01:29
-error: POST en /api/jwt/login - Causa del error: El usuario o la contraseña son incorrectas - Code error: 401 - at 5/5/2024 - 15:46:07
-error: POST en /api/jwt/login - Causa del error: El usuario o la contraseña son incorrectas - Code error: 401 - at 6/5/2024 - 01:23:48
-error: POST en /api/jwt/login - Causa del error: El usuario o la contraseña son incorrectas - Code error: 401 - at 6/5/2024 - 01:23:58
-error: POST en /api/jwt/login - Causa del error: El usuario o la contraseña son incorrectas - Code error: 401 - at 6/5/2024 - 17:13:50

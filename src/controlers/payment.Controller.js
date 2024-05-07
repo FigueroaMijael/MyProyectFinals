@@ -1,6 +1,9 @@
 import { MercadoPagoConfig, Preference } from 'mercadopago';
 import config from '../config/config.js';
 import {ticketService} from '../services/service.js'
+import { devLogger, prodLogger } from '../utils/logger.js'
+
+const logger = config.environment === 'production' ? prodLogger : devLogger;
 
 const client = new MercadoPagoConfig({ accessToken: config.mpAccessTokenTest });
 

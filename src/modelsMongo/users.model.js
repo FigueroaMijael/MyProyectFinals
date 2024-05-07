@@ -3,12 +3,12 @@ import { Schema, model } from "mongoose";
 const stringTypeSchemaUniqueRequired = {
     type: String,
     unique: true,
-    required: true // Agregado para hacer obligatorio el campo
+    required: true
 };
 
 const stringTypeSchemaNonUniqueRequired = {
     type: String,
-    required: true // Agregado para hacer obligatorio el campo
+    required: true 
 };
 
 const documentSchema = new Schema({
@@ -43,11 +43,11 @@ const usersSchema = new Schema({
         enum: ['user', 'admin', 'premium'],
     },
     documents: {
-        type: [documentSchema], // Definición de un array de documentos
+        type: [documentSchema],
         default: []
     },
     last_connection: {
-        type: Date, // Propiedad para almacenar la última conexión del usuario
+        type: Date,
         default: null
     }
 });

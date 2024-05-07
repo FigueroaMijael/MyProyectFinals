@@ -4,6 +4,7 @@ import { passportCall, authorization } from '../utils/passport.js';
 const router = Router();
 
 router.get('/', userController.getAllUsers);
+
 router.get('/:uid', userController.getUser);
 
 router.put('/:uid', userController.updateUser);

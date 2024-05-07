@@ -1,4 +1,3 @@
-// controllers/emailController.js
 import nodemailer from "nodemailer";
 import config from "../config/config.js";
 import { prodLogger, devLogger } from "../utils/logger.js"

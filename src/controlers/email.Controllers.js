@@ -1,4 +1,3 @@
-// controllers/emailController.js
 import transporter from "../utils/email.js";
 import config from "../config/config.js";
 import { prodLogger, devLogger } from "../utils/logger.js"

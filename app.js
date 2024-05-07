@@ -4,47 +4,34 @@ import Handlebars from "handlebars";
 import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access";
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-// chat
 import { Server } from "socket.io"
 import {chatService} from './src/services/service.js'
-// configuracion
 import config from './src/config/config.js';
 import __dirname from './utils.js';
-// Mongo connect 
 import MongoSingleton from './src/config/DBConect/mongodb-singleton.js';
-//Passport imports
 import initializePassport from './src/config/passport.config.js'
-//Routers
 import renderRouter from './src/routes/renderView.router.js'
 import productRouter from './src/routes/product.router.js';
 import cartRouter from './src/routes/cart.router.js'
 import usersRouter from './src/routes/user.router.js'
 import jwtRouter from './src/routes/jwt.router.js'
 import emailRouter from './src/routes/email.router.js'
-//Stripe Router:
 import MPaymentRouter from './src/routes/MPayments.router.js'
-// LOGGER
 import {  customErrorMiddleware } from './src/utils/logger.js';
-//SWAGGER
 import swaggerUiExpress from "swagger-ui-express"
 import swaggerJSDoc from "swagger-jsdoc";
-
 import {authorization, passportCall} from './src/utils/passport.js'
-
 import notFoundMiddleware from './src/middlewares/404NotFound.js';
 
-//Custom - Extended
 const app = express();
 initializePassport()
 
-//JSON settings:
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors())
 app.use(cookieParser());
 
 
-//Configuracion hbs
 app.engine(
     "hbs",
     handlebars.engine({
@@ -53,7 +40,6 @@ app.engine(
       handlebars: allowInsecurePrototypeAccess(Handlebars),
     })
   );
-
 
   app.set("view engine", "hbs");
   app.set("views", `${__dirname}/src/views`);
@@ -75,7 +61,6 @@ const specs = swaggerJSDoc(swaggerOptions)
 
 app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
-//Declare routers:
 app.use("/", renderRouter);
 app.use("/api/product", productRouter);
 app.use("/api/cart", passportCall('jwt'), authorization(['user', 'premium']), cartRouter);
@@ -88,7 +73,7 @@ app.use(customErrorMiddleware);
 app.use(notFoundMiddleware)
 
 
-const SERVER_PORT = config.port;
+const SERVER_PORT = config.port || 8080;
 
 const httpServer = app.listen(SERVER_PORT, async () => {
     console.log("Servidor escuchando por el puerto: " + SERVER_PORT);

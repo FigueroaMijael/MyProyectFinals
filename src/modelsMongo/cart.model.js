@@ -14,8 +14,11 @@ const cartSchema = new Schema({
 
     price: { type: Number, required: true},
 
-    thumbnail: { type: String, required: true},
-    
+    thumbnail: {
+      url: { type: String, required: true },
+      filename: { type: String, required: true }
+    },
+        
     quantity: { type: Number, required: true, default: 1 },
   }],
 });

@@ -4,7 +4,7 @@ import viewControllers from '../controlers/viewControllers.js'
 
 const router = Router();
 
-router.get("/", passportCall('jwt'), viewControllers.prodRender)
+router.get("/", passportCall('jwt') ,viewControllers.prodRender)
 
 router.get("/detail/:PId", viewControllers.prodDetailRender )
 

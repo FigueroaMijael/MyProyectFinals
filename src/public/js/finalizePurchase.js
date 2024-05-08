@@ -56,7 +56,7 @@ document.getElementById("checkout-btn").addEventListener("click", async () => {
             totalAmount: totalAmount,
         };
 
-        const emailResponse = await fetch("http://localhost:9092/api/email/finalyPurchase", {
+        const emailResponse = await fetch("https://myproyectfinals-production.up.railway.app/api/email/finalyPurchase", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

@@ -23,12 +23,12 @@ const createPreference = async (req, res) => {
             items: products,
             totalAmount: totalAmount,
             back_urls: {
-                success: "https://mail.google.com/mail/u/0/#inbox",
+                success: "https://myproyectfinals-production.up.railway.app/",
                 failure: "https://www.youtube.com/",
                 pending: "https://translate.google.com/",
             },
             auto_return: "approved",
-            notification_url: "https://22d0-2800-810-50f-99a9-8079-cc51-e6ef-93c6.ngrok-free.app/api/payments/webhook"
+            notification_url: "https://myproyectfinals-production.up.railway.app/api/payments/webhook"
         };
 
         const preference = new Preference(client);

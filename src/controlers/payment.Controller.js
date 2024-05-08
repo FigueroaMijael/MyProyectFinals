@@ -81,6 +81,27 @@ const createWebhook = async (req, res) => {
             
             await ticketService.save(ticketObjet)
 
+            
+        const emailData = {
+            products: ticketObjet.description,
+            totalAmount: ticketObjet.transaction_amount,
+        };
+
+
+            const emailResponse = await fetch("https://myproyectfinals-production.up.railway.app/api/email/finalyPurchase", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(emailData),
+            });
+    
+            if (!emailResponse.ok) {
+                throw new Error("Error al enviar el correo electrónico de confirmación");
+            }
+    
+            console.log("Correo electrónico enviado con éxito");
+
         }
 
         res.sendStatus(200);

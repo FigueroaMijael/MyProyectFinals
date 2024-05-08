@@ -51,25 +51,6 @@ document.getElementById("checkout-btn").addEventListener("click", async () => {
         const preference = await response.json();
         createCheckoutButton(preference.id);
 
-        const emailData = {
-            products: products,
-            totalAmount: totalAmount,
-        };
-
-        const emailResponse = await fetch("https://myproyectfinals-production.up.railway.app/api/email/finalyPurchase", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(emailData),
-        });
-
-        if (!emailResponse.ok) {
-            throw new Error("Error al enviar el correo electrónico de confirmación");
-        }
-
-        console.log("Correo electrónico enviado con éxito");
-
     } catch (error) {
         console.error(error);
         alert("Ocurrió un error al procesar la compra :(");

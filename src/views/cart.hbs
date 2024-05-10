@@ -3,21 +3,20 @@
         <h1>Tu Carrito de Compras</h1>
         <ul class="cart-products-container">
             {{#each cartDto.products}}
-                <input type="hidden" class="productId" value="{{this.product}}">
-
                 <li class="cart-item">
+                    <input type="hidden" class="productId" value="{{this.product}}">
                     <strong class="title">{{this.title}}</strong>
                     <img src="/assets/thumbnail/{{this.thumbnail.filename}}">
                     <div class="details">
-                        <p class="detail-title"><b>Precio:</b></p>
+                        <p class="detail-title" ><b>Precio:</b></p>
                         <p class="price">{{this.price}} USD</p>
                     </div>
                     <div class="details">
                         <p class="detail-title"><b>Cantidad:</b></p>
-                        <button id="decreaseBtn">-</button>
+                        <button id="decreaseBtn" data-product-id="{{this.product._id}}" >-</button>
                         <p class="quanty">{{this.quantity}}</p>
-                        <button id="increaseBtn">+</button>
-                        <button class="btn-delete-product">Eliminar</button>
+                        <button id="increaseBtn" data-product-id="{{this.product._id}}">+</button>
+                        <button class="btn-delete-product" data-product-id="{{this.product._id}}" id="btnDelete">Eliminar</button>
                     </div>
                 </li>
             {{/each}}

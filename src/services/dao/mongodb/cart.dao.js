@@ -140,7 +140,7 @@ export default class CartService {
             throw new Error('Cart not found');
         }
 
-        cart.products.pull({ _id: PId });
+        cart.products.pull({ product: PId });
         await cart.save();
 
         return cart;
